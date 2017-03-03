@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <title>业务分流端口</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Cache-control" content="no-cache"/>
+    <meta http-equiv="Cache" content="no-cache"/>
+    <meta http-equiv="Expires" content="0"/>
+    <script>
+        (function (win) {
+            console.log("satrt:", (new Date()).getTime());
+            var userAgent = win.navigator.userAgent; //取得浏览器的userAgent字符串
+            var isOpera = userAgent.indexOf("Opera") > -1; //判断是否Opera浏览器
+            var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 && !isOpera; //判断是否IE浏览器
+            //            var isFF = userAgent.indexOf("Firefox") > -1; //判断是否Firefox浏览器
+            //            var isSafari = userAgent.indexOf("Safari") > -1; //判断是否Safari浏览器
+            if (isIE) {
+                var reIE = new RegExp("MSIE (\\d+\\.\\d+);");
+                reIE.test(userAgent);
+                var fIEVersion = parseFloat(RegExp["$1"]);
+                if (fIEVersion <= 8) {
+                    document.write("本程序并不支持IE9以下的浏览器，如需体验，请更新当前浏览器");
+                }
+            }
+
+            //            if (isFF) {
+            //                return "FF";
+            //            }
+            //            if (isOpera) {
+            //                return "Opera";
+            //            }
+        })(window);
+
+    </script>
+    <link rel="stylesheet" href="css/ccdp2_new.css" type="text/css"/>
+
+    <script>
+        document.write(
+                '<body>' +
+                '<div id="bodyInit" style="position: absolute;top:0;left:0;display: table;width:100%;height:100%;background-color: #1b3a5b;z-index:9999;opacity:1;">' +
+                '<p style="display: table-cell;vertical-align: middle;text-align: center;color:#fff;font-size: 16px">正在加载程序...</p>' +
+                '</div>' +
+                '</body>');
+    </script>
+
+    <!--//基础库-->
+    <script src="lib/jquery-2.1.4.min.js"></script>
+    <script src="lib/angular.min.js"></script>
+
+    <!--//全局变量-->
+    <script src="src/common/services/initialize/global.js"></script>
+    <script src="src/common/services/initialize/supportService.js"></script>
+
+    <!--//jq依赖的自定义方法集-->
+    <script src="src/common/services/plugins/commonTool/basicTool.js"></script>
+
+    <script src="src/common/services/plugins/commonDiscreteness/titleBar.js"></script>
+    <script src="src/common/services/plugins/commonDiscreteness/processBar.js"></script>
+    <script src="src/common/services/plugins/commonDiscreteness/bottomButton.js"></script>
+
+    <script src="src/common/services/plugins/commonDiscreteness/loadingAnimation.js"></script>
+    <script src="src/common/services/plugins/commonTool/layout.js"></script>
+    <script src="src/common/services/plugins/commonDiscreteness/alertBox.js"></script>
+    <script src="src/common/services/plugins/commonTool/JSONcrossXML.js"></script>
+
+    <!--//angular依赖的自定义方法集-->
+    <script src="src/common/services/plugins/commonDiscreteness/angularFactory.js"></script>
+    <script src="src/common/services/plugins/commonTool/simulateScroll.js"></script>
+    <script src="src/common/services/plugins/commonDiscreteness/dropDownList.js"></script>
+
+    <!--//第三方库-->
+    <script src="lib/lodash.min.js"></script>
+    <script src="lib/Base64.js"></script>
+    <script src="lib/charset.js"></script>
+    <script src="lib/photoswipe/photoswipe.min.js"></script>
+    <script src="lib/photoswipe/photoswipe-ui-default.min.js"></script>
+    <script src="lib/photoswipe/photoswipe-ui-template.js"></script>
+    <link rel="stylesheet" href="css/photoswipe.css" type="text/css"/>
+    <link rel="stylesheet" href="lib/photoswipe/default-skin/default-skin.css" type="text/css"/>
+
+
+    <!--//交互端口-->
+    <script src="src/common/services/interface/app/input.js"></script>
+    <script src="src/common/services/interface/app/output.js"></script>
+
+    <script src="src/common/services/interface/server/input.js"></script>
+    <script src="src/common/services/interface/server/output.js"></script>
+
+    <script src="src/common/services/interface/processModsHost.js"></script>
+
+    <script src="src/common/services/interface/remoteSystem/io/input.js"></script>
+    <script src="src/common/services/interface/remoteSystem/io/output.js"></script>
+
+    <!--//远程聊天系统-->
+    <link href="css/char_active.css" type="text/css" rel="stylesheet"/>
+    <script src="src/common/services/interface/remoteSystem/conversationSystem/contentBody/template.js"></script>
+    <script src="src/common/services/interface/remoteSystem/conversationSystem/contentBody/controller.js"></script>
+    <script src="src/common/services/interface/remoteSystem/conversationSystem/hoverButton/template.js"></script>
+    <script src="src/common/services/interface/remoteSystem/conversationSystem/hoverButton/controller.js"></script>
+    <script src="src/common/services/interface/remoteSystem/conversationSystem/phraseForm/template.js"></script>
+    <script src="src/common/services/interface/remoteSystem/conversationSystem/phraseForm/controller.js"></script>
+
+    <!--//车系选择系统-->
+    <link href="css/carLogo.css" type="text/css" rel="stylesheet"/>
+    <script src="images/carLogo/dataBase/carLogo.js"></script>
+    <script src="src/common/mods/masterFrame/carLogo/template.js"></script>
+    <script src="src/common/mods/masterFrame/carLogo/controller.js"></script>
+
+    <script src="src/common/mods/masterFrame/diagType/template.js"></script>
+    <script src="src/common/mods/masterFrame/diagType/controller.js"></script>
+
+    <script src="src/common/mods/masterFrame/keyMatch/template.js"></script>
+    <script src="src/common/mods/masterFrame/keyMatch/controller.js"></script>
+
+    <script src="src/common/mods/masterFrame/carType/template.js"></script>
+    <script src="src/common/mods/masterFrame/carType/controller.js"></script>
+
+    <script src="src/common/mods/masterFrame/logSystem/devLog/template.js"></script>
+    <script src="src/common/mods/masterFrame/logSystem/devLog/controller.js"></script>
+    <!--//日志检测系统-->
+    <!--//<link href="www/common/mods/logMonitor/style.css" type="text/css" rel="stylesheet"/> -->
+    <!--//<script src="www/common/mods/logMonitor/template.js"></script> -->
+    <!--//<script src="www/common/mods/logMonitor/controller.js"></script> -->
+
+</head>
+<body>
+
+<div id="processBlock"></div>
+
+<script id="doBlock" src="index.js">
+</script>
+
+<!--<script src="mock/app-interActive.js"></script>-->
+<!--<script src="mock/diagnostics-dev-data.js"></script>-->
+<!--<script src="mock/ws_client.js"></script>-->
+
+<!--//html标签改造模块-->
+<script src="src/common/services/plugins/elementMonitor/slider.js"></script>
+<script src="src/common/services/plugins/elementMonitor/inputText.js"></script>
+<script src="src/common/services/plugins/elementMonitor/inputRadio.js"></script>
+</body>
+</html>

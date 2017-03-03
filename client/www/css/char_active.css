@@ -1,0 +1,261 @@
+
+/************************part of head style************************/
+.charForm{
+    position: absolute;top: 114px;left: 0;width: 100%;height: 30rem; background: #fff;z-index: 10000;box-sizing: border-box;box-shadow: 0 3px 5px #999;display: none;
+}
+.charHeadForm{
+    position: absolute; top: 0; left: 0; width: 100%; height: 4rem; background: #666;z-index:3;box-shadow: 0 3px 3px #C0C0C0;border-radius: 3px;overflow: hidden;
+}
+.char-back-btn{
+    position: absolute; top: 0; left: 0; width: 5rem; height: 100%; /*background: #999;*/display: table;z-index:2
+}
+.char-close-btn{
+    position: absolute; top: 0; right: 0; width: 5rem; height: 100%; /*background: #999;*/display: table;z-index:2
+}
+.char-close-btn > .table-cell{
+    background:url("../images/close.png") no-repeat center;
+    background-size:2.2rem 2.2rem;
+}
+.char-title{
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #477CB3;display: table;z-index:1
+}
+.char-title > span{
+    display: table-cell;vertical-align: middle;text-align:center;width:100%;height:100%;font-size:1.6rem;color:#fff;letter-spacing:3px;
+}
+
+
+
+/************************part of body style************************/
+
+.icon-dire-top{
+
+}
+
+.icon-dire-down{
+
+}
+
+.userName{
+    letter-spacing:1px;color:#9B9B9B
+}
+
+.charSentence{
+    line-height: 150%;color:#4A4A4A
+}
+
+.charContent{
+    position:relative;padding: 0.5rem 1rem;margin:0.5rem 0;box-sizing: border-box;border-radius: 7px;
+    background: #efefef;display: inline-block;text-align: left;word-break: break-all;
+}
+
+.RMTChar-remote{
+    text-align: left;font-size: 1.6rem;padding:0 1rem;
+}
+
+.RMTChar-native{
+    text-align: right;font-size: 1.6rem;padding:0 1rem;
+}
+
+.RMTChar-timer{
+    text-align: center;font-size: 1.4rem;color:#666666;padding:1rem 0;
+}
+
+.charBody{
+    height: 100%;padding: 4rem 0.7rem 5.5rem 0.7rem;box-sizing: border-box;overflow:auto;z-index:2;display: none;
+}
+
+.charPopCorner:after{
+    content: "";  position: absolute;  top: -10px;  left: 0;  background: #efefef;  width: 28px;
+    border-radius: 100%;  height: 22px;  z-index: 1;  transform: rotate(90deg);
+}
+
+.charPopCorner:before{
+    content: "";  position: absolute;  top: -10px;  left: 0;  background: #ffffff;  width: 20px;
+    border-radius: 100%;  height: 15px;  z-index: 2;
+}
+
+.RMTChar-remote .charPopCorner{
+    width: 10px;height: 15px; background: #fff; display: block;  position: absolute;  overflow: hidden;  top: 7px; left: -10px;
+}
+
+.RMTChar-native .charPopCorner{
+    width: 10px;height: 15px; background: #fff; display: block;  position: absolute;  overflow: hidden;  top: 7px;  right: -10px;
+    -moz-transform:scaleX(-1);  -webkit-transform:scaleX(-1);  -o-transform:scaleX(-1);  transform:scaleX(-1);transform: rotateY(180deg);
+    /*IE*/
+    filter:FlipH;
+
+}
+
+
+/************************part of footer style************************/
+.charFooter{
+    position: absolute;bottom: 0; left: 0; width: 100%;font-size: 1.4rem; height: 5rem; /*background: #666;*/ z-index:3;border: 1px solid #D1D1D1;
+
+}
+.charFooter .left-side{
+    position: absolute; top: 0; left: 0; width: 6rem; height: 5rem; /*background: #999;*/display: table;z-index:3
+}
+.charFooter .left-side > span{
+    display: table-cell;vertical-align: middle;width:100%;height:100%;text-align:center;color:#5F5F5F;
+}
+.charFooter .middle-side{
+    position: absolute; top: 0; left: 0; width: 100%; height: 5rem; background: #fff;display: table;z-index:2;padding:0.7rem 6rem;box-sizing: border-box
+}
+.charFooter .middle-side > input{
+    width:100%;height:100%;padding: 0 3rem 0 1rem;margin: 0;box-sizing: border-box;border: 1px solid #D1D1D1;border-radius: 7px;color:#4A4A4A
+}
+.charFooter .clear-button{
+    width:3rem;height:100%;position: absolute;right:6rem;top:0;z-index: 4;
+}
+.charFooter .clear-button img{
+    width:2.2rem;height:2.2rem
+}
+
+.charFooter .right-side{
+    position: absolute; top: 0; right: 0; width: 6rem; height: 5rem; /*background: #999;*/display: table;z-index:3
+}
+.charFooter .right-side > span{
+    display: table-cell;vertical-align: middle;width:100%;height:100%;text-align:center;color:#5F5F5F;
+}
+
+.table{
+    display: table;
+}
+
+
+.table-cell{
+    display: table-cell;    vertical-align: middle;    width:100%;    height:100%;
+}
+.table-cell-center{
+    display: table-cell;   text-align: center; vertical-align: middle;    width:100%;    height:100%;
+}
+
+
+/****************************hover button style**********************************/
+
+.message-remain-count{
+    width: 40%;height: 100%;display: block;float: right;box-sizing: border-box;padding: 0 5%;line-height: 200%;text-align: center;
+}
+
+.char-with{
+    width: 60%;height: 100%;display: block;padding: 0 5%;line-height: 200%;
+    white-space: nowrap;overflow: hidden;float: left;box-sizing: border-box;text-overflow: ellipsis
+}
+
+.message-remain-form{
+    width:8rem;height:3rem;border-left:1px solid rgb(150, 181, 212);
+    position:absolute;top:0.5rem;right: 0;z-index: 1;box-sizing:border-box;overflow:hidden;
+}
+
+.message-remain-form > div{
+    width: 100%;height: 100%;font-size: 1.4rem;color: rgb(232, 238, 245);position: relative;left: 0;top: 0
+}
+
+.char-message-tips-img{
+    width: 4rem;height: 4rem;position: absolute; left: 0;top: 0; border-radius: 5px; z-index: 2;
+    background-color: #477cb3;background-image: url("../images/message.png");
+    background-repeat: no-repeat;background-position: center center;background-size: 3rem 3.3rem;
+}
+
+.char-hover-button{
+    width: 4rem;height: 4rem;background: #477cb3;position: absolute;top: 5rem;left: 0;display: none;
+    z-index: 10001;border-radius: 5px;box-shadow: 3px 3px 5px rgba(110, 110, 110, 0.6);overflow: hidden
+}
+
+.char-hover-button-full{
+    width: 12rem;
+}
+
+.animation-width{
+    transition: width 0.5s ease;
+    -webkit-transition: width 0.5s ease;
+    -o-transition: width 0.5s ease;
+    -moz-transition: width 0.5s ease;
+}
+
+
+/****************************phrase form style**********************************/
+.phraseForm{
+    position: absolute;top: 200px;left: 0;width: 18rem;height: 18rem; background: #666;z-index: 10001;box-sizing: border-box;box-shadow: 0 0 7px;display: none;
+}
+.phraseList{
+    position: absolute;top: 0;left: 0;width: 100%;height: 100%; box-sizing: border-box;overflow: auto;z-index:2;display: none;
+}
+.phraseItem{
+    width: 6rem;height: 6rem; background: #eee;box-sizing: border-box;border-right:1px solid #666;border-bottom:1px solid #666;float: left;display: table;
+    position: relative;box-shadow: 1px 1px 1px #545454;
+}
+.phraseButton{
+    width: 100%;
+    height: 6rem;
+    background: #eee;
+    box-sizing: border-box;
+    float: left;
+    position: relative;
+    box-shadow: 1px 1px 1px #545454;
+}
+.phraseButton-item{
+    width: 6rem;
+    height: 6rem;
+    background: #fff;
+    box-sizing: border-box;
+    border-right: 1px solid #666;
+    border-bottom: 1px solid #666;
+    float: left;
+    display: table;
+    box-shadow: 1px 1px 1px #545454;
+}
+.phraseItem > span{
+    display: table-cell;vertical-align: middle;text-align: center
+}
+/*.phraseCtr{
+    position: absolute;width: 100%;height: 100%;top: 0;left: 0;display: block;background-color: rgba(56, 56, 56, 0.5);
+}
+.phraseCtr > img{
+    position: absolute;
+    right:.3rem;
+    top:.3rem;
+    width:1rem;
+}
+.phraseModify{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+
+}
+.phraseModify-on{
+    background: rgba(100,100,100,.6);
+}
+.phraseModify-off{
+    background: none;
+}
+
+.phraseModify > input{
+    width: 100%;
+    height: 40%;
+    position: relative;
+    top: 30%;
+    padding: 5px;
+    text-align: center;
+}
+
+.phraseModify-on > input{
+
+}
+.phraseModify-off > input{
+    border:none;
+    background: none;
+}*/
+
+.white{
+    background: #fff;
+}
+
+.show{
+    display: block;
+}
+.hide{
+    display: none;
+}
