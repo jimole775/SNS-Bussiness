@@ -2,3 +2,4 @@
 node_modules
 client/www/images/carLogo/logo
 client/www/images/carType/
+*.zip

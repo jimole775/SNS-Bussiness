@@ -76,7 +76,6 @@
 
 				$scope.carLogo = curCarLogo.carList;
 
-
 				$("#bodyInit").animate({opacity: 0}, 700, function () {
 					document.getElementById("bodyInit").style.display = "none";//隐藏初始化的提示文本
 				});

@@ -31,7 +31,7 @@
 				break;
 			case "timeout":
 			case "error"://涵盖有服务器繁忙
-				this.refreshHandle(response, callback, alertCallback, alertCallbackRetry, alertCallbackBack);
+				win.serverRequestCallback.refreshHandle(response, callback, alertCallback, alertCallbackRetry, alertCallbackBack);
 				break;
 		}
 	};
@@ -62,7 +62,7 @@
 		}
 	};
 
-	win.server.refreshHandle = function (response, callback, alertCallback, alertCallbackRetry, alertCallbackBack) {
+	win.serverRequestCallback.refreshHandle = function (response, callback, alertCallback, alertCallbackRetry, alertCallbackBack) {
 		/**超时回调处理：
 		 * 如果回调参数传过来的是数组，就是两个函数实体
 		 * 如果回调参数穿过来的是函数，就是一个函数，直接调用

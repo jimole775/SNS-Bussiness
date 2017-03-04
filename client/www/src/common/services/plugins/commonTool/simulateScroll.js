@@ -8,10 +8,12 @@
 			init: function () {
 				this.mouseEvent = {};
 				this.mouseEvent.down = {};
+
 				this.mouseEvent.move = {};
 				this.mouseEvent.up = {};
 				this.mouseEvent.down.orgX = 0;
 				this.mouseEvent.down.orgY = 0;
+				this.mouseEvent.down.flag = false;
 				this.mouseEvent.move.orgX = 0;
 				this.mouseEvent.move.orgY = 0;
 				this.mouseEvent.up.orgX = 0;
@@ -85,7 +87,7 @@
 				//content触摸事件
 
 				this.elements.context_main.on(win.CONSTANT.EVENT_TYPE.START, function (e) {
-
+					that.mouseEvent.down.flag = true;
 					that.count.startTime = e.timeStamp;
 
 					clearInterval(that.monitor.verticalScrollingWatcher);
@@ -111,6 +113,7 @@
 				});
 
 				this.elements.context_main.on(win.CONSTANT.EVENT_TYPE.MOVE, function (e) {
+					if(!that.mouseEvent.down.flag)return;
 					/**
 					 * 阻止move的默认动作,比如滚动条滑动 (现在就在模拟move的滚动条,在CSS里面已经禁止了浏览器滚动条:overflowHidden)
 					 * 如果不阻止默认动作,某些垃圾浏览器将无法滚动(比如:三星的SM-T310默认浏览器)**/
@@ -170,6 +173,8 @@
 				});
 
 				this.elements.context_main.on(win.CONSTANT.EVENT_TYPE.END, function (e) {
+					that.mouseEvent.down.flag = false;
+
 					that.count.slideTop = parseFloat(that.elements.scrollBodyController.curContentBox.css("top"));
 					that.count.slideLeft = parseFloat(that.elements.scrollBodyController.css("left"));
 					var target = e.originalEvent.changedTouches ? e.originalEvent.changedTouches[0] : e.originalEvent;

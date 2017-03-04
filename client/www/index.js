@@ -75,7 +75,6 @@
 	var programScripts = {};
 	programScripts["_公共"] = [
 		"src/common/interface/fileSystem/nativeFileSystem.js"
-		//"src/processBlock/programSeries/jsRecvServerData_fake.js"
 	];
 
 	programScripts["_编程"] = [

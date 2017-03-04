@@ -6,9 +6,16 @@
 	var gIndexId = "";
 	var gModuleInfo = "";
 	var gModuleAddress = "";
-	var gFileType = ""; 			//缓存0x2106+文件类型(2B)中的文件类型
-
+	var gFileType = ""; 			//文件类型(2B)
+	var gFileLen = null;            //文件长度(4B)
+	var gFileNameASCII = null;           //文件名,asc类型(32B)
+	var gFileMD5 = null;            //MD5值,长度(16B)
+	var gFileEncodeType = null;     //加密类型,长度(2B)
+	var gUploadTime = 0;            //上传文件校验次数,如果失败3次之后,退出业务
 	var BMWF18ServerType = 500;
+
+	//APP交互端口6202推送的文件名数据；
+	var gDevFilName = "";
 
 	var isFunctionSet = false;
 	var isModuleSelect = false;
@@ -96,7 +103,7 @@
 				 * 设备应答数据：0x7106+0x23+[01(成功)+文件名ASCII(32B)+文件大小(4B)+MD5值(16B)+加密类型(2B)+文件类型(2B)]/02(失败)/03(数据校验错误)
 				 * 截取8位之后的所有字符，传给APP进行处理: 0x2107+文件名ASCII(32B)+文件大小(4B)+MD5值(16B)+加密类型(2B)+文件类型(2B)
 				 * */
-				 win.appService.sendDataToApp(7106,varData,getDevFileName);
+				//requestUploadFile(varData,"2107");
 				break;
 			case "2302":        //8、读取模块配置信息 失败 弹出确认框提示“读取模块配置信息失败”，用户点确定后退出流程。
 				tool.alert("读取模块配置信息失败,请重试");
@@ -117,21 +124,6 @@
 		}
 
 	};
-
-
-	//APP交互端口6202推送的文件名数据；
-	var gDevFilName = "";
-
-	function getDevFileName(DevFileName) {
-		gDevFilName = DevFileName;
-		var dataPack = {
-			address: gModuleAddress,
-			configFileName: gModuleInfo,
-			devFileName: gDevFilName
-		};
-
-		SendDevFileNameToServer(dataPack);
-	}
 
 	var gCarTypeInfo = "";
 	win.devInterActive.Fun7105 = function (varRecvData) {
@@ -192,7 +184,6 @@
 	var setCodeInfosBindOnModelInfo = {};//把setCodeInfos属性和modelInfo属性绑定到一起;
 	win.serverRequestCallback.showPersonalizeModule = function (responseData, params) {
 		tool.loading(0);
-
 
 		var jsonData = responseData || [];
 		var strHtml = "";
@@ -298,8 +289,8 @@
 
 		$("#moduleList").html(strHtml);
 		tool.bottomBtn({
-			btn1Text:"退出",
-			btn1Callback:function(){
+			btn1Text: "退出",
+			btn1Callback: function () {
 				quitBusiness();
 			}
 		});
@@ -379,8 +370,8 @@
 				tool.stopPropagation(e);
 			}
 		} catch (e) {
-			tool.alert(e.message,function(){
-				win.appService.sendDataToApp(3999,"","");
+			tool.alert(e.message, function () {
+				win.appService.sendDataToApp(3999, "", "");
 			});
 		}
 	}
@@ -411,7 +402,7 @@
 		//索引ID(十六进制字符串)
 		//var varSendData = "{'subURL':'" + CONSTANT.SERVER_ADDRESS +
 		// "','data':[{'ServerType':'23'},{'DataType':'4'},{'DataPack':'" + data + "'}]}";
-		win.server.request(BMWF18ServerType, 4, varRecvData,win.serverRequestCallback.getKey_A100);
+		win.server.request(BMWF18ServerType, 4, varRecvData, win.serverRequestCallback.getKey_A100);
 	};
 
 
@@ -425,16 +416,8 @@
 	//PC应答：0x2703+索引ID(4B)+0x01(LAN密钥)+密钥位数m(2B)+密钥数据(nB)+密钥CRC16校验(2B)
 	win.serverRequestCallback.getKey_A100 = function (responseObject, params) {
 
-		//if (!!status.ok) {
-			keyBox = responseObject;
-			handleKeySeries(keyBox, 0);
-		//}
-		//else {
-			//todo 获取秘匙失败
-			//tool.alert("获取模块密钥失败,点击确定退出业务", function () {
-			//	win.appService.sendDataToApp(3999, "", "")
-			//});
-		//}
+		keyBox = responseObject;
+		handleKeySeries(keyBox, 0);
 
 	};
 
@@ -511,8 +494,8 @@
 			}
 
 		} catch (e) {
-			tool.alert(e.message,function(){
-				win.appService.sendDataToApp(3999,"","");
+			tool.alert(e.message, function () {
+				win.appService.sendDataToApp(3999, "", "");
 			});
 		}
 	};
@@ -739,12 +722,12 @@
 		selectChange();
 		tool.layout("module", 0);
 		tool.bottomBtn({
-			btn1Text:"确定",
-			btn1Callback:function(){
+			btn1Text: "确定",
+			btn1Callback: function () {
 				handleFunctionSet()
 			},
-			btn2Text:"返回",
-			btn2Callback:function(){
+			btn2Text: "返回",
+			btn2Callback: function () {
 				loopTrigger('functionSet');//传ID
 			}
 		});
@@ -767,7 +750,6 @@
 
 	//监听菜单修改情况，存储到cacheChangeItemByFlagOfParameter和cacheChangeItemByFlagOfParameter；
 	var cacheChangeItemByFlagOfParameter = {};
-
 	function selectChange() {
 		//不在字串拼接时使用“onchange”事件的原因在于，兼容性的解决太麻烦
 		$(".item-select-change").on("change", function (e) {
@@ -784,17 +766,11 @@
 				cacheChangeItemByFlagOfParameter[parameter] = document.getElementById(parameter).value;           //由于INPUT onchange方法不监听脚本操作，所以，只有在插件操作之后添加回调
 			});
 		});
-
 	}
 
 	win.RMTClickEvent.handleSelectEvent = function (parameter) {
 		cacheChangeItemByFlagOfParameter[parameter] = document.getElementById(parameter).value;
 	};
-
-	//给html模板使用的方法；
-	//win.RMTClickEvent.loopTrigger = function () {
-	//	loopTrigger();
-	//};
 
 	//tips方法已经集成RMT转发事件，如果再使用RMTClickEvent对象，就会造成两次转发；
 	function loopTrigger() {
@@ -802,11 +778,6 @@
 		tool.layout('functionSet', 0);
 		tool.layout("module", 1);
 	}
-
-	//给html模板使用的方法；
-	win.RMTClickEvent.quitBusiness = function () {
-		quitBusiness();
-	};
 
 	//给tool.alert绑定回调使用的方法
 	function quitBusiness() {
@@ -850,8 +821,7 @@
 
 		tool.loading({text: "正在将个性化设置参数写入车辆，请稍后..."});
 
-		win.server.request(BMWF18ServerType, 2, dataPack,
-		                   win.serverRequestCallback.moduleModifyResult);
+		win.server.request(BMWF18ServerType, 2, dataPack, win.serverRequestCallback.moduleModifyResult);
 
 		dataPack.parameterItems.length = 0;
 	}
@@ -860,28 +830,68 @@
 	//最后根据设备端口6202反馈的结果，进行应答
 	win.serverRequestCallback.moduleModifyResult = function (response, params) {
 
-		if (!!status.ok) {
-			var setCodeData = response.setCodeData || "";
-			isFunctionSet = true;
-			isModuleSelect = false;
-			win.appService.sendDataToApp(6203, setCodeData, "hasModify");
-			//tool.processBar("");
-		}
-		else {
-			tool.alert("服务器响应失败，请重新选择");
-		}
+		var setCodeData = response.setCodeData || "";
+		isFunctionSet = true;
+		isModuleSelect = false;
+		win.appService.sendDataToApp(6203, setCodeData, "hasModify");
+		/**请求下载(PC)	0x2108+文件名ASCII(32B)+文件大小(4B)+MD5值(16B)+加密类型(2B)+文件类型(2B)
+		 * 服务器已经把修改的数据全部修改成了 [文件名ASCII(32B)+文件大小(4B)+MD5值(16B)+加密类型(2B)+文件类型(2B)] 这种格式
+		 */
+		//requestUploadFile(setCodeData,"2108");
 	};
+
+	function requestUploadFile(data,prevCmd){
+		var i = 0;
+		i += 8;
+		gFileNameASCII = data.substr(i + 32 * 2); 		//文件名,asc类型(32B)
+		i += 32 * 2;
+		gFileLen = data.substr(i + 4 * 2);         //文件长度(4B)
+		i += 4 * 2;
+		gFileMD5 = data.substr(i + 16 * 2);        //MD5值,长度(16B)
+		i += 16 * 2;
+		gFileEncodeType = data.substr(i + 2 * 2);  //加密类型,长度(2B)
+		i += 2 * 2;
+		gFileType = data.substr(i + 2 * 2);        //文件类型(2B)
+		gUploadTime++;
+		win.sendDataToDev(prevCmd + gFileNameASCII + gFileLen + gFileMD5 + gFileEncodeType + gFileType);
+	}
+
 
 	//isFunctionSet代表菜单设置后的6202设备应答，
 	//isModuleSelect代表模块选择后的6202设备应答
 	win.devInterActive.Fun6202 = function (varRecvData) {
 		if (varRecvData.substr(4, 2) == "01") {
-			if (isFunctionSet && !isModuleSelect) {
 
-				//如果是功能设置菜单之后返回的6202，就通知设备设置修改完成
-				//0x3106+0x0F(写入参数)+地址(1B)+索引ID[4B]
+			//如果是功能设置菜单之后返回的6202，就通知设备设置修改完成
+			//0x3106+0x0F(写入参数)+地址(1B)+索引ID[4B]
+			if (isFunctionSet && !isModuleSelect) {
+				gUploadTime = 0;
 				Fun31060F();
 			}
+
+			//如果是上传模块配置信息文件返回的6202,就把文件名上传给服务器
+			//else{
+			//	gDevFilName = tool.decodeASC(gFileNameASCII);
+			//	var dataPack = {
+			//		address: gModuleAddress,
+			//		configFileName: gModuleInfo,
+			//		devFileName: gDevFilName
+			//	};
+			//
+			//	SendDevFileNameToServer(dataPack);
+			//}
+		}
+		else {
+			//校验文件失败之后,重新上传;
+			//if (gUploadTime < 3) {
+			//	gUploadTime++;
+			//	win.sendDataToDev("2107" + gFileNameASCII + gFileLen + gFileMD5 + gFileEncodeType + gFileType);
+			//}
+			//else {
+			//	tool.alert("上传文件校验失败", function () {
+			//		quitBusiness();
+			//	})
+			//}
 		}
 	};
 
@@ -893,16 +903,97 @@
 		win.sendDataToDev(CMDStr);
 	}
 
+	var calcLen = 0;
+	//上传模块数据
+	//DEV应答：0x6201+[01(成功)+起始地址(4B)+数据长度(4B)+数据(0 ～1024)]/02(失败)
 	win.devInterActive.Fun6201 = function (varRecvData) {
+		//if (varRecvData.substr(4, 2) == "01") {
+		//	var avoidLen = 4 + 2 + 4 * 2 + 4 * 2;
+		//	var result = varRecvData.substr(avoidLen);
+		//	calcLen += result.length / 2;
+		//
+		//	//逐步增加返回的数据长度
+		//	if (calcLen <= tool.hex2dec(gFileLen)) {
+		//		win.sendDataToDev("2201" + tool.toHex(calcLen, 8) + gFileLen);//开始起始位置是8位0,然后根据6201返回的长度,逐一增加
+		//	}
+		//	else {
+		//		/**传输结束(PC)	0x2202+文件名(32B)+文件大小(4B)+MD5值(16B)(为PC计算的MD5值)
+		//		 * 注：(1)传输结束后PC需要校验文件的名称/大小/MD5值，失败则PC重新请求上传文件；
+		//		 */
+		//		calcLen = 0;
+		//		win.sendDataToDev("2202" + gFileNameASCII + gFileLen + gFileMD5);
+		//	}
+		//}
+		//else {
+		//	tool.alert("上传模块配置数据失败", function () {
+		//		quitBusiness();
+		//	});
+		//}
+	};
+	win.global.A100GetDevFileName = function(fileName){
+			gDevFilName = fileName;
+			var dataPack = {
+				address: gModuleAddress,
+				configFileName: gModuleInfo,
+				devFileName: gDevFilName
+			};
+
+			SendDevFileNameToServer(dataPack);
 	};
 
-	win.devInterActive.Fun6203 = function (varRecvData) {
-	};
-
+	//请求下载模块数据;
 	win.devInterActive.Fun6108 = function (varRecvData) {
+		//if (varRecvData.substr(4, 2) == "01") {
+		//	win.sendDataToDev("2203" + tool.toHex(loopIndex,8) + gFileLen + tool.toHex(1024,8));
+		//	loopIndex = loopIndex + 1024;   //固定每次下载1024字节长度
+		//}
+		//else {
+		//	tool.alert("下载模块配置数据失败", function () {
+		//		quitBusiness();
+		//	});
+		//}
 	};
 
+	//下载模块数据
+	var loopIndex = 0;
+	//传输数据(PC)	0x2203+起始地址(4B)+数据长度(4B)+数据(0～1024)
+	win.devInterActive.Fun6203 = function (varRecvData) {
+		//if (varRecvData.substr(4, 2) == "01") {
+		//
+		//	//如果循环下标小于总长度,就继续传输数据,否则就代表传输完毕
+		//	if(loopIndex < tool.hex2dec(gFileLen)){
+		//
+		//		//如果循环下标还可以塞下1024的长度,就使用1024长度,否则就使用剩下的长度
+		//		if(tool.hex2dec(gFileLen) - loopIndex >= 1024){
+		//			win.sendDataToDev("2203" + tool.toHex(loopIndex,8) + gFileLen + tool.toHex(1024,8));
+		//			loopIndex = loopIndex + 1024;
+		//		}else{
+		//			win.sendDataToDev("2203" + tool.toHex(loopIndex,8) + gFileLen + tool.toHex(tool.hex2dec(gFileLen) - loopIndex,8));
+		//			loopIndex = tool.hex2dec(gFileLen);
+		//		}
+		//	}else{
+		//		loopIndex = 0;
+		//		win.sendDataToDev("2202" + gFileNameASCII + gFileLen + gFileMD5);
+		//	}
+		//}
+		//else {
+		//	tool.alert("下载模块配置数据失败", function () {
+		//		quitBusiness();
+		//	});
+		//}
+	};
+
+	//传输数据(PC)	0x2201+起始地址(4B)+数据长度(4B)
 	win.devInterActive.Fun6107 = function (varRecvData) {
+
+		//if (varRecvData.substr(4, 2) == "01") {
+		//	win.sendDataToDev("2201" + "00000000" + gFileLen);//开始起始位置是8位0,然后根据6201返回的长度,逐一增加
+		//}
+		//else {
+		//	tool.alert("上传模块配置数据失败", function () {
+		//		quitBusiness();
+		//	});
+		//}
 	};
 
 })(window);

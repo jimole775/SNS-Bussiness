@@ -8,12 +8,13 @@ html {
     font-size: 62.5%;
     height: 100%;
     font-family: ".PingFang-SC-Medium","微软雅黑","Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
+
 }
 
 body {
     height: 100%;
     overflow: hidden;
-    margin: 0;
+    margin: 0 auto;
 }
 
 article, aside, details, figcaption, figure, footer, header, main, nav, section, summary {

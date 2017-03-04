@@ -24,7 +24,7 @@ win.external.SendToApp = function (action, msg) {
 			//}
 			break;
 		case 1000:
-			win.jsRecvAppData(1000,{"screen":5.5,"head":44,"foot":44},"");
+			win.jsRecvAppData(1000,{"screen":5.5,"head":60,"foot":60},"");
 			break;
 		}
 

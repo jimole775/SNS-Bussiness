@@ -304,7 +304,6 @@
 
 		/**
 		 * 请求服务器回调方法
-		 * @param status ;服务器数据状态,在RequestService.js进行了封装 --status.ok="true":正常 status.ok="false":数据丢失
 		 * @param responseObject ;JSON数据
 		 * @param params ;用于内部运算的参数，通过 server.RequestService.utilAddParams() 方法传入, 远程协助时通过APP传入
 		 * */
@@ -458,7 +457,6 @@
 
 				//发送3027登入服务器,下一个入口在src/common/services/interActivePorts/devInterActive.js
 				win.appService.sendDataToApp(win.CONSTANT.JS_TO_APP.REQUEST_LOGIN_SERVER, global.businessInfo.link, "3027");
-
 			}
 
 			//防盗匹配只有在这里才能获取到完整的URL，和其他的项目不一样，需要区别对待！

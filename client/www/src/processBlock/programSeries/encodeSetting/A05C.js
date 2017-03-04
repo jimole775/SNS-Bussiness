@@ -381,7 +381,7 @@
 
     //密钥信息  字符串格式：                               密钥数n(1B)+n*密钥信息[密钥类型(1B)+密钥位数m(2B)+密钥校验(2B)+密钥数据(nB)]
     //PC应答：0x6703+索引ID(4B)+{01(成功)+密钥数n(1B)+n*密钥信息[密钥类型(1B)+密钥位数m(2B)+密钥校验(2B)+密钥数据(nB)]}/02(失败)
-    win.serverRequestCallback.getKey = function (recvData,params) {
+    win.serverRequestCallback.getKey_A05C = function (recvData,params) {
         //var varJson = JSON.parse(getBse64Decode(recvData));
         //if (varJson.CODETYPE == 'OK') {
             try {
@@ -835,6 +835,7 @@
                 "03": "编辑设码",
                 "04": "恢复设码"
             };
+
             tool.loading({text: "正在进行" + t[code] + "..."});
             tool.log("用户选择: " + t[code]);
             //如果是恢复设码，则弹出文件选择窗口
@@ -1198,7 +1199,7 @@
         } catch (e) {
             console.log(e.message);
         }
-    };
+    }
 
     //选择时赋值
     win.RMTClickEvent.optionChange = function (id) {
@@ -1260,8 +1261,7 @@
         //var varSendData = JSON.stringify({subURL: win.CONSTANT.SERVER_ADDRESS ,data:[{ServerType:"23"},{DataType:"3"},{DataPack: data }]});
         //win.external.RequestDataFromServer(3021, varSendData, getProgramFilesCallBack);
 
-        win.server.request(23,3,{DataPack:data},
-            win.serverRequestCallback.getProgramFiles_A05C);
+        win.server.request(23,3,{DataPack:data}, win.serverRequestCallback.getProgramFiles_A05C);
     };
 
     //获取密钥 0x2703+索引ID(4B)	PC应答：0x6703+索引ID(4B)+{01(成功)+密钥数n(1B)+n*密钥信息[密钥类型(1B)+密钥位数m(2B)+密钥校验(2B)+密钥数据(nB)]}/02(失败)
@@ -1275,7 +1275,7 @@
         var data = getBse64Encode(gIndexId + databaseVersion);
         //var varSendData = JSON.stringify({subURL: win.CONSTANT.SERVER_ADDRESS,data:[{ServerType:"23"},{DataType:"4"},{DataPack:data}]});
         //win.external.RequestDataFromServer(3021, varSendData, getKeyCallBack);
-
+        win.server.request(23,4,{DataPack:data}, win.serverRequestCallback.getKey_A05C);
 
     };
 

@@ -68,12 +68,12 @@ $ (document).ready (function () {
 			case win.CONSTANT.APP_TO_JS.RECEIVE_QUIT_SIGN_NORMAL:                           //退出业务之前，先通知APP其他线程的收尾工作，再通过此端口执行3109FF退出操作；
 				interActiveState.end.quit ();
 				break;
-			//case win.CONSTANT.APP_TO_JS.RECEIVE_DEV_FILE_AT_A100:                           //处理A100个性设码6202指令成功时，接收来自APP解析出来的DEV文件名；
-			//	interActiveState.event.handleA100Program(recvData);
-			//	break;
+			case win.CONSTANT.APP_TO_JS.RECEIVE_DEV_FILE_AT_A100:                           //处理A100个性设码6202指令成功时，接收来自APP解析出来的DEV文件名；
+				interActiveState.event.handleA100Program(recvData);
+				break;
 			case win.CONSTANT.APP_TO_JS.RECEIVE_CALC_MD5_RESULT:                            //编程设码项目 A040,A05C,A08D项目通过APP端口来执行处理回调；
-			//case win.CONSTANT.APP_TO_JS.RECEIVE_DIR_ALL_FILES:                              //编程设码项目 A040,A05C,A08D项目通过APP端口来执行处理回调；
-			//case win.CONSTANT.APP_TO_JS.RECEIVE_UPLOAD_FILE_FROM_SERVER:                    //编程设码项目 A040,A05C,A08D项目通过APP端口来执行处理回调；
+			case win.CONSTANT.APP_TO_JS.RECEIVE_DIR_ALL_FILES:                              //编程设码项目 A040,A05C,A08D项目通过APP端口来执行处理回调；
+			case win.CONSTANT.APP_TO_JS.RECEIVE_UPLOAD_FILE_FROM_SERVER:                    //编程设码项目 A040,A05C,A08D项目通过APP端口来执行处理回调；
 				interActiveState.event.handleProgramSeriesEvent(recvData, callbackId);
 				break;
 		}
@@ -162,10 +162,13 @@ $ (document).ready (function () {
 		$("#footer")[0].style.height = json.foot + "px";
 		$("#bottomButton")[0].style.height = json.foot + "px";
 
-		tool.layoutTable(); //重新计算页面的布局
+
 		setTimeout(function(){
-			tool._scroll.init ();   //重新计算滚动的布局
-		},45);  //这个延迟取决于tool.layoutTable的计算速度
+			tool.layoutTable(); //重新计算页面的布局,会导致页面重绘
+			setTimeout(function(){
+				tool._scroll.init ();   //重新计算滚动的布局
+			},45);
+		},210);  //这个延迟取决于页面重绘的速度!
 
 		//把屏幕尺寸辐射到全局
 		win.global.phoneScreenSize = screenSize;
@@ -179,10 +182,10 @@ $ (document).ready (function () {
 	 *获取图片的信息
 	 */
 	interActiveState.event.handleImages = function (recvData) {
-		var json = typeof recvData === "string" && /\{\[/.test (recvData) ? JSON.parse (recvData) : recvData;
-		var url = json[0];
-		var param = json[1];
-		global.ShowCarTypeImg (url, param);
+	//	var json = typeof recvData === "string" && /\{\[/.test (recvData) ? JSON.parse (recvData) : recvData;
+	//	var url = json[0];
+	//	var param = json[1];
+	//	global.ShowCarTypeImg (url, param);
 	};
 
 	interActiveState.event.handleProgramSeriesEvent = function(action, recvData){
