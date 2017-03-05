@@ -169,16 +169,18 @@
 				},
 				dataPack,
 				win.server.addCallbackParam(win.serverRequestCallback.BASE_ADJUST, [dataPack]),
-				function () {
-					var i = $scope.baseAdjuseterDataList.length;
-					safeApply(function () {
-						while (i--) {
-							$scope.baseAdjuseterDataList[i].ans = 'N/A';
-						}
-					});
-				}
+				[null,handleBackRequest]
 			);
 
+		}
+
+		function handleBackRequest(){
+			var i = $scope.baseAdjuseterDataList.length;
+			safeApply(function () {
+				while (i--) {
+					$scope.baseAdjuseterDataList[i].ans = 'N/A';
+				}
+			});
 		}
 
 		win.serverRequestCallback.BASE_ADJUST = function (responseObject, params) {

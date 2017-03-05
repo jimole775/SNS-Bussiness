@@ -231,7 +231,7 @@
 		}
 
 		//打包dataPack请求服务器
-		function getItemsByParents(pagesOptionChosenRecord, callback, overTimeHandler) {
+		function getItemsByParents(pagesOptionChosenRecord, callback, handleBackRequest) {
 			var DataPack = {
 				mkey: $scope.varmkey,
 				parents: pagesOptionChosenRecord  //服务器解析名为 parents；
@@ -239,7 +239,7 @@
 			win.server.request(global.businessInfo.serverType, {
 				key: "CTYPE",
 				cartype: global.businessInfo.carType
-			}, DataPack, callback, overTimeHandler);
+			}, DataPack, callback, handleBackRequest);
 		}
 
 

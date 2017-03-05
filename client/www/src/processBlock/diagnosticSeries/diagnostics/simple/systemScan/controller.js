@@ -576,29 +576,18 @@
 				},
 				DataPack,
 				win.server.addCallbackParam(win.serverRequestCallback.DTC_simple, [markParams]),
-				//function (params) {
-				//
-				//	cachebadRequestParamArr[params.webViewIndex] = params;
-				//	$scope.webViewSystemList_arr[params.webViewIndex].dtcScanStateText = '数据请求失败(点击重试)';
-				//	safeApply(function () {});
-				//}
-				win.serverRequestCallback.handleBackRequest
+				[null,handleBackRequest]
 			);
 		}
 
-		win.serverRequestCallback.handleBackRequest = function(params){
+		function handleBackRequest(params){
 			cachebadRequestParamArr[params.webViewIndex] = params;
 			$scope.webViewSystemList_arr[params.webViewIndex].dtcScanStateText = '数据请求失败(点击重试)';
 			safeApply(function () {});
-		};
+		}
 
 		win.serverRequestCallback.DTC_simple = function (responseObject, params) {
 			if (!showView)return;
-			//if (!status.ok) {
-			//	cachebadRequestParamArr[params.webViewIndex] = params;
-			//	$scope.webViewSystemList_arr[params.webViewIndex].dtcScanStateText = '数据请求失败(点击重试)';
-			//	safeApply(function () {});
-			//}
 			if (!responseObject.items.length) {
 				$scope.webViewSystemList_arr[params.webViewIndex].dtcScanStateText = '无故障';
 				safeApply(function () {});

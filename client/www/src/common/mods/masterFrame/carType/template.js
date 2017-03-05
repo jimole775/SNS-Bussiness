@@ -19,12 +19,20 @@
 		'               <span class="item-description item-description-layout-table" ng-click="handleSelect(parentIndex,item)">',
 		'                   <em class="item-description-layout-cell extend-font-size">{{ item.name }}</em>',
 		'               </span>',
-		'               <span class="item-value-layout-table" ng-click="showImg(parentIndex,curIndex,item.imgShow)">',
+						//如果没有图片，就切换到向右的箭标
+		'               <span class="item-value-layout-table"  ng-if="!item.picture">',
 		'                   <span class="item-value-layout-cell">',
-		'                       <i class="arrow-down arrow-layout-middle animation" ng-class="{\'arrow-down\':!item.imgShow,\'arrow-up\':item.imgShow}"></i>',
+		'                       <i class="arrow-right arrow-layout-middle"></i>',
 		'                   </span>',
 		'               </span>',
-		'               <img ng-if="item.picture" ng-show="item.imgShow" width="100%" ng-src="./images/carType/img/{{ item.picture }}" alt="车型图片丢失，请更新资源包">',
+						//如果有图片，就切换到向下的箭标
+		'               <span class="item-value-layout-table"  ng-if="item.picture" ng-click="showImg(parentIndex,curIndex,item.imgShow)">',
+		'                   <span class="item-value-layout-cell">',
+								//根据图片的显示情况切换箭标的上下状态
+		'                       <i class="arrow-layout-middle animation" ng-class="{\'arrow-down\':!item.imgShow,\'arrow-up\':item.imgShow}"></i>',
+		'                   </span>',
+		'               </span>',
+		'               <img ng-show="item.imgShow" width="100%" ng-src="./images/carType/img/{{ item.picture }}" alt="车型图片丢失，请更新资源包">',
 		'           </button>',
 		'       </div>',
 		'   </div>',
