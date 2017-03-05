@@ -325,7 +325,6 @@
 		gIndexId = $(curTarget).find("i[rel='moduleNameIndexId']").text();
 		gModuleAddress = $(curTarget).find("span[rel='moduleAddress']").text();
 
-
 		//var str1 = "红色：所选模块需要升级数据库";
 		//var str2 = "黑色：所选模块无个性化功能设置";
 		//如果tipStr有值，就证明是无效的模块，弹出提示框
