@@ -34,6 +34,7 @@
 	 * @params object: 0 如果object等于0，就隐藏
 	 * */
 	CommonTool.prototype.loading = function (object) {
+
 		var self = arguments.callee;
 		if (!self.status)self.status = {};
 		if (self.spinner)clearInterval (self.spinner);

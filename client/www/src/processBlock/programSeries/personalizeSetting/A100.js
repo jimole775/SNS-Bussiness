@@ -56,12 +56,12 @@
 		switch (cmdIndex4_2) {
 			case "01": //个性化设置参数写入车辆成功,(设备未确定指令为71090F01还是710901)
 				tool.alert("个性化设置参数写入车辆成功", function () {
-					loopTrigger('functionSet')
+					loopTrigger()
 				});
 				break;
 			case "02": //个性化设置参数写入车辆失败,(设备未确定指令为71090F02还是710902)
 				tool.alert("个性化设置参数写入车辆失败", function () {
-					loopTrigger('functionSet')
+					loopTrigger()
 				});
 				break;
 		}
@@ -95,6 +95,7 @@
 				});
 				break;
 			case "2301":
+				//APP会自行处理9,10两个步骤的数据处理;
 				isFunctionSet = false;
 				isModuleSelect = true;
 				console.log("isFunctionSet:", isFunctionSet, "isModuleSelect:", isModuleSelect);
@@ -727,7 +728,7 @@
 			},
 			btn2Text: "返回",
 			btn2Callback: function () {
-				loopTrigger('functionSet');//传ID
+				loopTrigger();//传ID
 			}
 		});
 
@@ -775,12 +776,19 @@
 	function loopTrigger() {
 		cacheChangeItemByFlagOfParameter = {};
 		tool.layout('functionSet', 0);
+		$("#moduleList").html(strHtml);
+		tool.bottomBtn({
+			btn1Text: "退出",
+			btn1Callback: function () {
+				quitBusiness();
+			}
+		});
 		tool.layout("module", 1);
 	}
 
 	//给tool.alert绑定回调使用的方法
 	function quitBusiness() {
-		win.sendDataToDev("3109FF");
+		win.sendDataToApp(3999,"","");
 	}
 
 	//当菜单页点击确定按钮后，
@@ -869,16 +877,16 @@
 			}
 
 			//如果是DEV上传模块配置信息文件返回的6202,就把文件名上传给服务器
-		/*	else{
-				gDevFilName = tool.decodeASC(gFileNameASCII);
-				var dataPack = {
-					address: gModuleAddress,
-					configFileName: gModuleInfo,
-					devFileName: gDevFilName
-				};
-
-				SendDevFileNameToServer(dataPack);
-			}*/
+			//else{
+			//	gDevFilName = tool.decodeASC(gFileNameASCII);
+			//	var dataPack = {
+			//		address: gModuleAddress,
+			//		configFileName: gModuleInfo,
+			//		devFileName: gDevFilName
+			//	};
+			//
+			//	SendDevFileNameToServer(dataPack);
+			//}
 		}
 		else {
 			//校验文件失败之后,重新上传;

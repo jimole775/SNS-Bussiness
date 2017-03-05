@@ -509,8 +509,9 @@
 			if (!showView)return;
 
 			if (!responseObject.items.length) {
-				pidsCallback += responseObject.items ? responseObject.items.length : 3;
-				if (pidsCallback >= pidsCount) {                                  //当数据全部刷新完成再去掉限制
+				pidsCallback += responseObject.items.length ? responseObject.items.length : 3;
+				//当数据全部刷新完成再去掉限制
+				if (pidsCallback >= pidsCount) {
 					tool.loading(0);
 					//处理一下如果只有一批数据的情况,Fun71091B类型
 					//if (pidsCount == 1) {
@@ -523,7 +524,7 @@
 					//			function () { }
 					//		);
 					//}
-
+					tool.alert("无冻结帧数据", function () {});
 					$scope.freezeBtnDisable = true;
 					pidsCallback = 0;
 					safeApply(function () {});

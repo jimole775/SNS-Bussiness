@@ -168,13 +168,16 @@
 						var funName = "serverRequestCallback." + prop;
 						return function () {
 							var params_stringJson = [];
-							var arguments_fst = arguments[0] || "{}";       //serverRequestCallback所有函数参数都固定为3个;
-							var arguments_sec = arguments[1] || "{}";       //serverRequestCallback所有函数参数都固定为3个;
-							var arguments_thd = arguments[2] || "{}";       //serverRequestCallback所有函数参数都固定为3个;
 
-							params_stringJson[0] = typeof arguments_fst !== "string" ? JSON.stringify(arguments_fst) : arguments_fst;    //确保结果为 字串json
-							params_stringJson[1] = typeof arguments_sec !== "string" ? JSON.stringify(arguments_sec) : arguments_sec;    //确保结果为 字串json
-							params_stringJson[2] = typeof arguments_thd !== "string" ? JSON.stringify(arguments_thd) : arguments_thd;    //确保结果为 字串json
+								var arguments_fst = arguments[0] || "{}";       //serverRequestCallback所有函数参数都固定为3个;
+								var arguments_sec = arguments[1] || "{}";       //serverRequestCallback所有函数参数都固定为3个;
+								var arguments_thd = arguments[2] || "{}";       //serverRequestCallback所有函数参数都固定为3个;
+
+
+								params_stringJson[0] = typeof arguments_fst !== "string" ?JSON.stringify(arguments_fst) : arguments_fst;    //确保结果为 字串json
+								params_stringJson[1] = typeof arguments_sec !== "string" ?JSON.stringify(arguments_sec): arguments_sec;    //确保结果为 字串json
+								params_stringJson[2] = typeof arguments_thd !== "string" ?JSON.stringify(arguments_thd) : arguments_thd;    //确保结果为 字串json
+
 
 							win.sendRMTEventToApp(funName,
 							                      params_stringJson[0] + "_|_" +                    //加上"_|_",方便区分参数个数

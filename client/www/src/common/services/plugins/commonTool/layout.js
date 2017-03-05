@@ -130,13 +130,10 @@
 
 				if (buttonElement) {
 					thead_cloneWidth = document.getElementById("topNav").offsetWidth;
-					this.setStyle(buttonElement, {
-						width: thead_cloneWidth,
-						top: groupNav.height() + 10 +       //10px为自由裁度量
-						(thead_cloneHeight - buttonElement.offsetHeight) / 2,
-						right: 0,
-						height: thead_cloneHeight
-					})
+					buttonElement.style.width = thead_cloneWidth;
+					buttonElement.style.top = groupNav.height() + 10 + (thead_cloneHeight - buttonElement.offsetHeight) / 2;
+					buttonElement.style.right = 0;
+					buttonElement.style.height = thead_cloneHeight;
 				}
 
 			}

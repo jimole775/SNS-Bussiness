@@ -1446,7 +1446,7 @@
 
 	var btnConfirmCancel = function () {
 		$ ("#btnConfirmCancel").click (function () {
-			RMTClickEvent.btnConfirmCancelClickEvent ();
+			win.RMTClickEvent.btnConfirmCancelClickEvent ();
 		});
 	};
 

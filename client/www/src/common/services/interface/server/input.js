@@ -12,31 +12,32 @@
 	 * @param callback str
 	 * @param alertCallback array or function
 	 * */
+
+	var alertCallbackRetry = function(){};
+	var alertCallbackCancle = function(){};
 	win.server.jsRecvServerData = function (action, response, callback, alertCallback) {
 		if (global.RMTInfo.ID == 2) return;                           //控制机不需要有服务器交互行为
 
 		//alertCallback有两个行为，一个是Array,一个是Function
-		var alertCallbackRetry = function(){};
-		var alertCallbackBack = function(){};
 		if (alertCallback instanceof Array) {
 			alertCallbackRetry = alertCallback[0];
-			alertCallbackBack = alertCallback[1];
+			alertCallbackCancle = alertCallback[1];
 		}else if (alertCallback instanceof Function) {
-			alertCallbackBack = alertCallback;
+			alertCallbackCancle = alertCallback;
 		}
 
 		switch (action) {
 			case "success":
-				this.successHandle(response, callback, alertCallbackBack);
+				this.successHandle(response, callback, alertCallbackCancle);
 				break;
 			case "timeout":
 			case "error"://涵盖有服务器繁忙
-				win.serverRequestCallback.refreshHandle(response, callback, alertCallback, alertCallbackRetry, alertCallbackBack);
+				win.serverRequestCallback.refreshHandle(response, callback.params, alertCallback);
 				break;
 		}
 	};
 
-	win.server.successHandle = function (response, callback, alertCallbackBack) {
+	win.server.successHandle = function (response, callback, alertCallbackCancle) {
 		var jsonData = null;
 
 		//如果CODETYPE == 0，就是数据查询成功，如果是1，就是数据查询失败！
@@ -58,22 +59,25 @@
 		
 		//如果服务器查询失败，就不必再给用户请求的机会！
 		else {
-			tool.alert(response.CODEDATA,function(){alertCallbackBack.apply(null, callback.params);});
+			tool.alert("服务器响应失败:"+response.CODEDATA,function(){
+				alertCallbackCancle.apply(null, callback.params);
+			});
 		}
 	};
 
-	win.serverRequestCallback.refreshHandle = function (response, callback, alertCallback, alertCallbackRetry, alertCallbackBack) {
+	win.serverRequestCallback.refreshHandle = function (response, callbackParams, alertCallback) {
 		/**超时回调处理：
 		 * 如果回调参数传过来的是数组，就是两个函数实体
 		 * 如果回调参数穿过来的是函数，就是一个函数，直接调用
 		 * */
+
 		if (alertCallback instanceof Array) {
 			tool.alert([response, "重试", "取消"],
 				function () {
-					alertCallbackRetry.apply(null, callback.params);
+					alertCallbackRetry.apply(null, callbackParams);
 				},
 				function () {
-					alertCallbackBack.apply(null, callback.params);
+					alertCallbackCancle.apply(null, callbackParams);
 				}
 			);
 		}
@@ -83,9 +87,8 @@
 		 * 在这里直接调用的时候，就可以对$scope.getResponse进行修改！！！
 		 * */
 		else if (alertCallback instanceof Function) {
-			alertCallbackBack.apply(null, callback.params);
+			alertCallbackCancle.apply(null, callbackParams);
 		}
 	};
-
 
 })();
