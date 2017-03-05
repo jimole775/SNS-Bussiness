@@ -7,7 +7,7 @@
 	var gModuleInfo = "";
 	var gModuleAddress = "";
 	var gFileType = ""; 			//文件类型(2B)
-	var gFileLen = null;            //文件长度(4B)
+	var gFileSize_dec = null;            //文件长度(4B)
 	var gFileNameASCII = null;           //文件名,asc类型(32B)
 	var gFileMD5 = null;            //MD5值,长度(16B)
 	var gFileEncodeType = null;     //加密类型,长度(2B)
@@ -844,7 +844,7 @@
 		i += 8;
 		gFileNameASCII = data.substr(i + 32 * 2); 		//文件名,asc类型(32B)
 		i += 32 * 2;
-		gFileLen = data.substr(i + 4 * 2);         //文件长度(4B)
+		gFileSize_dec = tool.hex2dec(data.substr(i + 4 * 2));         //文件大小(4B)
 		i += 4 * 2;
 		gFileMD5 = data.substr(i + 16 * 2);        //MD5值,长度(16B)
 		i += 16 * 2;
@@ -852,7 +852,7 @@
 		i += 2 * 2;
 		gFileType = data.substr(i + 2 * 2);        //文件类型(2B)
 		gUploadTime++;
-		win.sendDataToDev(prevCmd + gFileNameASCII + gFileLen + gFileMD5 + gFileEncodeType + gFileType);
+		win.sendDataToDev(prevCmd + gFileNameASCII + tool.toHex(gFileSize_dec,8) + gFileMD5 + gFileEncodeType + gFileType);
 	}
 
 
@@ -868,28 +868,28 @@
 				Fun31060F();
 			}
 
-			//如果是上传模块配置信息文件返回的6202,就把文件名上传给服务器
-			//else{
-			//	gDevFilName = tool.decodeASC(gFileNameASCII);
-			//	var dataPack = {
-			//		address: gModuleAddress,
-			//		configFileName: gModuleInfo,
-			//		devFileName: gDevFilName
-			//	};
-			//
-			//	SendDevFileNameToServer(dataPack);
-			//}
+			//如果是DEV上传模块配置信息文件返回的6202,就把文件名上传给服务器
+		/*	else{
+				gDevFilName = tool.decodeASC(gFileNameASCII);
+				var dataPack = {
+					address: gModuleAddress,
+					configFileName: gModuleInfo,
+					devFileName: gDevFilName
+				};
+
+				SendDevFileNameToServer(dataPack);
+			}*/
 		}
 		else {
 			//校验文件失败之后,重新上传;
 			//if (gUploadTime < 3) {
 			//	gUploadTime++;
-			//	win.sendDataToDev("2107" + gFileNameASCII + gFileLen + gFileMD5 + gFileEncodeType + gFileType);
+			//	win.sendDataToDev("2107" + gFileNameASCII + tool.toHex(gFileSize_dec,8) + gFileMD5 + gFileEncodeType + gFileType);
 			//}
 			//else {
-			//	tool.alert("上传文件校验失败", function () {
-			//		quitBusiness();
-			//	})
+				tool.alert("上传文件校验失败", function () {
+					quitBusiness();
+				});
 			//}
 		}
 	};
@@ -902,33 +902,6 @@
 		win.sendDataToDev(CMDStr);
 	}
 
-	var calcLen = 0;
-	//上传模块数据
-	//DEV应答：0x6201+[01(成功)+起始地址(4B)+数据长度(4B)+数据(0 ～1024)]/02(失败)
-	win.devInterActive.Fun6201 = function (varRecvData) {
-		//if (varRecvData.substr(4, 2) == "01") {
-		//	var avoidLen = 4 + 2 + 4 * 2 + 4 * 2;
-		//	var result = varRecvData.substr(avoidLen);
-		//	calcLen += result.length / 2;
-		//
-		//	//逐步增加返回的数据长度
-		//	if (calcLen <= tool.hex2dec(gFileLen)) {
-		//		win.sendDataToDev("2201" + tool.toHex(calcLen, 8) + gFileLen);//开始起始位置是8位0,然后根据6201返回的长度,逐一增加
-		//	}
-		//	else {
-		//		/**传输结束(PC)	0x2202+文件名(32B)+文件大小(4B)+MD5值(16B)(为PC计算的MD5值)
-		//		 * 注：(1)传输结束后PC需要校验文件的名称/大小/MD5值，失败则PC重新请求上传文件；
-		//		 */
-		//		calcLen = 0;
-		//		win.sendDataToDev("2202" + gFileNameASCII + gFileLen + gFileMD5);
-		//	}
-		//}
-		//else {
-		//	tool.alert("上传模块配置数据失败", function () {
-		//		quitBusiness();
-		//	});
-		//}
-	};
 	win.global.A100GetDevFileName = function(fileName){
 			gDevFilName = fileName;
 			var dataPack = {
@@ -940,59 +913,102 @@
 			SendDevFileNameToServer(dataPack);
 	};
 
-	//请求下载模块数据;
-	win.devInterActive.Fun6108 = function (varRecvData) {
-		//if (varRecvData.substr(4, 2) == "01") {
-		//	win.sendDataToDev("2203" + tool.toHex(loopIndex,8) + gFileLen + tool.toHex(1024,8));
-		//	loopIndex = loopIndex + 1024;   //固定每次下载1024字节长度
-		//}
-		//else {
-		//	tool.alert("下载模块配置数据失败", function () {
-		//		quitBusiness();
-		//	});
-		//}
-	};
+	var gLoopIndex = 0;
+	var gFileData = "";
+	function requestFileFormDev(){
+		if(gFileSize_dec - gLoopIndex >= 1024){
+			win.sendDataToDev("2201" + tool.toHex(gLoopIndex,8) + tool.toHex(1024,8));
+			gLoopIndex += 1024;
+		}else{
+			win.sendDataToDev("2201" + tool.toHex(gLoopIndex,8) + tool.toHex((gFileSize_dec - gLoopIndex),8));
+			gLoopIndex += (gFileSize_dec - gLoopIndex);
+		}
+	}
+	function sendFileToDev(){
+		//如果循环下标还可以塞下1024的长度,就使用1024长度,否则就使用剩下的长度
+		if(gFileSize_dec - gLoopIndex >= 1024){
+			win.sendDataToDev("2203" + tool.toHex(gLoopIndex,8) + tool.toHex(1024,8) + gFileData.substring(gLoopIndex,1024));
+			gLoopIndex += gLoopIndex + 1024;
+		}else{
+			win.sendDataToDev("2203" + tool.toHex(gLoopIndex,8) + tool.toHex(gFileSize_dec - gLoopIndex,8) + gFileData.substring(gLoopIndex,gFileSize_dec - gLoopIndex));;
+			gLoopIndex += (gFileSize_dec - gLoopIndex);
+		}
+	}
 
-	//下载模块数据
-	var loopIndex = 0;
-	//传输数据(PC)	0x2203+起始地址(4B)+数据长度(4B)+数据(0～1024)
-	win.devInterActive.Fun6203 = function (varRecvData) {
-		//if (varRecvData.substr(4, 2) == "01") {
-		//
-		//	//如果循环下标小于总长度,就继续传输数据,否则就代表传输完毕
-		//	if(loopIndex < tool.hex2dec(gFileLen)){
-		//
-		//		//如果循环下标还可以塞下1024的长度,就使用1024长度,否则就使用剩下的长度
-		//		if(tool.hex2dec(gFileLen) - loopIndex >= 1024){
-		//			win.sendDataToDev("2203" + tool.toHex(loopIndex,8) + gFileLen + tool.toHex(1024,8));
-		//			loopIndex = loopIndex + 1024;
-		//		}else{
-		//			win.sendDataToDev("2203" + tool.toHex(loopIndex,8) + gFileLen + tool.toHex(tool.hex2dec(gFileLen) - loopIndex,8));
-		//			loopIndex = tool.hex2dec(gFileLen);
-		//		}
-		//	}else{
-		//		loopIndex = 0;
-		//		win.sendDataToDev("2202" + gFileNameASCII + gFileLen + gFileMD5);
-		//	}
-		//}
-		//else {
-		//	tool.alert("下载模块配置数据失败", function () {
-		//		quitBusiness();
-		//	});
-		//}
-	};
-
-	//传输数据(PC)	0x2201+起始地址(4B)+数据长度(4B)
+	/**
+	 * 请求DEV：上传模块配置数据
+	 * DEV应答：0x2201+起始地址(4B)+数据长度(4B)
+	 * */
 	win.devInterActive.Fun6107 = function (varRecvData) {
 
-		//if (varRecvData.substr(4, 2) == "01") {
-		//	win.sendDataToDev("2201" + "00000000" + gFileLen);//开始起始位置是8位0,然后根据6201返回的长度,逐一增加
-		//}
-		//else {
-		//	tool.alert("上传模块配置数据失败", function () {
-		//		quitBusiness();
-		//	});
-		//}
+		/*if (varRecvData.substr(4, 2) == "01") {
+			requestFileFormDev();
+		}
+		else {
+			tool.alert("上传模块配置数据失败", function () {
+				quitBusiness();
+			});
+		}*/
 	};
 
+	/**
+	 * DEV上传模块数据
+	 * DEV应答：0x6201+[01(成功)+起始地址(4B)+数据长度(4B)+数据(0 ～1024)]/02(失败)
+	 * */
+	win.devInterActive.Fun6201 = function (varRecvData) {
+		/*if (varRecvData.substr(4, 2) == "01") {
+			var avoidLen = 4 + 2 + 4*2 + 4*2;
+			gFileData += varRecvData.substr(avoidLen);
+
+			if (gLoopIndex < gFileSize_dec) {
+				requestFileFormDev();
+			}
+			else {
+				gLoopIndex = 0;
+				win.sendDataToDev("2202" + gFileNameASCII + tool.toHex(gFileSize_dec,8) + gFileMD5);
+			}
+		}
+		else {
+			tool.alert("上传模块配置数据失败", function () {
+				quitBusiness();
+			});
+		}*/
+	};
+
+
+
+	/**
+	 * 下发模块数据给DEV：
+	 * DEV应答：0x2201+起始地址(4B)+数据长度(4B)
+	 * */
+	win.devInterActive.Fun6108 = function (varRecvData) {
+		/*if (varRecvData.substr(4, 2) == "01") {
+			sendFileToDev();
+		}
+		else {
+			tool.alert("下载模块配置数据失败", function () {
+				quitBusiness();
+			});
+		}*/
+	};
+
+
+	//传输数据(PC)	0x2203+起始地址(4B)+数据长度(4B)+数据(0～1024)
+	win.devInterActive.Fun6203 = function (varRecvData) {
+		/*if (varRecvData.substr(4, 2) == "01") {
+
+			//如果循环下标小于总长度,就继续传输数据,否则就代表传输完毕
+			if(gLoopIndex < gFileSize_dec){
+				sendFileToDev();
+			}else{
+				gLoopIndex = 0;
+				win.sendDataToDev("2202" + gFileNameASCII + tool.toHex(gFileSize_dec,8) + gFileMD5);
+			}
+		}
+		else {
+			tool.alert("下载模块配置数据失败", function () {
+				quitBusiness();
+			});
+		}*/
+	};
 })(window);

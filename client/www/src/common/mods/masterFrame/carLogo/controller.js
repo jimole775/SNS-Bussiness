@@ -112,8 +112,6 @@
 			global.businessInfo.carName_en = carInfo.en;
 			global.businessInfo.carType = carInfo.type;
 			global.businessInfo.link = carInfo.support && carInfo.support.length ? carInfo.support[0].link : "";
-			//location.href = location.href + "#" + carInfo.type + "?pic=true"; //声明选择的车型，让APP去下载相应的照片；
-			location.href = location.href + "#" + carInfo.type + "_pic"; //声明选择的车型，让APP去下载相应的照片；
 
 			//"车辆诊断", "保养灯归零,刹车片归零,节气门匹配,胎压报警灯归零", "特殊功能","模块编程", "设码配置","个性化设置
 			switch (global.businessInfo.procedureType) {

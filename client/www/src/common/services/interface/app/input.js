@@ -61,9 +61,9 @@ $ (document).ready (function () {
 			case win.CONSTANT.APP_TO_JS.RECEIVE_DEV_CONNECT_FAIL:                           //设备连接失败
 				interActiveState.end.err (recvData);
 				break;
-			case win.CONSTANT.APP_TO_JS.RECEIVE_IMAGE_URL:                                      //获取车型图片URL
-				interActiveState.event.handleImages (recvData);
-				break;
+			//case win.CONSTANT.APP_TO_JS.RECEIVE_IMAGE_URL:                                      //获取车型图片URL
+			//	interActiveState.event.handleImages (recvData);
+			//	break;
 			case win.CONSTANT.APP_TO_JS.RECEIVE_QUIT_SIGN_AFTER_DTC_LOG:                    //APP处理完上传故障码日志之后，通过此端口执行3109FF退出操作；
 			case win.CONSTANT.APP_TO_JS.RECEIVE_QUIT_SIGN_NORMAL:                           //退出业务之前，先通知APP其他线程的收尾工作，再通过此端口执行3109FF退出操作；
 				interActiveState.end.quit ();
@@ -181,12 +181,12 @@ $ (document).ready (function () {
 	/**
 	 *获取图片的信息
 	 */
-	interActiveState.event.handleImages = function (recvData) {
+	//interActiveState.event.handleImages = function (recvData) {
 	//	var json = typeof recvData === "string" && /\{\[/.test (recvData) ? JSON.parse (recvData) : recvData;
 	//	var url = json[0];
 	//	var param = json[1];
 	//	global.ShowCarTypeImg (url, param);
-	};
+	//};
 
 	interActiveState.event.handleProgramSeriesEvent = function(action, recvData){
 		tool.loading (0);
