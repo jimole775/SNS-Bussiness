@@ -24,7 +24,7 @@
 		'                       <i class="arrow-down arrow-layout-middle animation" ng-class="{\'arrow-down\':!item.imgShow,\'arrow-up\':item.imgShow}"></i>',
 		'                   </span>',
 		'               </span>',
-		'               <img  ng-show="item.imgShow" width="100%" ng-src="./images/carType/img/{{ item.picture }}" alt="车型图片丢失，请更新资源包">',
+		'               <img ng-if="item.picture" ng-show="item.imgShow" width="100%" ng-src="./images/carType/img/{{ item.picture }}" alt="车型图片丢失，请更新资源包">',
 		'           </button>',
 		'       </div>',
 		'   </div>',

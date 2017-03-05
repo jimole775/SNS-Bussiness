@@ -39,7 +39,7 @@
 		//	win.moduleEntry.devMessagesEnter ();
 		//};
 
-		win.moduleEntry.searchDTC = function (systemList,prevFormId) {
+		win.moduleEntry.searchDTC = function (systemList, prevFormId) {
 			showView = true;
 			//tool.processBar("");
 			tool.layout(prevFormId, 0);
@@ -179,7 +179,7 @@
 					return;
 				}
 
-				win.moduleEntry.showDTC(originalIndex_int,systemBindBottomBtn);
+				win.moduleEntry.showDTC(originalIndex_int, systemBindBottomBtn);
 			}
 			else {
 				$scope.scanProcess = '无故障信息';
@@ -571,18 +571,26 @@
 			win.server.request(
 				global.businessInfo.serverType,
 				{
-				key: "DTC",
-				cartype: global.businessInfo.carType
-			},
+					key: "DTC",
+					cartype: global.businessInfo.carType
+				},
 				DataPack,
-			    win.server.addCallbackParam(win.serverRequestCallback.DTC_simple, [markParams]),
-				function(params){
-					cachebadRequestParamArr[params.webViewIndex] = params;
-					$scope.webViewSystemList_arr[params.webViewIndex].dtcScanStateText = '数据请求失败(点击重试)';
-					safeApply(function () {});
-				}
+				win.server.addCallbackParam(win.serverRequestCallback.DTC_simple, [markParams]),
+				//function (params) {
+				//
+				//	cachebadRequestParamArr[params.webViewIndex] = params;
+				//	$scope.webViewSystemList_arr[params.webViewIndex].dtcScanStateText = '数据请求失败(点击重试)';
+				//	safeApply(function () {});
+				//}
+				win.serverRequestCallback.handleBackRequest
 			);
 		}
+
+		win.serverRequestCallback.handleBackRequest = function(params){
+			cachebadRequestParamArr[params.webViewIndex] = params;
+			$scope.webViewSystemList_arr[params.webViewIndex].dtcScanStateText = '数据请求失败(点击重试)';
+			safeApply(function () {});
+		};
 
 		win.serverRequestCallback.DTC_simple = function (responseObject, params) {
 			if (!showView)return;

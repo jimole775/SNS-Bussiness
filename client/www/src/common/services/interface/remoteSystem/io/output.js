@@ -86,15 +86,15 @@
 		 * 当前页数据量实时刷新**/
 		if (/CALC_ONE_ANS/i.test(funcName) ||
 			/CHANNEL_DATA/i.test(funcName)) {
-			win.global.RMTInfo.dataStream += queryJson + split_mark_outer;                                  //以"_!_"为分隔符,区别"_|_"
-			var tempStore_str = global.RMTInfo.dataStream.substring(0, global.RMTInfo.dataStream.length - 3);     //截掉最后一个分隔符
+			win.global.RMTInfo.DataStream_JsonString += queryJson + split_mark_outer;                                  //以"_!_"为分隔符,区别"_|_"
+			var tempStore_str = global.RMTInfo.DataStream_JsonString.substring(0, global.RMTInfo.DataStream_JsonString.length - 3);     //截掉最后一个分隔符
 			var tempArr = tempStore_str.split(split_mark_outer);                                              //解出字串组，判断数量
 
 			var rowsInEachPage = global.DataStream_CurPageLinesCount;       //动态计算每页的数据量
 
 			if (tempArr.length >= rowsInEachPage) {
-				external.sendRMTEventToApp(global.RMTInfo.ID, funcName, tempStore_str);
-				win.global.RMTInfo.dataStream = "";
+				external.SendRMTEventToApp(global.RMTInfo.ID, funcName, tempStore_str);
+				win.global.RMTInfo.DataStream_JsonString = "";
 			}
 		}
 
@@ -104,13 +104,13 @@
 		 * 或者数据长度大于50K的时候也发，然后清除定时器**/
 		else if (/DTC_simple/i.test(funcName) ||
 			/FREEZE_RESULT/i.test(funcName)) {
-			win.global.RMTInfo.dataStream += queryJson + split_mark_outer;
+			win.global.RMTInfo.DataStream_JsonString += queryJson + split_mark_outer;
 
-			if (global.RMTInfo.dataStream.length >= 50000) { //如果数据长度大于50K，就一次性发送出去，否则，就进入1秒倒计时
+			if (global.RMTInfo.DataStream_JsonString.length >= 50000) { //如果数据长度大于50K，就一次性发送出去，否则，就进入1秒倒计时
 				clearTimeout(clocker);
-				external.sendRMTEventToApp(global.RMTInfo.ID, funcName,
-				                           win.global.RMTInfo.dataStream.substring(0, global.RMTInfo.dataStream.length - 3));
-				win.global.RMTInfo.dataStream = "";
+				external.SendRMTEventToApp(global.RMTInfo.ID, funcName,
+				                           win.global.RMTInfo.DataStream_JsonString.substring(0, global.RMTInfo.DataStream_JsonString.length - 3));
+				win.global.RMTInfo.DataStream_JsonString = "";
 
 			}
 			else {
@@ -120,10 +120,10 @@
 					clocker = setTimeout(function () {
 						clockStart = false;
 
-						if (global.RMTInfo.dataStream) {
-							external.sendRMTEventToApp(global.RMTInfo.ID, funcName,
-							                           win.global.RMTInfo.dataStream.substring(0, global.RMTInfo.dataStream.length - 3));
-							win.global.RMTInfo.dataStream = "";
+						if (global.RMTInfo.DataStream_JsonString) {
+							external.SendRMTEventToApp(global.RMTInfo.ID, funcName,
+							                           win.global.RMTInfo.DataStream_JsonString.substring(0, global.RMTInfo.DataStream_JsonString.length - 3));
+							win.global.RMTInfo.DataStream_JsonString = "";
 						}
 
 					}, 1000);
