@@ -1653,3 +1653,22 @@ option {
 .bottom-bar-button-special{
     padding:0;
 }
+.triangle-icon{
+    width: 2rem;
+    height: 2rem;
+    border: none;
+    position: absolute;
+    overflow: hidden;
+    top:0;
+    left:0;
+}
+.triangle-icon:after{
+    width: 2rem;
+    height: 2rem;
+    background: #fff;
+    transform: rotate(45deg);
+    position: absolute;
+    right: -1rem;
+    top: -1rem;
+    content: " ";
+}
