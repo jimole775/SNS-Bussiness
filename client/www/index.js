@@ -178,7 +178,17 @@
 								params_stringJson[1] = typeof arguments_sec !== "string" ?JSON.stringify(arguments_sec): arguments_sec;    //确保结果为 字串json
 								params_stringJson[2] = typeof arguments_thd !== "string" ?JSON.stringify(arguments_thd) : arguments_thd;    //确保结果为 字串json
 
-
+							/**所有协议数据必须保证以字串的形式传输
+							 * 理论上,即使是function类型也可以使用obj.toString()方法进行强制转换,
+							 * 但是,在接受方必须要以eval或者new Function的方式解析,
+							 * 这样就触及安全隐患,
+							 * 所以,以3个字串类型的参数进行数据传输是最稳妥的方式;
+							 * (
+							 * 底部按钮或者alert的集成,是由于双方程序在执行时,都在执行同一个流程,绑定了同一个回调,所以,在同步的时候,只需要通知执行主函数就OK了,他们的回调都已经更换成相同的函数.
+							 * 但是,在做服务器请求的时候,这个工作只有业务端在做,控制端基本不可能知道哪个才是回调,所以根本不可能同步到,只能把回调暴露到全局环境,自己被执行的时候,自动把函数名通知对方
+							 * )
+							 *
+							 * */
 							win.sendRMTEventToApp(funName,
 							                      params_stringJson[0] + "_|_" +                    //加上"_|_",方便区分参数个数
 							                      params_stringJson[1] + "_|_" +                    //加上"_|_",方便区分参数个数
