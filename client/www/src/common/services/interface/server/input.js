@@ -5,8 +5,6 @@
 	var win = window;
 	win.server = win.server ? win.server : {};
 
-
-
 	/**
 	 * APP从服务器获取到数据，转发给Js
 	 * @param action str
@@ -15,7 +13,7 @@
 	 * @param handleBackRequest array or function
 	 * */
 	win.server.jsRecvServerData = function (action, response, callback, handleBackRequest) {
-		if (global.RMTInfo.ID == 2) return;                           //控制机不需要有服务器交互行为
+		if (global.RMTID.role == 2) return;                           //控制机不需要有服务器交互行为
 
 
 		switch (action) {

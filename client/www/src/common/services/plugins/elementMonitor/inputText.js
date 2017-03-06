@@ -11,7 +11,7 @@
 		};
 
 		RMTClickEvent.RMTInput_ClickEvent = function (id, value) {
-			if (global.RMTInfo.ID == 1)$ ("#" + id).val (value);
+			if (global.RMTID.role == 1)$ ("#" + id).val (value);
 		};
 
 		var win = window;

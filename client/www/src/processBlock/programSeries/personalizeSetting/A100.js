@@ -400,7 +400,7 @@
 
 	win.devInterActive.Fun2703 = function (varRecvData) {
 		//索引ID(十六进制字符串)
-		//var varSendData = "{'subURL':'" + CONSTANT.SERVER_ADDRESS +
+		//var varSendData = "{'subURL':'" + global.businessInfo.serverDst +
 		// "','data':[{'ServerType':'23'},{'DataType':'4'},{'DataPack':'" + data + "'}]}";
 		win.server.request(BMWF18ServerType, 4, varRecvData, win.serverRequestCallback.getKey_A100);
 	};

@@ -6,7 +6,7 @@ $(document).ready(function () {
 	var win = window;
 	win.server = win.server ? win.server : {};
 	win.server.request = function (serverType, dataType, dataPack, callback, handleBackRequest) {
-		if (global.RMTInfo.ID == 2) return;   //控制机不需要有服务器交互行为
+		if (global.RMTID.role == 2) return;   //控制机不需要有服务器交互行为
 		var that = this;
 
 		var paramsObj = [
@@ -22,7 +22,7 @@ $(document).ready(function () {
 		];
 
 		var sendDataStr = JSON.stringify({
-			'subURL': win.CONSTANT.SERVER_ADDRESS,
+			'subURL': win.global.businessInfo.serverDst,
 			'data': paramsObj
 		});
 
@@ -62,7 +62,7 @@ $(document).ready(function () {
 			type: "POST",
 			async: true,
 			timeout: 10000, //超时时间设置，单位毫秒
-			url: "http://112.124.26.243:8090/CCDPWebServer/CCDP2Server.aspx",
+			url: global.businessInfo.serverHost + "/CCDPWebServer/" + global.businessInfo.serverDst,
 			dataType: "xml",
 			data: data,
 			complete: function (XMLHttpRequest, status) {

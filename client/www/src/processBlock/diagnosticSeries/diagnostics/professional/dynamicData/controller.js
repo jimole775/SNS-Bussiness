@@ -689,7 +689,7 @@
 		function handleBackRequest(params) {
 			if (!$scope.DynamicWebView || !params) return;
 			var curIndex = params.index;
-			var rowsInEachPage = global.RMTInfo.rowsInEachPage || 0;
+			var rowsInEachPage = global.RMTID.rowsInEachPage || 0;
 			safeApply(function () {
                 while ((params.index > curIndex - 3) && (params.index >= 0)) {
                     $scope.DynamicWebView[params.index-- + ($scope.pagingIndex * rowsInEachPage)].ans = "N/A";
@@ -947,7 +947,7 @@
 					//显示所有未选中项
 					showAllUncheck();
 					//这个标记的意义在于，如果正在进行数据流任务，就把其他不必要的数据丢弃掉，比如：设备数据
-					win.global.RMTInfo.dataStream = false;
+					win.global.RMTID.dataStream = false;
 					showCheckBox();
 					//tool.processBar('暂停');
 				});
@@ -979,7 +979,7 @@
 			hideCheckBox();
 
 			//让远程操控端无法连续点击按钮，第一个数据从业务机返回时，再隐藏加载遮罩
-			if (global.RMTInfo.ID != "0") tool.loading({text: "等待远程端数据同步..."});
+			if (global.RMTID.role != "0") tool.loading({text: "等待远程端数据同步..."});
 
 			//进行分页处理，并创建翻页按钮，返回预处理的二维数组。
 			pagingManager.handlePaging(checkItemStore);
@@ -990,7 +990,7 @@
 		//todo 由于控制机不能同服务器通讯，
 		//todo 所以，解决方案为：设置全局变量，由APP进行转发，只取业务机的显示最大数
 		win.serverRequestCallback.SetRMTCountRowInScrollTable = function (rowsInEachPage, dataArr) {
-			win.global.RMTInfo.rowsInEachPage = parseFloat(rowsInEachPage);
+			win.global.RMTID.rowsInEachPage = parseFloat(rowsInEachPage);
 			var $pagingButton = $("#pagingButton");
 
 			//如果dataArr假，或者传入的数组为空，就退出函数
@@ -1003,15 +1003,15 @@
 			$scope.DynamicWebView = dataArr;
 			var calcArr = [];
 			//计算分页数；
-			var countPages = Math.floor($scope.DynamicWebView.length / global.RMTInfo.rowsInEachPage);
+			var countPages = Math.floor($scope.DynamicWebView.length / global.RMTID.rowsInEachPage);
 			//分页是否整除
-			var lastPageRows = $scope.DynamicWebView.length % global.RMTInfo.rowsInEachPage;
+			var lastPageRows = $scope.DynamicWebView.length % global.RMTID.rowsInEachPage;
 
 			//每一页的数据存一个数组
 			for (var i = 0; i < countPages; i++) {
 				calcArr[i] = [];
-				for (var j = 0; j < global.RMTInfo.rowsInEachPage; j++)
-					calcArr[i].push($scope.DynamicWebView[global.RMTInfo.rowsInEachPage * i + j]);
+				for (var j = 0; j < global.RMTID.rowsInEachPage; j++)
+					calcArr[i].push($scope.DynamicWebView[global.RMTID.rowsInEachPage * i + j]);
 			}
 
 			//判断是否整除，如果不整除，就处理最后一页的数据
@@ -1019,7 +1019,7 @@
 			if (lastPageRows) {
 				calcArr[countPages] = [];            //把二维数据变成一维数组；
 				for (var n = 0; n < lastPageRows; n++)
-					calcArr[countPages].push($scope.DynamicWebView[global.RMTInfo.rowsInEachPage * countPages + n]);
+					calcArr[countPages].push($scope.DynamicWebView[global.RMTID.rowsInEachPage * countPages + n]);
 			}
 
 			//存完数据之后，显示第一页；（两个方案，1：实现左右移动；2：修改【显示/隐藏】）
@@ -1038,7 +1038,7 @@
 			win.global.DataStream_CurPageLinesCount = calcArr[$scope.pagingIndex].length;
 
 			//如果要分组的数组长度小于或等于单页的长度，就不需要进行分页，
-			if (dataArr.length <= global.RMTInfo.rowsInEachPage) {
+			if (dataArr.length <= global.RMTID.rowsInEachPage) {
 				if ($pagingButton.length) $pagingButton.hide();
 			}
 			else {
@@ -1068,7 +1068,7 @@
 			safeApply(function () {});
 
 			//这个标记的意义在于，如果正在进行数据流任务，就把其他不必要的数据丢弃掉，比如：设备数据
-			win.global.RMTInfo.dataStream = true;
+			win.global.RMTID.dataStream = true;
 			FunGetOriginal();
 		}
 
@@ -1175,7 +1175,7 @@
 			$scope.isCheckAll = false;
 
 			//取消数据流远程标识
-			global.RMTInfo.dataStream = false;
+			global.RMTID.dataStream = false;
 		}
 
 	}])
@@ -1202,7 +1202,7 @@
 				         handlePaging: function (dataArr) {
 
 					         //计算每页显示的最大行数，用于分页，控制机通过SetRMTCountRowInScrollTable在远程端获取！
-					         if (global.RMTInfo.ID != 2) {
+					         if (global.RMTID.role != 2) {
 						         var rowsInEachPage = this.countRowInScrollTable("ShowDynamicData", $);
 						         win.serverRequestCallback.SetRMTCountRowInScrollTable(rowsInEachPage, dataArr);
 					         }

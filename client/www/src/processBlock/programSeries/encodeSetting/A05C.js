@@ -592,7 +592,7 @@
     function Fun310542(recvData) {
         //调服务器接口  默认选择版本最新数据库
 
-        //var varSendData = JSON.stringify({subURL: CONSTANT.SERVER_ADDRESS ,data:[{ServerType:"23"},{DataType:"1"},{DataPack:""}]});
+        //var varSendData = JSON.stringify({subURL: global.businessInfo.serverDst ,data:[{ServerType:"23"},{DataType:"1"},{DataPack:""}]});
         //win.external.RequestDataFromServer(3021, varSendData, getDatabaseCallBack);
         win.server.request(23,1,{DataPack:""},win.serverRequestCallback.showDatabaseVersion_A05C);
 
@@ -683,7 +683,7 @@
     function decodeCarType(carType, carTypeId) {
         gCarTypeId = carTypeId;
         var paramData = getBse64Encode(carType);
-        //var param = JSON.stringify({subURL:win.CONSTANT.SERVER_ADDRESS,data:[{ServerType:"23"},{DataType:"8"},{DataPack:paramData}]});
+        //var param = JSON.stringify({subURL:win.global.businessInfo.serverDst,data:[{ServerType:"23"},{DataType:"8"},{DataPack:paramData}]});
         //win.external.RequestDataFromServer(3021, param, getCarTypeCallBack);
         win.server.request(23,8,{DataPack:paramData},win.serverRequestCallback.getCarType_A05C)
     }
@@ -704,7 +704,7 @@
         //var databaseVersion = $("input[name='dbOption']:checked").val();
         //tool.processBar("获取模块信息...");
         var data = getBse64Encode(databaseVersion);
-        //var varSendData = JSON.stringify({subURL:win.CONSTANT.SERVER_ADDRESS,data:[{ServerType:"23"},{DataType:"2"},{DataPack:data}]});
+        //var varSendData = JSON.stringify({subURL:win.global.businessInfo.serverDst,data:[{ServerType:"23"},{DataType:"2"},{DataPack:data}]});
         //win.external.RequestDataFromServer(3021, varSendData, getModulesCallBack);
 
         win.server.request(23,2,{DataPack:data},win.serverRequestCallback.showModules_A05C);
@@ -907,7 +907,7 @@
             var databaseVersion = inputChecked.value;
             //var databaseVersion = $("input[name='dbOption']:checked").val();
             var data = getBse64Encode(gVersionArray[index] + databaseVersion);
-            //var varSendData = JSON.stringify({subURL:win.CONSTANT.SERVER_ADDRESS,data:[{ServerType:"23"},{DataType:"5"},{DataPack: data}]});
+            //var varSendData = JSON.stringify({subURL:win.global.businessInfo.serverDst,data:[{ServerType:"23"},{DataType:"5"},{DataPack: data}]});
             //win.external.RequestDataFromServer(3021, varSendData, getVersionsCallBack);
             win.server.request(23,5,{DataPack:data},
                 win.serverRequestCallback.getVersions_A05C);
@@ -967,7 +967,7 @@
         //TEST 暂时只处理只有一个SGBMID的情况
         //nSGBMIDs = nSGBMIDs.substr(4);
         var data = getBse64Encode(nSGBMIDs + carFrameNum + databaseVersion);
-        //var varSendData = JSON.stringify({subURL: win.CONSTANT.SERVER_ADDRESS ,data:[{ServerType:"23"},{DataType:"10"},{DataPack: data }]});
+        //var varSendData = JSON.stringify({subURL: win.global.businessInfo.serverDst ,data:[{ServerType:"23"},{DataType:"10"},{DataPack: data }]});
         //win.external.RequestDataFromServer(3021, varSendData, getCodeInfoCallBack);
         win.server.request(23,10,{DataPack:data},
             win.serverRequestCallback.getCodeInfo_A05C);
@@ -1191,7 +1191,7 @@
             }
             data = '{' + data.substr(0, data.length - 1) + '}';
             data = getBse64Encode(data);
-            //var varSendData = JSON.stringify({subURL: win.CONSTANT.SERVER_ADDRESS ,data:[{ServerType:"23"},{DataType:"11"},{DataPack: data }]});
+            //var varSendData = JSON.stringify({subURL: win.global.businessInfo.serverDst ,data:[{ServerType:"23"},{DataType:"11"},{DataPack: data }]});
             //win.external.RequestDataFromServer(3021, varSendData, editCodeCallBack);
             win.server.request(23,11,{DataPack:data},
                 win.serverRequestCallback.editCode_A05C);
@@ -1231,7 +1231,7 @@
 
         //默认设码
         if (code == "02") {
-            //var varSendData = JSON.stringify({subURL: win.CONSTANT.SERVER_ADDRESS,data:[{ServerType:"23"},{DataType:"9"},{DataPack: data }]});
+            //var varSendData = JSON.stringify({subURL: win.global.businessInfo.serverDst,data:[{ServerType:"23"},{DataType:"9"},{DataPack: data }]});
             //win.external.RequestDataFromServer(3021, varSendData, getProgramFilesCallBack);
             win.server.request(23,9,{DataPack:data},win.serverRequestCallback.getProgramFiles_A05C);
             return;
@@ -1257,7 +1257,7 @@
             return;
         }
 
-        //var varSendData = JSON.stringify({subURL: win.CONSTANT.SERVER_ADDRESS ,data:[{ServerType:"23"},{DataType:"3"},{DataPack: data }]});
+        //var varSendData = JSON.stringify({subURL: win.global.businessInfo.serverDst ,data:[{ServerType:"23"},{DataType:"3"},{DataPack: data }]});
         //win.external.RequestDataFromServer(3021, varSendData, getProgramFilesCallBack);
 
         win.server.request(23,3,{DataPack:data}, win.serverRequestCallback.getProgramFiles_A05C);
@@ -1272,7 +1272,7 @@
         var databaseVersion = inputChecked.value;
         //索引ID(十六进制字符串)
         var data = getBse64Encode(gIndexId + databaseVersion);
-        //var varSendData = JSON.stringify({subURL: win.CONSTANT.SERVER_ADDRESS,data:[{ServerType:"23"},{DataType:"4"},{DataPack:data}]});
+        //var varSendData = JSON.stringify({subURL: win.global.businessInfo.serverDst,data:[{ServerType:"23"},{DataType:"4"},{DataPack:data}]});
         //win.external.RequestDataFromServer(3021, varSendData, getKeyCallBack);
         win.server.request(23,4,{DataPack:data}, win.serverRequestCallback.getKey_A05C);
 

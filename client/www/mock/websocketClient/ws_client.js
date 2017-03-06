@@ -4,13 +4,13 @@
 var win = window;
 
 (function () {
-	win.global.RMTInfo.userName = win.prompt("输入一个用户名，用于远程交互！");
+	win.global.RMTID.userName = win.prompt("输入一个用户名，用于远程交互！");
 	win.ws = new WebSocket("ws://127.0.0.1:81");
 
 	ws.onopen = function (res) {
 		console.log(res);
 		console.log("握手成功");
-		ws.send(JSON.stringify({uid: win.global.RMTInfo.userName}));
+		ws.send(JSON.stringify({uid: win.global.RMTID.userName}));
 	};
 
 	ws.onerror = function (e) {
@@ -22,7 +22,7 @@ var win = window;
 		//win.ws = new WebSocket("ws://127.0.0.1:81");
 	};
 	win.onbeforeunload = function () {
-		ws.send(JSON.stringify({uid: win.global.RMTInfo.userName, close: true}));
+		ws.send(JSON.stringify({uid: win.global.RMTID.userName, close: true}));
 	};
 	//console.log("background:url(https://2.gravatar.com/avatar/e43425aad4de30d628ad5c89e7c57a8a?r=x&s=150); background-repeat:no-repeat; font-size:0; line-height:30px; padding-top:150px;padding-left:150px;");
 
@@ -33,18 +33,18 @@ var win = window;
 			if (data.userList) {
 				addFriend(data.userList);
 			}
-			else if (data.rmtid) {
-				distributeRemoteId(data.rmtid);
+			else if (data.remoteRole) {
+				distributeRemoteId(data.remoteRole);
 			}
 			else if (data.RMTInterActive) {
-				win.RecvRMTEventFromApp(data.RMTInterActive.RMTID, data.RMTInterActive.funcName, data.RMTInterActive.expression);
+				win.RecvRMTEventFromApp(data.RMTInterActive.remoteRole, data.RMTInterActive.funcName, data.RMTInterActive.expression);
 			}
 		});
 
 	};
 
-	function distributeRemoteId(rmtid) {
-		win.RecvRMTEventFromApp(rmtid, win.global.RMTInfo.userName, "");
+	function distributeRemoteId(remoteRole) {
+		win.RecvRMTEventFromApp(remoteRole, win.global.RMTID.userName, "");
 	}
 
 	function decodeBlob(data, callback) {
@@ -72,7 +72,7 @@ var win = window;
 			document.getElementById("friendList").innerHTML = "";
 
 			names.split(",").forEach(function (newName) {
-				if (win.global.RMTInfo.userName === newName) return;
+				if (win.global.RMTID.userName === newName) return;
 				var li = document.createElement("li");
 				li.innerHTML = '<button class="item-button"  onclick="test_1(\'' + newName + '\')" style="height:3.6rem;">' + newName + '</button>';
 				document.getElementById("friendList").appendChild(li);
@@ -82,7 +82,7 @@ var win = window;
 		else {
 			//当只有一个用户名的时候
 			document.getElementById("friendList").innerHTML = "";
-			if (win.global.RMTInfo.userName === names) return;
+			if (win.global.RMTID.userName === names) return;
 			var li = document.createElement("li");
 			li.innerHTML = '<button class="item-button" onclick="test_1(\'' + names + '\')" style="height:3.6rem;">' + names + '</button>';
 			document.getElementById("friendList").appendChild(li);
@@ -94,7 +94,7 @@ var win = window;
 		tool.alert("是否请求【" + assistantName + "】的协助！确定之后将失去控制权，直到你选择退出！",
 		           function () {
 			           new Blob([ws.send(JSON.stringify({
-				           uid: win.global.RMTInfo.userName,
+				           uid: win.global.RMTID.userName,
 				           rmtuid: assistantName
 			           }))],{type:"text/plain"});
 		           }, function () {
@@ -105,9 +105,9 @@ var win = window;
 	win.external.SendRMTEventToApp = function (localID, funcName, expression) {
 		win.ws.send(
 			new Blob([JSON.stringify({
-				uid: win.global.RMTInfo.userName,
+				uid: win.global.RMTID.userName,
 				RMTInterActive: {
-					RMTID: global.RMTInfo.ID,
+					remoteRole: global.RMTID.role,
 					funcName: funcName,
 					expression: expression
 				}

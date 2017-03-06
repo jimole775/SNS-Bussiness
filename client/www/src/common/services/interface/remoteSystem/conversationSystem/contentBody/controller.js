@@ -28,14 +28,14 @@
 
 			$scope.charSentence = [
 				//{
-				//	RMTID: "remote",
+				//	remoteRole: "remote",
 				//	userName: "诸葛先森",
 				//	sentence: "你好！",
 				//	timer: "时:分:秒",
 				//	_interval: 0
 				//},
 				//{
-				//	RMTID: "native",
+				//	remoteRole: "native",
 				//	userName: "刘先森",
 				//	sentence: "你好！",
 				//	timer: "时:分:秒",
@@ -46,7 +46,7 @@
 			var convInfoBox = [];
 			win.global.syncRMTConversation = function (charInfo) {
 
-				if(charInfo.RMTID !== global.RMTInfo.ID){
+				if(charInfo.remoteRole !== global.RMTID.role){
 					if( $scope.charSate.charFormState === false && $scope.charSate.newSentenceAmount < 99) { $scope.charSate.newSentenceAmount ++; }
 					else { $scope.charSate.newSentenceAmount = 99; }
 
@@ -76,7 +76,7 @@
 
 				$scope.safeApply (function () {
 					$scope.charSentence.push ({
-						RMTID: charInfo.RMTID == global.RMTInfo.ID ? "native" : "remote",
+						remoteRole: charInfo.remoteRole == global.RMTID.role ? "native" : "remote",
 						userName: charInfo.userName,
 						sentence: charInfo.sentence,
 						timer: charInfo.timer,
@@ -161,7 +161,7 @@
 					var s = nowDate.getSeconds ();
 					var formatDate = (h < 10 ? "0" + h : h) + ":" + (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
 					var charInfo = {
-						RMTID: global.RMTInfo.ID,
+						remoteRole: global.RMTID.role,
 						userName: global.userName || "远程对象",
 						sentence: contents,
 						timer: formatDate

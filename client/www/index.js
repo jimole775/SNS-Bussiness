@@ -261,7 +261,7 @@
 				params_stringJson[2] = typeof arguments_thd !== "string" ? JSON.stringify(arguments_thd) : arguments_thd;    //确保结果为
 				// 字串json
 				/********************************************以下是远程数据处理************************************************/
-				if (global.RMTInfo.ID == 1) {
+				if (global.RMTID.role == 1) {
 					var action_int = parseInt(params_stringJson[0]);
 					switch (action_int) {
 						case win.CONSTANT.APP_TO_JS.RECEIVE_STATUS_MESSAGE:
@@ -311,7 +311,7 @@
 		win.jsRecvDeviceData = (function (old) {
 			return function () {
 				//如果设备正在运行数据流，就不转发设备数据
-				if (global.RMTInfo.ID == 1 && !global.RMTInfo.dataStream) {
+				if (global.RMTID.role == 1 && !global.RMTID.dataStream) {
 					win.sendRMTEventToApp("jsRecvDeviceData",                                       //发送到远程端
 					                      arguments[0] + "_|_" +                           //加上"_|_",方便区分参数个数
 					                      arguments[1]);                                                          //最后一个不加"_|_",
