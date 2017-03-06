@@ -13,6 +13,7 @@
 		'       <div class="sliding-shoe" id="slidingShoe" ng-class="{\'full\':carLogo.length === 1}"></div>',
 		'   </div>',
 		'   <div class="context_main" id="context_main">',
+				//如果只有一种系列的车型，就只为内容盒子添加full样式，使其填满整个窗体
 		'       <div class="context_main_with_title car-module-main" id="scroll-body-controller" ng-class="{\'full\':carLogo.length === 1}">',
 		'           <div class="module-list car-module-list" ng-repeat="item in carLogo" ng-class="{\'full\':carLogo.length === 1}">',
 		'               <ul class="module-list-ul">',

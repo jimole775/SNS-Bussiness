@@ -678,7 +678,7 @@
 			},
 				dataPack,
 				win.server.addCallbackParam (win.serverRequestCallback.CALC_ONE_ANS, [param]),
-				handleResponseErr
+				[null,handleBackRequest]
 			)
 
 		}
@@ -686,7 +686,7 @@
 		/**
 		 //动态数据信息值返回无效时，刷新为'N/A'，每次3条
 		 */
-		function handleResponseErr(params) {
+		function handleBackRequest(params) {
 			if (!$scope.DynamicWebView || !params) return;
 			var curIndex = params.index;
 			var rowsInEachPage = global.RMTInfo.rowsInEachPage || 0;
@@ -719,11 +719,11 @@
 
 			//if (!responseObject.items.length) {
 			//	//todo 刷新信息值为“N/A”，每次刷新3条
-			//	handleResponseErr(params);
+			//	handleBackRequest(params);
 			//}
 			//else {
 			if(!responseObject.items.length){
-				handleResponseErr(params);
+				handleBackRequest(params);
 				return;
 			}
 				var supports = $scope.DynamicWebView || [];

@@ -64,7 +64,6 @@
 			outputConfirm();
 		};
 
-
 		/**
 		 * 从服务器获取系统信息
 		 * @param dataPack
@@ -80,21 +79,23 @@
 				},
 				dataPack,
 				win.server.addCallbackParam(win.serverRequestCallback.SYS, [dataPack]),
-				function (params) {
-					safeApply(function () {
-						$scope.curPageIndex = 0;
-						$scope.pagesOptionChosenRecord.length = 0;
-						$scope.curPageData.length = 0;
-					});
+				[null,handleBackRequest]
+			);
+		}
 
-					tool.alert(['服务器请求超时，请点击重试', '重试', '取消'],
-						function () {
-							requestData(params);
-						},
-						function () {
-							moduleExit();
-						}
-					);
+		function handleBackRequest(params){
+			safeApply(function () {
+				$scope.curPageIndex = 0;
+				$scope.pagesOptionChosenRecord.length = 0;
+				$scope.curPageData.length = 0;
+			});
+
+			tool.alert(['服务器请求超时，请点击重试', '重试', '取消'],
+				function () {
+					requestData(params);
+				},
+				function () {
+					moduleExit();
 				}
 			);
 		}

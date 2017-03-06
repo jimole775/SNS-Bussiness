@@ -188,15 +188,17 @@
 			},
 				dataPack,
 				win.server.addCallbackParam(win.serverRequestCallback.CHANNEL_DATA, [dataPack]),
-			    function(){
-				    var i = $scope.channelDataList.length;
-				    while (i--) {
-					    $scope.channelDataList[i].ans = 'N/A';
-				    }
-				    safeApply(function () {});
-			    }
+				[null,handleBackRequest]
 			);
 
+		}
+
+		function handleBackRequest(){
+			var i = $scope.channelDataList.length;
+			while (i--) {
+				$scope.channelDataList[i].ans = 'N/A';
+			}
+			safeApply(function () {});
 		}
 
 		win.serverRequestCallback.CHANNEL_DATA = function (responseObject, params) {

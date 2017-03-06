@@ -594,8 +594,7 @@
 
         //var varSendData = JSON.stringify({subURL: CONSTANT.SERVER_ADDRESS ,data:[{ServerType:"23"},{DataType:"1"},{DataPack:""}]});
         //win.external.RequestDataFromServer(3021, varSendData, getDatabaseCallBack);
-        win.server.request(23,1,{DataPack:""},
-            win.serverRequestCallback.showDatabaseVersion_A05C);
+        win.server.request(23,1,{DataPack:""},win.serverRequestCallback.showDatabaseVersion_A05C);
 
     }
 

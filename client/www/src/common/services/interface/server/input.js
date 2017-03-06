@@ -5,39 +5,31 @@
 	var win = window;
 	win.server = win.server ? win.server : {};
 
+
+
 	/**
 	 * APP从服务器获取到数据，转发给Js
 	 * @param action str
 	 * @param response obj
 	 * @param callback str
-	 * @param alertCallback array or function
+	 * @param handleBackRequest array or function
 	 * */
-
-	var alertCallbackRetry = function(){};
-	var alertCallbackCancle = function(){};
-	win.server.jsRecvServerData = function (action, response, callback, alertCallback) {
+	win.server.jsRecvServerData = function (action, response, callback, handleBackRequest) {
 		if (global.RMTInfo.ID == 2) return;                           //控制机不需要有服务器交互行为
 
-		//alertCallback有两个行为，一个是Array,一个是Function
-		if (alertCallback instanceof Array) {
-			alertCallbackRetry = alertCallback[0];
-			alertCallbackCancle = alertCallback[1];
-		}else if (alertCallback instanceof Function) {
-			alertCallbackCancle = alertCallback;
-		}
 
 		switch (action) {
 			case "success":
-				this.successHandle(response, callback, alertCallbackCancle);
+				this.successHandle(response, callback, handleBackRequest[1]);
 				break;
 			case "timeout":
 			case "error"://涵盖有服务器繁忙
-				win.serverRequestCallback.refreshHandle(response, callback.params, alertCallback);
+				win.serverRequestCallback.refreshHandle(response, callback.params, handleBackRequest);
 				break;
 		}
 	};
 
-	win.server.successHandle = function (response, callback, alertCallbackCancle) {
+	win.server.successHandle = function (response, callback, backRequestCancel) {
 		var jsonData = null;
 
 		//如果CODETYPE == 0，就是数据查询成功，如果是1，就是数据查询失败！
@@ -60,24 +52,24 @@
 		//如果服务器查询失败，就不必再给用户请求的机会！
 		else {
 			tool.alert("服务器响应失败:"+response.CODEDATA,function(){
-				alertCallbackCancle.apply(null, callback.params);
+				backRequestCancel.apply(null, callback.params);
 			});
 		}
 	};
 
-	win.serverRequestCallback.refreshHandle = function (response, callbackParams, alertCallback) {
+	win.serverRequestCallback.refreshHandle = function (response, callbackParams, handleBackRequest) {
 		/**超时回调处理：
 		 * 如果回调参数传过来的是数组，就是两个函数实体
 		 * 如果回调参数穿过来的是函数，就是一个函数，直接调用
 		 * */
 
-		if (alertCallback instanceof Array) {
+		if (handleBackRequest[0]) {
 			tool.alert([response, "重试", "取消"],
 				function () {
-					alertCallbackRetry.apply(null, callbackParams);
+					handleBackRequest[0].apply(null, callbackParams);
 				},
 				function () {
-					alertCallbackCancle.apply(null, callbackParams);
+					handleBackRequest[1].apply(null, callbackParams);
 				}
 			);
 		}
@@ -86,8 +78,8 @@
 		 * 例如：function(){ $scope.getResponse = response;}
 		 * 在这里直接调用的时候，就可以对$scope.getResponse进行修改！！！
 		 * */
-		else if (alertCallback instanceof Function) {
-			alertCallbackCancle.apply(null, callbackParams);
+		else{
+			handleBackRequest[1].apply(null, callbackParams);
 		}
 	};
 

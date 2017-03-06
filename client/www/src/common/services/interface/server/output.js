@@ -5,7 +5,7 @@
 $(document).ready(function () {
 	var win = window;
 	win.server = win.server ? win.server : {};
-	win.server.request = function (serverType, dataType, dataPack, callback, alertCallback) {
+	win.server.request = function (serverType, dataType, dataPack, callback, handleBackRequest) {
 		if (global.RMTInfo.ID == 2) return;   //控制机不需要有服务器交互行为
 		var that = this;
 		//每次页面刷新的时候,都会同时执行tool.loading,tool.layout,server.request函数,
@@ -48,7 +48,7 @@ $(document).ready(function () {
 				return result;
 			})();
 
-			that.ajaxHandle(data, callback, alertCallback);
+			that.ajaxHandle(data, callback, handleBackRequest);
 		}, 105);
 		console.log('toServer：serverType：', serverType, 'dataType：', dataType, 'dataPack：', JSON.stringify(dataPack));
 	};
@@ -59,7 +59,7 @@ $(document).ready(function () {
 		return func;
 	};
 
-	win.server.ajaxHandle = function (data, callback, alertCallback) {
+	win.server.ajaxHandle = function (data, callback, handleBackRequest) {
 		var that = this;
 		var ajaxInstance = $.ajax({
 			type: "POST",
@@ -78,14 +78,14 @@ $(document).ready(function () {
 
 						var jsonData = JSON.parse(tool.xml2json(xml.childNodes[0], "").toUpperCase()).ROOT;
 
-						that.jsRecvServerData("success", jsonData, callback, alertCallback);
+						that.jsRecvServerData("success", jsonData, callback, handleBackRequest);
 						break;
 					case "timeout":
 						ajaxInstance.abort();
-						that.jsRecvServerData("timeout", "服务器请求超时", callback, alertCallback);
+						that.jsRecvServerData("timeout", "服务器请求超时", callback, handleBackRequest);
 						break;
 					case "error":
-						that.jsRecvServerData("error", "服务器请求失败", callback, alertCallback);
+						that.jsRecvServerData("error", "服务器请求失败", callback, handleBackRequest);
 						console.log('http请求失败:', XMLHttpRequest);
 						break;
 				}

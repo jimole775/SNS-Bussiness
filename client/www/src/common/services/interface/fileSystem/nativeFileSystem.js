@@ -131,9 +131,7 @@
 			//调服务器接口验证文件是否正确
 			var data = getBse64Encode (type + selectedFileName);
 			//var varSendData = "{'subURL':'" + CONSTANT.SERVER_ADDRESS + "','data':[{'ServerType':'17'},{'DataType':'7'},{'DataPack':'" + data + "'}]}";
-			win.server.request(
-				17,7,{DataPack:data},win.serverRequestCallback.validateFile
-			);
+			win.server.request(17,7,{DataPack:data},win.serverRequestCallback.validateFile);
 			//external.RequestDataFromServer (3021, varSendData, validateFileCallBack);
 		}
 		else {
