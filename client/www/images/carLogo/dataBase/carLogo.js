@@ -383,8 +383,8 @@
                 "link": "empty.htm#ID=A0B5&INDEX=1&PROCEDURE='奔驰全车模块故障扫描（自动检测功能）'&TLMAX=5&CARCODE=01&ServerType=-1&CarType=benz&DiagnoseType=&RunMode=online&FunctionID=CCDP_Web/zh-cn/Business/SimpleDiagnostics.html"
               },
               {
-                "name": "单模块故障扫描（半自动检测功能）",
-                "link": "empty.htm#ID=A0B5&INDEX=1&PROCEDURE='奔驰单模块故障扫描（半自动检测功能）'&TLMAX=5&CARCODE=01&ServerType=-1&CarType=benz&DiagnoseType=2&RunMode=offline&FunctionID=CCDP_Web/zh-cn/Business/ProfessionalDiagnostics.html"
+                "name": "手动单模块检测（专家检测功能）",
+                "link": "empty.htm#ID=A0B5&INDEX=1&PROCEDURE='手动单模块检测（专家检测功能）'&TLMAX=5&CARCODE=01&ServerType=-1&CarType=benz&DiagnoseType=2&RunMode=offline&FunctionID=CCDP_Web/zh-cn/Business/ProfessionalDiagnostics.html"
               }
             ]
           },

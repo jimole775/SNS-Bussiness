@@ -59,7 +59,7 @@
 			//全车模块扫描    100|101
 			//手动模块扫描    102
 			//专家模块扫描    103
-			global.businessInfo.serverType = diagInfo.name.match(/全车/g) ? "100":(diagInfo.name.match(/手动/g) ? "103" : "102");
+			global.businessInfo.serverType = diagInfo.name.match(/全车模块故障扫描/g) ? "100":(diagInfo.name.match(/手动单模块检测/g) ? "103" : "102");
 			global.businessInfo.link = diagInfo.link;
 			tool.layout(thisBoxId,0);
 			win.moduleEntry.carType();
