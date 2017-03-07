@@ -6,6 +6,10 @@
 	var key;
 	var mask = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
 	var clients = [];
+
+	//所有以创建连接的用户以{asker:session,assiant:session}的方式存储
+	var chanelMap = [];
+
 	var namesMap = [];
 	var original = "";
 
@@ -36,7 +40,7 @@
 			//});
 			socket.on('data', function (e) {
 				var frame = decodeDataFrame(e);
-				console.log("一共接收了多少次数据：",frame);
+				console.log("一共接收了多少次数据：", frame);
 				//第一次握手
 				if (frame.FIN === 0) {
 					that.handshake(socket, e);
@@ -48,57 +52,19 @@
 							console.log("会话已经结束:", socket, frame.PayloadData);
 							break;
 						default :
-							console.log("服务器接收的帧数据：", frame);
 							that.opcode = frame.Opcode;
 							var data = JSON.parse(frame.PayloadData.toString()) || "";
 
 							if (data.close) {
-								//删除断线的用户，重新推送到客户端
-								clients.forEach(function (item, index) {
-									if (item.uid === data.uid) {
-										clients[index].session.destroy();
-										console.log("删除对象：", clients[index]);
-										clients.splice(index, 1);
-										namesMap.splice(index, 1);
-									}
-								});
-
-								clients.forEach(function (item, index) {
-									item.session.write(
-										encodeDataFrame({
-											FIN: 1,
-											Opcode: that.opcode,
-											PayloadData: that.opcode == 1 ? JSON.stringify({userList: namesMap.join(",")}) : new Buffer(JSON.stringify({userList: namesMap.join(",")}))
-
-										})
-									);
-								});
+								that.close(data);
 								return;
 							}
 
 							//如果map里面没有此用户，就存储session，并绑定用户名
-							if (!namesMap.join(",").match(new RegExp(data.uid, "g"))) {
-								clients.push({
-									uid: data.uid,
-									session: socket
-								});
-								namesMap.push(data.uid);
-
-								//向所有的用户推送用户名
-								clients.forEach(function (item, index) {
-									item.session.write(
-										encodeDataFrame({
-											FIN: 1,
-
-											Opcode: that.opcode,
-											PayloadData: that.opcode == 1 ? JSON.stringify({userList: namesMap.join(",")}) : new Buffer(JSON.stringify({userList: namesMap.join(",")}))
-
-										})
-									);
-								});
+							if (!namesMap.join(",").match(new RegExp(data.askUid, "g"))) {
+								that.distributeUid(data, socket);
 							}
-
-							if (data.rmtuid) {
+							if (data.asstUid) {
 								that.openChanel(data)
 							}
 							else if (data.RMTInterActive) {
@@ -112,6 +78,7 @@
 		}).listen(81, function () {});
 	};
 
+	//单个用户的握手实例;
 	WebSocket.prototype.handshake = function (socket, e) {
 		original = e.toString().match(/Sec-WebSocket-Key: (.+)/)[1];
 		key = crypto.createHash("sha1").update(original + mask).digest("base64");
@@ -122,41 +89,30 @@
 		socket.write("\r\n");
 	};
 
+	//两个用户的对接
 	WebSocket.prototype.openChanel = function (data) {
 		var that = this;
-		that.asker = that.getSession(data.uid, clients);
-		that.assistant = that.getSession(data.rmtuid, clients);
-		var decideAsker = JSON.stringify({remoteRole: 1});
-		var decideAssistant = JSON.stringify({remoteRole: 2});
+		var asker = that.getSession(data.askUid, clients);
+		var asst = that.getSession(data.asstUid, clients);
 
-		that.asker.write(
-			encodeDataFrame({
-				FIN: 1,
-				Opcode: that.opcode,
-				PayloadData: that.opcode == 1 ? decideAsker : new Buffer(decideAsker)
-			}));
-		that.assistant.write(
-			encodeDataFrame({
-				FIN: 1,
-				Opcode: that.opcode,
-				PayloadData: that.opcode == 1 ? decideAssistant : new Buffer(decideAssistant)
-			}));
+		//存储远程对话通道
+		chanelMap.push({
+			asker: {uid: data.askUid, session: asker},
+			asst: {uid: data.asstUid, session: asst}
+		});
+
+		that.send(asker,{remoteRole: 1});
+		that.send(asst,{remoteRole: 2});
 	};
 
 	WebSocket.prototype.RMTInterActive = function (data) {
 		var that = this;
-		var msg = JSON.stringify({RMTInterActive: data.RMTInterActive});
-		var emitFrame = encodeDataFrame({
-			FIN: 1,
-			Opcode: that.opcode,
-			PayloadData: that.opcode == 1 ? msg : new Buffer(msg)
-		});
-
+		var map = that.getChanelSession(data.uid);
 		if (data.RMTInterActive.remoteRole == 1) {
-			that.assistant.write(emitFrame);
+			that.send(map.asst,{RMTInterActive: data.RMTInterActive});
 		}
 		else if (data.RMTInterActive.remoteRole == 2) {
-			that.asker.write(emitFrame);
+			that.send(map.asker,{RMTInterActive: data.RMTInterActive});
 		}
 	};
 
@@ -168,11 +124,82 @@
 			}
 		}
 	};
+	WebSocket.prototype.getChanelSession = function (uid) {
+		var result = {};
+		chanelMap.forEach(function(item,index){
+			if(item.asker.uid == uid || item.asst.uid == uid){
+				result = {
+					asker:item.asker.session,
+					asst:item.asst.session
+				};
+			}
+		});
+		return result;
+	};
 
-	WebSocket.prototype.closeChanel = function(){
+	WebSocket.prototype.close = function (data) {
+		this.refreshUserList();
+		this.disconnectChanel(data);
+	};
+
+	WebSocket.prototype.refreshUserList = function () {
+		var that = this;
+		//删除断线的用户，重新推送到客户端
+		clients.forEach(function (item, index) {
+			if (item.uid === data.askUid) {
+				clients[index].session.destroy();
+				console.log("删除对象：", clients[index]);
+				clients.splice(index, 1);
+				namesMap.splice(index, 1);
+			}
+		});
+
+		clients.forEach(function (item, index) {
+			that.send(item.session,{userList: namesMap.join(",")});
+		});
+	};
+	WebSocket.prototype.disconnectChanel = function (data) {
+		//如果是协助者的断开讯号,
+		var that = this;
+		var asker = null;
+		var asst = null;
+		chanelMap.forEach(function(item,index){
+			if(item.asker.uid == data.uid || item.asst.uid == data.uid){
+				asker = item.asker.session;
+				asst = item.asst.session;
+				that.send(asker,{disconnect:true});
+				that.send(asst,{disconnect:true});
+				chanelMap.splice(index,1);   //删除远程会话通道
+			}
+		});
 
 	};
 
+	WebSocket.prototype.send = function (socket,data) {
+		var that = this;
+		var PayloadData = that.opcode == 1 ? JSON.stringify(data) : new Buffer(JSON.stringify(data));
+		socket.write(
+			encodeDataFrame({
+				FIN: 1,
+				Opcode: that.opcode,
+				PayloadData: PayloadData
+			})
+		);
+
+	};
+	WebSocket.prototype.distributeUid = function (data, socket) {
+		var that = this;
+		clients.push({
+			uid: data.askUid,
+			session: socket
+		});
+		namesMap.push(data.askUid);
+
+		//向所有的用户推送用户名
+		clients.forEach(function (item, index) {
+			that.send(item.session,{userList: namesMap.join(",")});
+		});
+	};
 	//websocket数据的加解密工作
 	function decodeDataFrame(e) {
 		global.inputBuffer = e;

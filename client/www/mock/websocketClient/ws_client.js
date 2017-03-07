@@ -10,7 +10,7 @@ var win = window;
 	ws.onopen = function (res) {
 		console.log(res);
 		console.log("握手成功");
-		ws.send(JSON.stringify({uid: win.global.RMTID.userName}));
+		ws.send(JSON.stringify({askUid: win.global.RMTID.userName}));
 	};
 
 	ws.onerror = function (e) {
@@ -28,30 +28,43 @@ var win = window;
 
 	ws.onmessage = function (res) {
 		decodeBlob(res.data, function (data) {
-			console.log("数据票据：",data);
+			console.log("数据票据：", data);
 			if (!data) return;
 			if (data.userList) {
 				addFriend(data.userList);
 			}
 			else if (data.remoteRole) {
-				distributeRemoteId(data.remoteRole);
+
+
+				distributeRemoteRole(data.remoteRole);
 			}
 			else if (data.RMTInterActive) {
 				win.RecvRMTEventFromApp(data.RMTInterActive.remoteRole, data.RMTInterActive.funcName, data.RMTInterActive.expression);
+			}
+			else if (data.disconnect) {
+
+				$("#RMTCover").hide();
+				win.global.RMTID.role = 0;
+				tool.alert("对方已经断开连接!", function () {});
+
 			}
 		});
 
 	};
 
-	function distributeRemoteId(remoteRole) {
+	function distributeRemoteRole(remoteRole) {
 		//win.RecvRMTEventFromApp(remoteRole, win.global.RMTID.userName, "");
-		win.jsRecvAppData(1000,{screenInfo:{screenSize:5.5,headHeight:60,footHeight:60},serverHost:"http://112.124.26.243:8090",businessRole:remoteRole},"");
+		win.jsRecvAppData(1000, {
+			screenInfo: {screenSize: 5.5, headHeight: 60, footHeight: 60},
+			serverHost: "http://112.124.26.243:8090",
+			businessRole: remoteRole
+		}, "");
 	}
 
 	function decodeBlob(data, callback) {
 		if (data instanceof Blob) {
 			var reader = new FileReader();
-			reader.readAsText(data, "utf8");	//如果是中文直接压制的，就用readAsText方法读取，如果通过后台传出的buffer呢？
+			reader.readAsText(data, "utf8");
 			reader.onload = function (e) {
 				var result = /^[\{\[]/.test(reader.result.substr(0, 1)) ? JSON.parse(reader.result) : reader.result;
 				callback(result);
@@ -95,25 +108,26 @@ var win = window;
 		tool.alert("是否请求【" + assistantName + "】的协助！确定之后将失去控制权，直到你选择退出！",
 		           function () {
 			           new Blob([ws.send(JSON.stringify({
-				           uid: win.global.RMTID.userName,
-				           rmtuid: assistantName
-			           }))],{type:"text/plain"});
+				           askUid: win.global.RMTID.userName,
+				           asstUid: assistantName
+			           }))], {type: "text/plain"});
 		           }, function () {
 			})
 	};
 
 
 	win.external.SendRMTEventToApp = function (localID, funcName, expression) {
-		win.ws.send(
-			new Blob([JSON.stringify({
+		var msg = "";
+			msg = {
 				uid: win.global.RMTID.userName,
 				RMTInterActive: {
 					remoteRole: global.RMTID.role,
 					funcName: funcName,
 					expression: expression
 				}
-			})],{type:"text/plain"})
-		)
+			};
+
+		win.ws.send(new Blob([JSON.stringify(msg)], {type: "text/plain"}));
 
 	};
 
