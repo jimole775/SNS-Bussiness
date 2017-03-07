@@ -44,7 +44,8 @@ var win = window;
 	};
 
 	function distributeRemoteId(remoteRole) {
-		win.RecvRMTEventFromApp(remoteRole, win.global.RMTID.userName, "");
+		//win.RecvRMTEventFromApp(remoteRole, win.global.RMTID.userName, "");
+		win.jsRecvAppData(1000,{screenInfo:{screenSize:5.5,headHeight:60,footHeight:60},serverHost:"http://112.124.26.243:8090",businessRole:remoteRole},"");
 	}
 
 	function decodeBlob(data, callback) {

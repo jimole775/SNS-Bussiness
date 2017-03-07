@@ -168,13 +168,13 @@
 
 		win.serverRequestCallback.ORGAN_COMPONENTS = function (response, params) {
 			win.tool.loading(0);
-			//if (!status.ok) {
-			//	tool.alert(
-			//		["服务器响请求超时", "重试", "取消"],
-			//		function () { requestData(params, gRequestType) },
-			//		function () { fnBack() }
-			//	);
-			//}
+			if (!response.items.length) {
+				tool.alert(
+					"服务器无任何数据!",
+					function () { fnBack() }
+				);
+				return;
+			}
 			//if (response.items.length && response.items[0].groupitems.length) {
 
 				response.items[0].groupitems.forEach(function (item, index) {
