@@ -11,20 +11,20 @@ $(document).ready(function () {
         var that = this;
         _callback = callback;
         _handleBadRequest = handleBadRequest;
-        var sendDataStr = JSON.stringify({
-            'subURL': win.global.businessInfo.serverDst,
-            'data': [
+        var sendDataStr = {
+            subURL: win.global.businessInfo.serverDst,
+            data: JSON.stringify([
                 {
-                    'ServerType': serverType
+                    ServerType: serverType
                 },
                 {
-                    'DataType': dataType
+                    DataType: dataType
                 },
                 {
-                    'DataPack': getBse64Encode((typeof dataPack === "object") ? JSON.stringify(dataPack) : dataPack)
+                    DataPack: getBse64Encode((typeof dataPack === "object") ? JSON.stringify(dataPack) : dataPack)
                 }
-            ]
-        });
+            ])
+        };
 
         var pack = (function () {
             var result = {};

@@ -145,10 +145,11 @@
 						}
 					}, 100);
 
-				}, 600);    //预留600毫秒给angular.bootstrap，并初始化所有controller控制器，win.moduleEntry对象在初始化过程中逐一被赋值！
+				}, 1000);    //预留1000毫秒给angular.bootstrap，并初始化所有controller控制器，win.moduleEntry对象在初始化过程中逐一被赋值！
 							//问题在于，并不能准确的判断controller初始化需要多少时间，这个时间间隔受到系统CPU和模块数量的影响，
 							//如果需要准确无误的判断，只能监听angular的queue队列数量，和moduleEntry的入口数量，通过手动记录对应的数量，相等之后才通过判断式
 							//这样的后果就是，每次新增模块都需要手动调整一次模块数量
+							//当然，能使用webpack就好了
 			}
 		})
 	}
