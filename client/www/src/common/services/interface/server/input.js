@@ -29,6 +29,7 @@
 		}
 	};
 
+
 	win.server.successHandle = function (response, callback, backRequestCancel) {
 		var jsonData = null;
 
