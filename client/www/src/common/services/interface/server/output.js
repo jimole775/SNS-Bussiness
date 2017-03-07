@@ -11,9 +11,9 @@ $(document).ready(function () {
         var that = this;
         _callback = callback;
         _handleBadRequest = handleBadRequest;
-        var sendDataStr = {
+        var sendDataStr = JSON.stringify({
             subURL: win.global.businessInfo.serverDst,
-            data: JSON.stringify([
+            data: [
                 {
                     ServerType: serverType
                 },
@@ -23,8 +23,8 @@ $(document).ready(function () {
                 {
                     DataPack: getBse64Encode((typeof dataPack === "object") ? JSON.stringify(dataPack) : dataPack)
                 }
-            ])
-        };
+            ]
+        });
 
         var pack = (function () {
             var result = {};
