@@ -93,7 +93,7 @@
 
                 var selectedOptionIndex = $(options).index(selectedOption);               //计算被选择的值的下标;
                 var params = [selectId, selectedOptionIndex];
-                sendRMTEventToApp("RMTClickEvent.RMTOption_ClickEvent", params);          //发送ID和点击的元素的下标
+                win.sendRMTEventToApp("RMTClickEvent.RMTOption_ClickEvent", params);          //发送ID和点击的元素的下标
             };
 
             win.RMTClickEvent.RMTOption_ClickEvent = function (selectId, selectedOptionIndex)
@@ -120,7 +120,7 @@
                 $radio.on("change", function (event)
                 {
                     var curTag = event.currentTarget;
-                    RMTClickEvent.RMTRadio_ClickEvent(curTag.id);
+                    win.RMTClickEvent.RMTRadio_ClickEvent(curTag.id);
                 });
             });
 
@@ -145,7 +145,7 @@
 
                 $checkbox.on("change", function (event){
                     var curTag = event.currentTarget;
-                    RMTClickEvent.RMTChecked_ClickEvent(curTag.id);
+                    win.RMTClickEvent.RMTChecked_ClickEvent(curTag.id);
                 });
             });
 

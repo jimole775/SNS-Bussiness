@@ -11,7 +11,6 @@
 	var chanelMap = [];
 
 	var namesMap = [];
-	var original = "";
 
 	function WebSocket() {}
 
@@ -80,7 +79,7 @@
 
 	//单个用户的握手实例;
 	WebSocket.prototype.handshake = function (socket, e) {
-		original = e.toString().match(/Sec-WebSocket-Key: (.+)/)[1];
+		var original  = e.toString().match(/Sec-WebSocket-Key: (.+)/)[1];
 		key = crypto.createHash("sha1").update(original + mask).digest("base64");
 		socket.write("HTTP/1.1 101 Switching Protocols\r\n");
 		socket.write("Upgrade:Websocket\r\n");
@@ -159,6 +158,7 @@
 			that.send(item.session,{userList: namesMap.join(",")});
 		});
 	};
+
 	WebSocket.prototype.disconnectChanel = function (data) {
 		//如果是协助者的断开讯号,
 		var that = this;
@@ -188,6 +188,7 @@
 		);
 
 	};
+
 	WebSocket.prototype.distributeUid = function (data, socket) {
 		var that = this;
 		clients.push({
@@ -201,6 +202,7 @@
 			that.send(item.session,{userList: namesMap.join(",")});
 		});
 	};
+
 	//websocket数据的加解密工作
 	function decodeDataFrame(e) {
 		global.inputBuffer = e;
