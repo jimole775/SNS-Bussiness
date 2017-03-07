@@ -169,6 +169,10 @@
 		}
 	};
 
+	WebSocket.prototype.closeChanel = function(){
+
+	};
+
 	//websocket数据的加解密工作
 	function decodeDataFrame(e) {
 		global.inputBuffer = e;
