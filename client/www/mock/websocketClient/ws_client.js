@@ -117,8 +117,7 @@ var win = window;
 
 
 	win.external.SendRMTEventToApp = function (localID, funcName, expression) {
-		var msg = "";
-			msg = {
+		var msg = {
 				uid: win.global.RMTID.userName,
 				RMTInterActive: {
 					remoteRole: global.RMTID.role,

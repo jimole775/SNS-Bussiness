@@ -163,12 +163,12 @@
 				},
 				dataPack,
 				win.server.addCallbackParam(win.serverRequestCallback.CHANNEL_DATA, [dataPack]),
-				[null, handleBackRequest]
+				[null, handleBadRequest]
 			);
 
 		}
 
-		function handleBackRequest() {
+		function handleBadRequest() {
 			var i = $scope.channelDataList.length;
 			while (i--) {
 				$scope.channelDataList[i].ans = 'N/A';

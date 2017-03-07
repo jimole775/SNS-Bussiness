@@ -79,11 +79,11 @@
 				},
 				dataPack,
 				win.server.addCallbackParam(win.serverRequestCallback.SYS, [dataPack]),
-				[null,handleBackRequest]
+				[null,handleBadRequest]
 			);
 		}
 
-		function handleBackRequest(params){
+		function handleBadRequest(params){
 			safeApply(function () {
 				$scope.curPageIndex = 0;
 				$scope.pagesOptionChosenRecord.length = 0;

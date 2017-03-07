@@ -147,12 +147,12 @@
 				},
 				dataPack,
 				win.server.addCallbackParam(win.serverRequestCallback.BASE_ADJUST, [dataPack]),
-				[null, handleBackRequest]
+				[null, handleBadRequest]
 			);
 
 		}
 
-		function handleBackRequest() {
+		function handleBadRequest() {
 			var i = $scope.baseAdjuseterDataList.length;
 			safeApply(function () {
 				while (i--) {

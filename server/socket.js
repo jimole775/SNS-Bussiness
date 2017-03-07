@@ -124,6 +124,7 @@
 			}
 		}
 	};
+
 	WebSocket.prototype.getChanelSession = function (uid) {
 		var result = {};
 		chanelMap.forEach(function(item,index){

@@ -5,7 +5,7 @@
 $(document).ready(function () {
 	var win = window;
 	win.server = win.server ? win.server : {};
-	win.server.request = function (serverType, dataType, dataPack, callback, handleBackRequest) {
+	win.server.request = function (serverType, dataType, dataPack, callback, handleBadRequest) {
 		if (global.RMTID.role == 2) return;   //控制机不需要有服务器交互行为
 		var that = this;
 
@@ -27,7 +27,7 @@ $(document).ready(function () {
 		});
 
 		//var data = {ServerType:1001,DataType:0,DataPack:getBse64Encode(JSON.stringify({"function":"防盗匹配"}))};
-		var data = (function () {
+		var pack = (function () {
 			var result = {};
 			var _data = JSON.parse(sendDataStr).data || [];
 			_data.forEach(function (item) {
@@ -45,7 +45,21 @@ $(document).ready(function () {
 			return result;
 		})();
 
-		that.ajaxHandle(data, callback, handleBackRequest);
+
+		var link = global.businessInfo.link;
+		//在线模式,使用AJAX请求服务器;
+		//"link": "empty.htm#ID=A0B5&INDEX=1&PROCEDURE='手动单模块检测（专家检测功能）'&TLMAX=5&CARCODE=01&ServerType=-1&CarType=benz&DiagnoseType=2&RunMode=offline&FunctionID=CCDP_Web/zh-cn/Business/ProfessionalDiagnostics.html"
+		if(link.indexOf("=online&") >= 0){
+			that.ajaxHandle(pack, callback, handleBadRequest);
+		}else{
+			//离线版本的服务器数据走这个通道;
+			win.external.RequestDataFromServer(3021, pack, "");
+
+			//并且同时创建一个全局函数接受APP推送的数据,第三个参数暂时用不到!
+			win.jsRecvServerData = function(status, response, abandonParam){
+				that.jsRecvServerData(status, response, callback, handleBadRequest);
+			};
+		}
 
 		console.log('toServer：serverType：', serverType, 'dataType：', dataType, 'dataPack：', JSON.stringify(dataPack));
 	};
@@ -56,7 +70,8 @@ $(document).ready(function () {
 		return func;
 	};
 
-	win.server.ajaxHandle = function (data, callback, handleBackRequest) {
+
+	win.server.ajaxHandle = function (pack, callback, handleBadRequest) {
 		var that = this;
 		var ajaxInstance = $.ajax({
 			type: "POST",
@@ -64,7 +79,7 @@ $(document).ready(function () {
 			timeout: 10000, //超时时间设置，单位毫秒
 			url: global.businessInfo.serverHost + "/CCDPWebServer/" + global.businessInfo.serverDst,
 			dataType: "xml",
-			data: data,
+			data: pack,
 			complete: function (XMLHttpRequest, status) {
 				switch (status) {
 					case "success":
@@ -75,14 +90,14 @@ $(document).ready(function () {
 
 						var jsonData = JSON.parse(tool.xml2json(xml.childNodes[0], "").toUpperCase()).ROOT;
 
-						that.jsRecvServerData("success", jsonData, callback, handleBackRequest);
+						that.jsRecvServerData("success", jsonData, callback, handleBadRequest);
 						break;
 					case "timeout":
 						ajaxInstance.abort();
-						that.jsRecvServerData("timeout", "服务器请求超时", callback, handleBackRequest);
+						that.jsRecvServerData("timeout", "服务器请求超时", callback, handleBadRequest);
 						break;
 					case "error":
-						that.jsRecvServerData("error", "服务器请求失败", callback, handleBackRequest);
+						that.jsRecvServerData("error", "服务器请求失败", callback, handleBadRequest);
 						console.log('http请求失败:', XMLHttpRequest);
 						break;
 				}

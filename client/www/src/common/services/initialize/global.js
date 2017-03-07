@@ -88,7 +88,6 @@
 	win.global.businessInfo.carName_cn = '';    //车辆类型的中文形式（仅用于页面显示）；
 	win.global.businessInfo.link = '';
 	win.global.businessInfo.diagType = '';
-
 	win.global.businessInfo.serverHost = 'http://112.124.26.243:8090';   //服务器统一请求地址(默认),业务开始之后,会从APP端口重新获取
 	win.global.businessInfo.serverDst = 'CCDP2Server.aspx';   //服务器数据地址(默认)
 	win.global.businessInfo.procedureType = '车辆诊断'; //业务类型：（'保养灯归零'、'BMW编程'、'BMW设码'、'标致调用控制单元功能'、'标致全车故障检测'、'特殊功能'）
