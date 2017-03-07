@@ -40,9 +40,9 @@ $ (document).ready (function () {
 		
 		switch (parseFloat (action)) {
 			case win.CONSTANT.APP_TO_JS.RECEIVE_SCREEN_INFO:                                //获取屏幕尺寸,改变相应的字体大小
-				interActiveState.init.getScreenInfo (recvData);
+				interActiveState.init.appInfo (recvData);
 				break;
-			case win.CONSTANT.APP_TO_JS.RECEIVE_KEYBOARD_INFO:                              //获取键盘尺寸信息,调整input框位置
+			case win.CONSTANT.APP_TO_JS.RECEIVE_KEYBOARD_INFO:                              //获取键盘尺寸信息,调整input框位置,APP会监听,实时推送
 				interActiveState.init.getKeyboardInfo (recvData);
 				break;
 			case win.CONSTANT.APP_TO_JS.RECEIVE_LOG_MESSAGE:                                //打印一条记录
@@ -61,9 +61,9 @@ $ (document).ready (function () {
 			case win.CONSTANT.APP_TO_JS.RECEIVE_DEV_CONNECT_FAIL:                           //设备连接失败
 				interActiveState.end.err (recvData);
 				break;
-			//case win.CONSTANT.APP_TO_JS.RECEIVE_IMAGE_URL:                                      //获取车型图片URL
-			//	interActiveState.event.handleImages (recvData);
-			//	break;
+			case win.CONSTANT.APP_TO_JS.RECEIVE_serverHost:                                      //获取车型图片URL
+				interActiveState.init.getServerHost (recvData);
+				break;
 			case win.CONSTANT.APP_TO_JS.RECEIVE_QUIT_SIGN_AFTER_DTC_LOG:                    //APP处理完上传故障码日志之后，通过此端口执行3109FF退出操作；
 			case win.CONSTANT.APP_TO_JS.RECEIVE_QUIT_SIGN_NORMAL:                           //退出业务之前，先通知APP其他线程的收尾工作，再通过此端口执行3109FF退出操作；
 				interActiveState.end.quit ();
@@ -78,7 +78,9 @@ $ (document).ready (function () {
 				break;
 		}
 	};
-
+	interActiveState.init.getServerHost = function(recvData){
+		win.global.businessInfo.serverHost = recvData;
+	};
 
 	interActiveState.end.quit = function () {
 		win.sendDataToDev ("3109FF");
@@ -140,53 +142,63 @@ $ (document).ready (function () {
 		win.sendDataToDev ("C09B");
 	};
 
+
+	/**
+	 * 激活业务机的遮罩,不确定库文件加载的情况，所以使用原生写法
+	 * */
+	function activeRMTCover() {
+		var RMTCover = document.createElement("div");
+		RMTCover.id = "RMTCover";
+		RMTCover.style.width = "100%";
+		RMTCover.style.height = "100%";
+		RMTCover.style.opacity = 0;
+		RMTCover.style.position = "absolute";
+		RMTCover.style.top = 0;
+		RMTCover.style.left = 0;
+		RMTCover.style.background = "#000";
+		RMTCover.style.zIndex = 999;
+		RMTCover.style.display = "block";
+		document.body.appendChild(RMTCover);
+	}
 	/**
 	 * 根据APP计算的屏幕物理尺寸，修改文本大小
-	 * @param recvData = {screen:"",head:"",foot:""}
-	 * screen:5 //屏幕的物理尺寸，单位（inch）;
-	 * head:40  //头部的高度，单位（px）;
-	 * foot:40  //脚部的高度，单位（px）;
+	 * @param recvData = {screenInfo:{
+	 *                              screenSize:inch,    //屏幕尺寸
+	 *                              headHeight:px,      //头部高度,html页面需要和APP首页的布局一致;
+	 *                              footHeight:px,      //脚部高度,html页面需要和APP首页的布局一致;
+	 *                              windowHeight:px,    //窗口高度,如果能从这里获取,就可以安全的解决兼容性问题
+	 *                              windowWidth:px}     //窗口宽度
+						 serverHost:"http://xxxxx:80",  //服务器主机地址
+						 businessRole:0                 //业务身份,0代表 单机模式,1代表 远程协助模式的业务机,2代表 控制机
+						}
 	 * */
-	interActiveState.init.getScreenInfo = function (recvData) {
-		console.log("手机屏幕信息：",recvData);
+	interActiveState.init.appInfo = function (recvData) {
 		var json = typeof recvData === "string" ? JSON.parse(recvData) : recvData;
-		var docEl = document.documentElement;
+		win.global.RMTID.role = json.businessRole;
+		win.global.businessInfo.serverHost = json.serverHost;
 
-		var screenSize = json.screen;
+		//如果在远程业务下,就在业务机创建遮罩层
+		if(win.global.RMTID.role == 1)activeRMTCover();
+
+		var docEl = document.documentElement;
+		var screenSize = json.screenInfo.screenSize;
 		if (screenSize >= 7) docEl.style.fontSize = '90%';
 		else if (screenSize > 4.4 && screenSize < 7) docEl.style.fontSize = '70%';
 		else docEl.style.fontSize = '50%';
 
 		//根据项目需求，头部和脚部高度需要和APP首页相同
-		$(".title")[0].style.height = json.head + "px";
-		$("#footer")[0].style.height = json.foot + "px";
-		$("#bottomButton")[0].style.height = json.foot + "px";
-
+		$(".title")[0].style.height = json.screenInfo.headHeight + "px";
+		$("#footer")[0].style.height = json.screenInfo.footHeight + "px";
+		$("#bottomButton")[0].style.height = json.screenInfo.footHeight + "px";
 
 		setTimeout(function(){
 			tool.layoutTable(); //重新计算页面的布局,会导致页面重绘
-			setTimeout(function(){
-				tool._scroll.init ();   //重新计算滚动的布局
-			},45);
 		},210);  //这个延迟取决于页面重绘的速度!
-
-		//把屏幕尺寸辐射到全局
-		win.global.phoneScreenSize = screenSize;
 	};
 
 	interActiveState.init.getKeyboardInfo = function (keyboardHeight) {
 		win.global.keyBoardHeight = parseFloat (keyboardHeight);
 	};
-
-	/**
-	 *获取图片的信息
-	 */
-	//interActiveState.event.handleImages = function (recvData) {
-	//	var json = typeof recvData === "string" && /\{\[/.test (recvData) ? JSON.parse (recvData) : recvData;
-	//	var url = json[0];
-	//	var param = json[1];
-	//	global.ShowCarTypeImg (url, param);
-	//};
 
 	interActiveState.event.handleProgramSeriesEvent = function(action, recvData){
 		tool.loading (0);

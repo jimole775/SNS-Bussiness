@@ -19,7 +19,7 @@ $(document).ready(function () {
 	 * 发送数据到设备
 	 * */
 	win.sendDataToDev = function (varSendData) {
-		if (global.RMTInfo.ID == 2) return;                    //如果是控制机，和设备无交互行为
+		if (global.RMTID.role == 2) return;                    //如果是控制机，和设备无交互行为
 		external.SendJsDataToDev(varSendData);
 		console.log('发送命令到 DEV: ' + varSendData);
 	};

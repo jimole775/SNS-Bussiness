@@ -59,7 +59,6 @@
 
 	win.global = {};
 	win.global.md5Map = {}; //文件系统处理md5校验值的；
-	win.global.phoneScreenSize = 5; //手机屏幕尺寸，默认为5英寸
 	win.global.keyBoardHeight = 0;  //键盘高度，会通过APP交互端口8888号实时获取
 
 	win.global.DTCLog = {}; //存储诊断信息
@@ -71,13 +70,13 @@
 	win.global.rootCache.carConfig = {};    //缓存车辆配置列表项
 	win.global.rootCache.carSystem = {};    //缓存系统选择列表项
 
-	win.global.RMTInfo = {};
-	win.global.RMTInfo.ID = 0;  //远程协助信号   0：正常业务， 1：通讯机， 2：远程控制机
-	win.global.RMTInfo.systemScanState = "";    //简易诊断扫描状态存储,避免扫描状态不同步时,收到按钮点击事件
-	win.global.RMTInfo.userName = "CCDP用户";
-	win.global.RMTInfo.dataStream = false;  //数据流标记，远程协助在运行数据流情况下，不转发包括设备指令和APP通知等数据
-	win.global.RMTInfo.rowsInEachPage = 0;  //动态数据分页的每页数据量；设为全局变量的原因为，远程协助存在 “两个机型屏幕宽度不一”，会造成数据读取错误，所以远程端的每页数据量必须以业务机为准
-	win.global.RMTInfo.DataStream_JsonString = "";  //动态数据流时，用来存储回调数据，存够一整页，再转发到控制机，以此来削减数据流时的延迟
+	win.global.RMTID = {};
+	win.global.RMTID.role = 0;  //远程协助信号   0：正常业务， 1：业务机， 2：远程控制机
+	win.global.RMTID.systemScanState = "";    //简易诊断扫描状态存储,避免扫描状态不同步时,收到按钮点击事件
+	win.global.RMTID.userName = "CCDP用户";
+	win.global.RMTID.dataStream = false;  //数据流标记，远程协助在运行数据流情况下，不转发包括设备指令和APP通知等数据
+	win.global.RMTID.rowsInEachPage = 0;  //动态数据分页的每页数据量；设为全局变量的原因为，远程协助存在 “两个机型屏幕宽度不一”，会造成数据读取错误，所以远程端的每页数据量必须以业务机为准
+	win.global.RMTID.DataStream_JsonString = "";  //动态数据流时，用来存储回调数据，存够一整页，再转发到控制机，以此来削减数据流时的延迟
 
 	win.global.businessInfo = {};
 	win.global.businessInfo.busID = "A000";
@@ -90,6 +89,8 @@
 	win.global.businessInfo.link = '';
 	win.global.businessInfo.diagType = '';
 
+	win.global.businessInfo.serverHost = 'http://112.124.26.243:8090';   //服务器统一请求地址(默认),业务开始之后,会从APP端口重新获取
+	win.global.businessInfo.serverDst = 'CCDP2Server.aspx';   //服务器数据地址(默认)
 	win.global.businessInfo.procedureType = '车辆诊断'; //业务类型：（'保养灯归零'、'BMW编程'、'BMW设码'、'标致调用控制单元功能'、'标致全车故障检测'、'特殊功能'）
 	//业务类型通过APP输出的URL获取，在appInterActive.js模块 AppInitEnd方法
 	win.global.businessInfo.mkey = "";
@@ -98,7 +99,6 @@
 	win.global.businessInfo.pubFilename = '';   //专业诊断专用
 
 	win.CONSTANT = {};
-	win.CONSTANT.SERVER_ADDRESS = 'CCDP2Server.aspx';   //服务器统一请求地址
 	win.CONSTANT.WINDOW_HEIGHT = doc.body.clientHeight;
 	win.CONSTANT.WINDOW_WIDTH = doc.body.clientWidth;
 	win.CONSTANT.EVENT_TYPE = {};
@@ -116,7 +116,6 @@
 	win.CONSTANT.APP_TO_JS.RECEIVE_DEV_ID = 1006;   //APP端推送设备ID，安全卡给JS；
 	win.CONSTANT.APP_TO_JS.RECEIVE_APP_ERR_MSG = 1007;  //APP底层发生程序异常，通过此端口，把异常信息推送到JS端
 
-	//win.CONSTANT.APP_TO_JS.RECEIVE_IMAGE_URL = 1009;    //从本地获取图片，由APP打包生成
 	win.CONSTANT.APP_TO_JS.RECEIVE_BUSINESS_URL = 1011; //获取业务的URL信息
 	win.CONSTANT.APP_TO_JS.RECEIVE_DEV_CONNECT_FAIL = 1012; //特地为连接失败设置的端口,和1007的操作一致;
 
@@ -129,6 +128,7 @@
 
 	win.CONSTANT.APP_TO_JS.RECEIVE_SCREEN_INFO = 1000;  //获取APP计算的手机屏幕的物理尺寸
 	win.CONSTANT.APP_TO_JS.RECEIVE_KEYBOARD_INFO = 8888;    //获取APP计算的键盘的高度
+	win.CONSTANT.APP_TO_JS.RECEIVE_serverHost = 3027; //JS请求登录服务器
 	win.CONSTANT.APP_TO_JS.RECEIVE_CALC_MD5_RESULT = 3028;  //JS请求计算MD5值
 	win.CONSTANT.APP_TO_JS.RECEIVE_DIR_ALL_FILES = 3029;    //JS请求罗列路径下的所有文件
 	win.CONSTANT.APP_TO_JS.RECEIVE_UPLOAD_FILE_FROM_SERVER = 3032;  //JS请求上传文件到服务器

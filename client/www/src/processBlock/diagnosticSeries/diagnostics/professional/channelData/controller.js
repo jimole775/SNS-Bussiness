@@ -246,7 +246,7 @@
 			$scope.stateText = '开始';
 			$scope.channelDataList.length = 0;
 			safeApply(function () {});
-			win.global.RMTInfo.dataStream = false;
+			win.global.RMTID.dataStream = false;
 			win.global.DataStream_CurPageLinesCount = 7;     //动态数据默认每一页数据量为7；
 			tool.layout("channeldata", 0);
 			win.moduleEntry.showOperationMenu();
@@ -263,10 +263,10 @@
 				return;
 			}
 
-			if (global.RMTInfo.ID != 0) {
-				win.global.RMTInfo.dataStream = true;
+			if (global.RMTID.role != 0) {
+				win.global.RMTID.dataStream = true;
 				win.global.DataStream_CurPageLinesCount = $scope.channelDataList.length;
-				if (global.RMTInfo.ID == 2)win.tool.loading({text: "等待远程端数据同步..."});
+				if (global.RMTID.role == 2)win.tool.loading({text: "等待远程端数据同步..."});
 			}
 
 			safeApply(function () {

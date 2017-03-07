@@ -125,7 +125,7 @@
 			$scope.btnScanText = OperationText[$scope.scanState];
 
 			//#hack for 远程简易诊断 按钮文本无法同步的问题
-			win.global.RMTInfo.systemScanState = $scope.scanState;
+			win.global.RMTID.systemScanState = $scope.scanState;
 		});
 
 		$scope.selectedSystemIndex = function () {

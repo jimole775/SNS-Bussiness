@@ -94,7 +94,7 @@
 
 		$scope.onBtn1Click = function () {
 			//todo #hack for 远程简易诊断 按钮文本无法同步的问题
-			win.RMTClickEvent.Btn1Click(global.RMTInfo.systemScanState);
+			win.RMTClickEvent.Btn1Click(global.RMTID.systemScanState);
 		};
 
 		win.RMTClickEvent.Btn1Click = function(RMTScanState){

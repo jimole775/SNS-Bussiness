@@ -127,7 +127,7 @@
             win.RMTClickEvent.RMTRadio_ClickEvent = function (ipnutid)
             {
                 var checkRadio = $("#" + ipnutid);
-                if(global.RMTInfo.ID == "1") checkRadio.click();
+                if(global.RMTID.role == "1") checkRadio.click();
             };
 
         };
@@ -151,7 +151,7 @@
 
             win.RMTClickEvent.RMTChecked_ClickEvent = function (ipnutid) {
                 var checkRadio = $("#" + ipnutid);
-                if(global.RMTInfo.ID == "1") checkRadio.click();                       //只有业务机才执行click()方法，如果本地也执行，那么就会触发2次点击；
+                if(global.RMTID.role == "1") checkRadio.click();                       //只有业务机才执行click()方法，如果本地也执行，那么就会触发2次点击；
             };
 
         };
@@ -168,7 +168,7 @@
          *************************************************************/
         win.RMTClickEvent.RMTChecked_ForStringContact = function (tagid,checkStatus)
         {
-            if(global.RMTInfo.ID == "1"){
+            if(global.RMTID.role == "1"){
                 var _checkStatus = typeof checkStatus === "string" ? eval(checkStatus) : checkStatus;
                 var $tag = $("#" + tagid);
                 if($tag[0].checked != _checkStatus) $tag.click();

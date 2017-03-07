@@ -13,7 +13,7 @@
 		'   <div class="charBody" ng-class="{\'hide\':!charSate.charFormState,\'show\':charSate.charFormState}">',
 		'       <div ng-repeat="item in charSentence">',
 		'           <p ng-show="item._interval >= 2*60*1000 || item._interval < 0" class="RMTChar-timer" ng-bind="item.timer">时间</p>',
-		'           <div ng-class="{\'RMTChar-remote\':item.RMTID===\'remote\',\'RMTChar-native\':item.RMTID===\'native\'}">',
+		'           <div ng-class="{\'RMTChar-remote\':item.remoteRole===\'remote\',\'RMTChar-native\':item.remoteRole===\'native\'}">',
 		'               <p  ng-hide="item._continuity && item._interval < 2*60*1000" class="userName" ng-bind="item.userName">名字</p>',
 		'               <p class="charContent">',
 		'                   <span class="charSentence" ng-bind="item.sentence">聊天内容</span>',

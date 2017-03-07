@@ -164,7 +164,10 @@
 			if (!response.items.length) {
 				tool.alert(
 					"服务器无数据支持",
-					function () { fnBack() }
+					function () {
+						fnBack();
+						safeApply(function () {});
+					}
 				);
 			}
 			else {
@@ -173,10 +176,8 @@
 					item.itemIndex = index;
 				});
 				groupItemsStorage[$scope.curGroupName] = $scope.Components = response.items[0].groupitems;
+				safeApply(function () {});
 			}
-			safeApply(function () {});
-
-
 		};
 
 		var gCurPID = "";

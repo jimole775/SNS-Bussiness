@@ -126,8 +126,8 @@
 		var that = this;
 		that.asker = that.getSession(data.uid, clients);
 		that.assistant = that.getSession(data.rmtuid, clients);
-		var decideAsker = JSON.stringify({rmtid: 1});
-		var decideAssistant = JSON.stringify({rmtid: 2});
+		var decideAsker = JSON.stringify({remoteRole: 1});
+		var decideAssistant = JSON.stringify({remoteRole: 2});
 
 		that.asker.write(
 			encodeDataFrame({
@@ -152,10 +152,10 @@
 			PayloadData: that.opcode == 1 ? msg : new Buffer(msg)
 		});
 
-		if (data.RMTInterActive.RMTID == 1) {
+		if (data.RMTInterActive.remoteRole == 1) {
 			that.assistant.write(emitFrame);
 		}
-		else if (data.RMTInterActive.RMTID == 2) {
+		else if (data.RMTInterActive.remoteRole == 2) {
 			that.asker.write(emitFrame);
 		}
 	};

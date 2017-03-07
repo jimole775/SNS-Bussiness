@@ -372,8 +372,8 @@
     //设码信息选择
     function Fun310542(recvData) {
         tool.loading();
-        //var varSendData = "{'subURL':'" + CONSTANT.SERVER_ADDRESS + "','data':[{'ServerType':'44'},{'DataType':'1'},{'DataPack':''}]}";
-        //var varSendData = JSON.stringify({subURL:CONSTANT.SERVER_ADDRESS,data:[{ServerType:"44"},{DataType:"1"},{DataPack:""}]});
+        //var varSendData = "{'subURL':'" + global.businessInfo.serverDst + "','data':[{'ServerType':'44'},{'DataType':'1'},{'DataPack':''}]}";
+        //var varSendData = JSON.stringify({subURL:global.businessInfo.serverDst,data:[{ServerType:"44"},{DataType:"1"},{DataPack:""}]});
         //external.RequestDataFromServer(3021, varSendData, getDatabaseCallBack);
 
         win.server.request(44,1,{DataPack:""},win.serverRequestCallback.showDatabaseVersion_A08D)
@@ -397,8 +397,8 @@
 
         var data = getBse64Encode(dbVersion);   //编码
 
-        //var varSendData = "{'subURL':'" + CONSTANT.SERVER_ADDRESS + "','data':[{'ServerType':'44'},{'DataType':'2'},{'DataPack':'" + data + "'}]}";
-        //var varSendData = JSON.stringify({subURL: CONSTANT.SERVER_ADDRESS ,data:[{ServerType:"44"},{DataType:"2"},{DataPack:data }]});
+        //var varSendData = "{'subURL':'" + global.businessInfo.serverDst + "','data':[{'ServerType':'44'},{'DataType':'2'},{'DataPack':'" + data + "'}]}";
+        //var varSendData = JSON.stringify({subURL: global.businessInfo.serverDst ,data:[{ServerType:"44"},{DataType:"2"},{DataPack:data }]});
         tool.loading({text:"正在获取车型列表..."});
         //external.RequestDataFromServer(3021, varSendData, getCarTypeCallBack);
         win.server.request(44,2,{DataPack:data},win.serverRequestCallback.showCarType_A08D)
@@ -453,8 +453,8 @@
         var data = vin + carType;
         data = getBse64Encode(data);
 
-        //var varSendData = "{'subURL':'" + CONSTANT.SERVER_ADDRESS + "','data':[{'ServerType':'44'},{'DataType':'3'},{'DataPack':'" + data + "'}]}";
-        //var varSendData = JSON.stringify({subURL: CONSTANT.SERVER_ADDRESS,data:[{ServerType:"44"},{DataType:"3"},{DataPack: data}]});
+        //var varSendData = "{'subURL':'" + global.businessInfo.serverDst + "','data':[{'ServerType':'44'},{'DataType':'3'},{'DataPack':'" + data + "'}]}";
+        //var varSendData = JSON.stringify({subURL: global.businessInfo.serverDst,data:[{ServerType:"44"},{DataType:"3"},{DataPack: data}]});
         tool.loading({text:"正在读取模块信息..."});
         //external.RequestDataFromServer(3021, varSendData, getModulesCallBack);
         win.server.request(44,3,{DataPack:data},win.serverRequestCallback.showModules_A08D)
@@ -519,8 +519,8 @@
 
         data = getBse64Encode(data);
         //接口：获取数据版本列表
-        //var varSendData = "{'subURL':'" + CONSTANT.SERVER_ADDRESS + "','data':[{'ServerType':'44'},{'DataType':'4'},{'DataPack':'" + data + "'}]}";
-        //var varSendData = JSON.stringify({subURL:CONSTANT.SERVER_ADDRESS ,data:[{ServerType:"44"},{DataType:"4"},{DataPack: data }]});
+        //var varSendData = "{'subURL':'" + global.businessInfo.serverDst + "','data':[{'ServerType':'44'},{'DataType':'4'},{'DataPack':'" + data + "'}]}";
+        //var varSendData = JSON.stringify({subURL:global.businessInfo.serverDst ,data:[{ServerType:"44"},{DataType:"4"},{DataPack: data }]});
         //external.RequestDataFromServer(3021, varSendData, getFileCallBack);
         win.server.request(44,4,{DataPack:data},win.serverRequestCallback.getFile_A08D)
     };

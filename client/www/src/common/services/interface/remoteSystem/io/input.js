@@ -25,12 +25,12 @@
 		var action_int = parseFloat(action);
 
 		//第一次RecvRMTEventFromApp被调用时，初始化远程身份，并且激活非操作方的遮罩
-		if (global.RMTInfo.ID == 0) {
-			win.global.RMTInfo.ID = action_int;
-			win.global.RMTInfo.userName = varFuncName;
-			activeRMTCover();
-			return;
-		}
+		//if (global.RMTID.role == 0) {
+		//	win.global.RMTID.role = action_int;
+		//	win.global.RMTID.userName = varFuncName;
+		//	activeRMTCover();
+		//	return;
+		//}
 
 		var funcName = "";
 		//转发的函数名有时候不需要拼接_|_
@@ -75,27 +75,6 @@
 				break;
 		}
 	};
-
-
-	/**
-	 * 激活业务机的遮罩,不确定库文件加载的情况，所以使用原生写法
-	 * */
-	function activeRMTCover() {
-		var RMTCover = doc.createElement("div");
-		RMTCover.id = "RMTCover";
-		RMTCover.style.width = "100%";
-		RMTCover.style.height = "100%";
-		RMTCover.style.opacity = 0;
-		RMTCover.style.position = "absolute";
-		RMTCover.style.top = 0;
-		RMTCover.style.left = 0;
-		RMTCover.style.background = "#000";
-		RMTCover.style.zIndex = 999;
-		RMTCover.style.display = "none";
-		doc.body.appendChild(RMTCover);
-		if (win.global.RMTInfo.ID == 1) RMTCover.style.display = "block";
-		console.log('RMTID', global.RMTInfo.ID);
-	}
 
 	function HiddenRMTCover() {
 		var RMTCover = document.getElementById("RMTCover");
@@ -195,9 +174,8 @@
 		var dataArr = RMTClickAnimationData.split(",");
 
 		var clickCoords = dataArr[0];
-		var RMTScreenSize = dataArr[1];
-		var clickItem = dataArr[2];
-		var theControllerHasScrollBar = dataArr[3];
+		var clickItem = dataArr[1];
+		var theControllerHasScrollBar = dataArr[2];
 
 		var pageX = parseFloat(clickCoords.split("_!_")[0]);
 		var pageY = parseFloat(clickCoords.split("_!_")[1]);
@@ -211,38 +189,6 @@
 		if (pageX == "0" && pageY == "0") {
 			decodeRMTDataPackage(funcName, varParams);
 			return;
-		}
-
-		//如果两个机子的屏幕尺寸相同，就使用点击动画方案
-		if (RMTScreenSize == global.phoneScreenSize) {
-
-			var hitAnimation = $("#hitAnimation");
-			var selfWidth = hitAnimation.width();
-			var selfHeight = hitAnimation.height();
-
-			hitAnimation.css({
-				top: win.CONSTANT.WINDOW_HEIGHT * pageY - selfHeight / 2,
-				left: win.CONSTANT.WINDOW_WIDTH * pageX - selfWidth / 2
-			});
-
-			setTimeout(function () {
-				hitAnimation.css({
-					display: "block"
-				});
-				setTimeout(function () {
-					hitAnimation.css({
-						transform: "scale(.3, .3)",
-						background: "rgba(0, 254, 25, .8)"
-					});
-					setTimeout(function () {
-						hitAnimation.css({
-							transform: "scale(1, 1)",
-							display: "none",
-							background: "rgba(0, 254, 25, .6)"
-						});
-					}, 300);   //给予盒子动画的时间
-				}, 30);  //给予盒子渲染的时间
-			}, 30);  //给予盒子位移的时间
 		}
 
 		//如果传输过来的点击事件 是 button 或者 input 标签触发的，就寻找对应的标签，改变背景色
@@ -280,8 +226,8 @@
 			}
 		}
 
-		//给300MS的事件运行点击动画，再执行远程事件
-		setTimeout(function () {decodeRMTDataPackage(funcName, varParams)}, 660);
+		//给500MS的事件运行点击动画，再执行远程事件
+		setTimeout(function () {decodeRMTDataPackage(funcName, varParams)}, 500);
 	}
 
 	function networkDelayAct6(delay) {
@@ -318,7 +264,7 @@
 		tool.loading.status.disable = true;
 
 		//远程中，业务端和控制端区分对待
-		if (global.RMTInfo.ID == "1") {
+		if (global.RMTID.role == "1") {
 			HiddenRMTCover();
 			//首先隐藏遮罩，才能让提示框可以点击，如果用户选择【继续等待】，再将遮罩层返还，
 			//对于提示网络不稳定之前的 弹框 和 加载遮罩，不管用户如何选择，都必须原样返还
