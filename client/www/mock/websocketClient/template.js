@@ -9,7 +9,7 @@
 	};
 
 	var innerHtml = [
-	'<h2 style="height:3rem;line-height:200%;text-align:center;background:#008eff;color:#fff">基友列表(在线)</h2>' +
+	'<h2 id="friendListHeader" style="height:3rem;line-height:200%;text-align:center;background:#008eff;color:#fff">基友列表(在线)</h2>' +
 	'<ul id="friendList" style="width:100%;height:100%;position: absolute;padding-top:3rem;box-sizing: border-box;top:0;left:0"></ul>',
 	'<button onclick="global.hideList()" style="width:2rem;height:2rem;position:absolute;top:0;right:0;border:none;background: none;outline: none">' +
 	'<i class="triangle-icon"></i>' +

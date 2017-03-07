@@ -138,15 +138,15 @@
 	};
 
 	WebSocket.prototype.close = function (data) {
-		this.refreshUserList();
+		this.refreshUserList(data);
 		this.disconnectChanel(data);
 	};
 
-	WebSocket.prototype.refreshUserList = function () {
+	WebSocket.prototype.refreshUserList = function (data) {
 		var that = this;
 		//删除断线的用户，重新推送到客户端
 		clients.forEach(function (item, index) {
-			if (item.uid === data.askUid) {
+			if (item.uid === data.uid) {
 				clients[index].session.destroy();
 				console.log("删除对象：", clients[index]);
 				clients.splice(index, 1);

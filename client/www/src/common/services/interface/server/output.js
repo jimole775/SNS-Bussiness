@@ -12,16 +12,16 @@ $(document).ready(function () {
         _callback = callback;
         _handleBadRequest = handleBadRequest;
         var sendDataStr = JSON.stringify({
-            'subURL': win.global.businessInfo.serverDst,
-            'data': [
+            subURL: win.global.businessInfo.serverDst,
+            data: [
                 {
-                    'ServerType': serverType
+                    ServerType: serverType
                 },
                 {
-                    'DataType': dataType
+                    DataType: dataType
                 },
                 {
-                    'DataPack': getBse64Encode((typeof dataPack === "object") ? JSON.stringify(dataPack) : dataPack)
+                    DataPack: getBse64Encode((typeof dataPack === "object") ? JSON.stringify(dataPack) : dataPack)
                 }
             ]
         });
