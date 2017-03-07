@@ -200,16 +200,6 @@
 			tool.loading(0);
 			if (!showView)return;
 
-			//if (!status || !responseObject.items || !status.ok) {
-			//	tool.alert(['服务器响应失败，请点击重试', '重试', '取消'],
-			//		function () { helpInfoRequest.apply(null, params); },
-			//		function () {
-			//			backToPrvLevel();
-			//			//tool.processBar("");
-			//		}
-			//	);
-			//}
-			//else {
 			if(!responseObject.items.length){
 				tool.alert('服务器无任何数据',
 				           function () {
@@ -221,8 +211,6 @@
 			}
 				$scope.helpPopData = responseObject.items;
 				document.getElementById("helpPop").style.display = "block";
-
-			//}
 
 		};
 
@@ -341,26 +329,6 @@
 			tool.loading(0);
 			if (!showView)return;
 
-			//if (!status.ok) {
-			//	tool.alert(['服务器请求超时，请点击重试', '重试', '取消'],
-			//		function () { requestData(params); },
-			//		function () {
-			//			backToPrvLevel();
-			//			//tool.processBar("");
-			//		}
-			//	);
-			//}
-			//else if (!responseObject || responseObject.items.length <= 0) {
-			//	tool.alert('无任何车型数据',
-			//	           function () {
-			//		           backToPrvLevel();
-			//		           //tool.processBar("");
-			//	           }
-			//	);
-			//	return;
-			//}
-			//else {
-
 			if(!responseObject.items.length){
 				tool.alert('服务器无任何数据',
 				           function () {
@@ -390,9 +358,6 @@
 					//tool.processBar('请选择');
 					$scope.pagesData[$scope.pagesDataIndex] = items;
 				});
-
-				//tool.processBar("请选择");
-			//}
 
 			//根据界面需求，必须等需要跳转的页面渲染完毕再进行 显示
 			tool.layout(thisBoxId, 1);

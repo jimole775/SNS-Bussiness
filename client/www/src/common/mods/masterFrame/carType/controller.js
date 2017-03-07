@@ -310,25 +310,6 @@
 		win.serverRequestCallback.CTYPE = function (responseObject, params) {
 			win.tool.loading(0);
 			if (!showView)return;
-
-			//if (!status.ok) {
-			//	tool.alert(['服务器请求超时，请点击重试', '重试', '取消'],
-			//		function () { requestData($scope.pagesOptionChosenRecord); },
-			//		function () {
-			//			backToPrvLevel();
-			//			//tool.processBar("");
-			//		}
-			//	);
-			//}
-			//else if (!responseObject || responseObject.items.length <= 0) {
-			//	tool.alert('无任何车型数据',
-			//	           function () {
-			//		           backToPrvLevel();
-			//		           //tool.processBar("");
-			//	           }
-			//	);
-			//}
-			//else {
 			if(!responseObject.items.length){
 				tool.alert('服务器无任何数据',
 				           function () {

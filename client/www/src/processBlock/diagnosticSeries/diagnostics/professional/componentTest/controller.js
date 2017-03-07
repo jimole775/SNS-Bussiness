@@ -83,20 +83,13 @@
 				global.businessInfo.serverType,
 				{key: "ORGAN_TEST", cartype: global.businessInfo.carType},
 				dataPack,
-				win.server.addCallbackParam(win.serverRequestCallback[requestType], [dataPack,gRequestType]),
-			    [requestData,fnBack]
+				win.server.addCallbackParam(win.serverRequestCallback[requestType], [dataPack, gRequestType]),
+				[requestData, fnBack]
 			);
 		}
 
 		win.serverRequestCallback.ORGAN_GROUP = function (response, params) {
 			win.tool.loading(0);
-			//if (!status.ok) {
-			//	tool.alert(
-			//		["服务器响请求超时", "重试", "取消"],
-			//		function () { requestData(params, gRequestType) },
-			//		function () { fnBack() }
-			//	);
-			//}
 			if (response.items.length && response.items[0].groupitems.length && response.items[0].groupitems[0].group) {
 				response.items.forEach(function (item, index) {
 					$scope.groupNameList.push(item.groupName);
@@ -168,27 +161,19 @@
 
 		win.serverRequestCallback.ORGAN_COMPONENTS = function (response, params) {
 			win.tool.loading(0);
-			//if (!status.ok) {
-			//	tool.alert(
-			//		["服务器响请求超时", "重试", "取消"],
-			//		function () { requestData(params, gRequestType) },
-			//		function () { fnBack() }
-			//	);
-			//}
-			//if (response.items.length && response.items[0].groupitems.length) {
-
+			if (!response.items.length) {
+				tool.alert(
+					"服务器无数据支持",
+					function () { fnBack() }
+				);
+			}
+			else {
 				response.items[0].groupitems.forEach(function (item, index) {
 					item.state = "未知状态";
 					item.itemIndex = index;
 				});
 				groupItemsStorage[$scope.curGroupName] = $scope.Components = response.items[0].groupitems;
-
-			//}
-			//else {
-			//	tool.alert("服务器暂无数据支持", function () {
-			//		fnBack()
-			//	});
-			//}
+			}
 			safeApply(function () {});
 
 

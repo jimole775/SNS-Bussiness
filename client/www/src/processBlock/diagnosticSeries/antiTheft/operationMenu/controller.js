@@ -120,18 +120,6 @@
 		win.serverRequestCallback.specialPIDs = function (responseObject, params) {
 			if (!showView) return;
 			win.tool.loading(0);
-			//if (!status || !responseObject || !status.ok) {
-			//	tool.alert(['服务器响应失败，请点击重试', '重试', '取消'],
-			//		function () {
-			//			PIDsRequest(params);
-			//		},
-			//		function () {
-			//			global.disconnectOBD();
-			//			//tool.processBar("");
-			//		}
-			//	);
-			//}
-			//else {
 
 			//如果支持63指令，就把返回的所有supid拼接，发送给设备，再根据返回的710963返回的supid，匹配对应的服务项展示在页面上；
 			if (is63Supported) {
@@ -159,8 +147,6 @@
 				safeApply(function () {});
 				win.moduleEntry.showATServiceMenu();
 			}
-
-			//}
 
 		};
 
@@ -221,26 +207,6 @@
 		win.serverRequestCallback.ATServiceList = function (responseObject, params) {
 			if (!showView) return;
 			win.tool.loading(0);
-			//if (!status.ok) {
-			//	tool.alert(['服务器请求超时，请点击重试', '重试', '取消'],
-			//		function () {
-			//			serviceListRequest(params);
-			//		},
-			//		function () {
-			//			global.disconnectOBD();
-			//			//tool.processBar("");
-			//		}
-			//	);
-			//}
-			//else if (!responseObject || !responseObject.items) {
-			//	tool.alert('无任何防盗匹配功能',
-			//	           function () {
-			//		           global.disconnectOBD();
-			//		           //tool.processBar("");
-			//	           }
-			//	);
-			//}
-			//else {
 
 			if(!responseObject.items.length){
 				tool.alert('服务器无任何数据',
@@ -258,7 +224,6 @@
 			while (i--) $scope.serviceList[i].name = $scope.serviceList[i].name.split("\\n");
 			safeApply(function () {});
 			win.moduleEntry.showATServiceMenu();
-			//}
 
 		};
 

@@ -103,35 +103,6 @@
 
 		win.serverRequestCallback.SYS = function (responseObject, params) {
 			if (!showView)return;
-			//if (!status.ok) {
-			//	safeApply(function () {
-			//		$scope.curPageIndex = 0;
-			//		$scope.pagesOptionChosenRecord.length = 0;
-			//		$scope.curPageData.length = 0;
-			//	});
-			//
-			//	tool.alert(['服务器请求超时，请点击重试', '重试', '取消'],
-			//		function () {
-			//			requestData(params);
-			//		},
-			//		function () {
-			//			moduleExit();
-			//			//tool.processBar("");
-			//		}
-			//	);
-			//
-			//}
-			//else if (!responseObject || !responseObject.items) {
-			//	tool.alert('无任何车辆系统信息',
-			//	           function () {
-			//		           moduleExit();
-			//		           //tool.processBar("");
-			//	           }
-			//	);
-			//}
-			//else {
-			//tool.processBar('解析系统列表信息成功');
-
 			if(!responseObject.items.length){
 				tool.alert('服务器无任何数据',
 				           function () {
@@ -146,7 +117,6 @@
 				$scope.curPageData = responseObject.items || [];
 			});
 			tool.loading(0);
-			//}
 		};
 
 		win.devInterActive.Fun710970 = function (varRecvData) {

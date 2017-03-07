@@ -97,27 +97,6 @@
 
 		win.serverRequestCallback.EGOS_GROUP = function (responseObject, params) {
 			if (!showView)return;
-			//if (!status.ok) {
-			//	tool.alert(['服务器请求超时', '重试', '取消'],
-			//		function () {
-			//			getGroupFromServer(params);
-			//		},
-			//		function () {
-			//			oxygenIsBtnDisable();
-			//			//tool.processBar("");
-			//		}
-			//	);
-			//
-			//}
-			//else if (!responseObject || !responseObject.groups.length) {
-			//	tool.alert('无任何传感器组支持',
-			//	           function () {
-			//		           oxygenIsBtnDisable();
-			//		           //tool.processBar("");
-			//	           }
-			//	);
-			//}
-			//else {
 			if (!responseObject.groups.length) {
 				tool.alert('服务器无数据支持',
 				           function () {
@@ -134,7 +113,6 @@
 			});
 
 			FunGetOxygenSensorSupport();
-			//}
 		};
 
 		function FunGetOxygenSensorSupport() {
@@ -179,27 +157,6 @@
 
 		win.serverRequestCallback.EGOS_SUPPORT = function (responseObject, params) {
 			if (!showView)return;
-			//if (!status.ok) {
-			//	tool.alert(['服务器响应失败，请点击重试', '重试', '取消'],
-			//		function () {
-			//			getSupportsFromServer(params);
-			//		},
-			//		function () {
-			//			oxygenIsBtnDisable();
-			//			//tool.processBar("");
-			//		}
-			//	);
-			//
-			//}
-			//else if (!responseObject || !responseObject.supportitems.length) {
-			//	tool.alert('无任何传感器组支持',
-			//	           function () {
-			//		           oxygenIsBtnDisable();
-			//		           //tool.processBar("");
-			//	           }
-			//	);
-			//}
-			//else {
 			if (!responseObject.supportitems.length) {
 				tool.alert('服务器无数据支持',
 				           function () {
@@ -218,7 +175,6 @@
 			});
 
 			FunGetOxygenSensorOriginalData();
-			//}
 			tool.layoutTable();
 		};
 
@@ -324,21 +280,7 @@
 		win.serverRequestCallback.EGOS_RESULT = function (responseObject, params) {
 			if (!showView)return;
 
-			//if (!status || !responseObject || !status.ok) {
-			//
-			//		tool.alert(['服务器响应失败，请点击重试', '重试', '取消'],
-			//			function () {
-			//				FunCalculateOxygenSensorResult();
-			//			},
-			//			function () {
-			//				oxygenIsBtnDisable();
-			//				//tool.processBar("");
-			//			}
-			//		);
-			//
-			//}
-			//else {
-			if (!responseObject.items || responseObject.items.length <= 0) {
+			if (!responseObject.items.length) {
 				showN_A('无任何信息值');
 				return;
 			}
@@ -360,7 +302,6 @@
 				$scope.oxygenSensorBtnDisable = true;
 			});
 			tool.loading(0);
-			//}
 		};
 
 		function oxygenIsBtnDisable() {
@@ -368,7 +309,7 @@
 		}
 
 		$scope.createDropDownList = function () {
-			RMTClickEvent.createOxygenDropDownList();
+			win.RMTClickEvent.createOxygenDropDownList();
 		};
 
 		win.RMTClickEvent.createOxygenDropDownList = function () {

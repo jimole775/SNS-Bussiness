@@ -121,25 +121,9 @@
         win.serverRequestCallback.CALC_VER_SUPPORT = function (responseObject, params) {
 
             if (!showView)return;
-            //if (!status.ok) {
-            //    tool.alert(['服务器请求超时','重试','取消'],
-            //        function () { getVersionInfoSurpports(params); },
-            //        function () {
-            //            computerVerBack();
-            //            //tool.processBar("");
-            //        }
-            //    );
-            //}
-            //else if(!responseObject || !responseObject.items){
-            //    tool.alert('设备无任何版本信息',function () {
-            //        //tool.processBar("");
-            //        computerVerBack();
-            //    });
-            //}
-            //else {
 
             if(!responseObject.items.length){
-                tool.alert('服务器无任何数据',
+                tool.alert('服务器无数据支持',
                            function () {
                                //tool.processBar("");
                                computerVerBack();
@@ -162,7 +146,6 @@
                 });
 
                 FunReadComputerVersionInfoOriginalValue();
-            //}
         };
 
         function FunReadComputerVersionInfoOriginalValue() {
@@ -230,26 +213,8 @@
                 tool.loading(0);
                 return;
             }
-            //if (!status.ok) {
-            //    tool.alert(['服务器请求超时','重试','取消'],
-            //        function () { getVersionInfoValue(params); },
-            //        function () { computerVerBack();
-            //           // tool.processBar("");
-            //        }
-            //    );
-            //
-            //}
-            //else if(!responseObject || !responseObject.items){
-            //    tool.alert('服务器无任何版本信息',
-            //        function () {
-            //            //tool.processBar("");
-            //            computerVerBack();
-            //        }
-            //    );
-            //}
-            //else {
             if(!responseObject.items.length){
-                tool.alert('服务器无任何数据',
+                tool.alert('服务器无数据支持',
                            function () {
                                //tool.processBar("");
                                computerVerBack();
@@ -283,9 +248,7 @@
                     });
                 });
 
-                //tool.processBar("版本信息获取完成");
                 tool.loading(0);
-            //}
         };
     }]);
 })();

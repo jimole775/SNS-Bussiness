@@ -262,27 +262,6 @@
 
 		win.serverRequestCallback.bindingViewFromServer = function (responseObject, params) {
 
-			//if (!status.ok){
-			//	//重新请求服务器，否则退到前一个业务界面 车型列表 || 配置列表 || 系统列表
-			//	tool.alert (['服务器响应失败，请点击重试','重试','取消'],
-			//		function () {
-			//			FunGetsupidDataFromServer (cachesupidsForbadRequest_arr);
-			//		},
-			//		function () {
-			//			global.disconnectOBD ();
-			//			//tool.processBar ("");
-			//		}
-			//	);
-			//}
-			//else if(!responseObject || !responseObject.supids.length){
-			//	tool.alert ('服务器无数据支持',
-			//		function () {
-			//			global.disconnectOBD ();
-			//			//tool.processBar ("");
-			//		}
-			//	);
-			//}
-			//else {
 				//todo 由于存在读秒框体，需要马上计算发送 指令给设备，所以在不能发送之后 马上重置数据
 			if (!responseObject.supids.length) {
 				tool.alert('服务器无数据支持',
@@ -428,8 +407,6 @@
 				}
 				safeApply (function () { });
 				//tool.processBar ("");
-
-			//}
 
 		};
 

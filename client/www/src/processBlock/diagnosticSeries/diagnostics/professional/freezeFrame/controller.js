@@ -96,28 +96,6 @@
 
 		win.serverRequestCallback.FREEZE_DTC = function (responseObject, params) {
 			if (!showView)return;
-			//if (!status.ok) {
-			//
-			//	tool.alert(['服务器请求超时', '重试', '取消'],
-			//		function () {
-			//			getFreezeFrameDtc(params);
-			//		},
-			//		function () {
-			//			freezeFrameIsBtnDisable();
-			//			//tool.processBar("");
-			//		}
-			//	);
-			//
-			//}
-			//else if (!responseObject || !responseObject.items.length) {
-			//	tool.alert('无任何故障码信息',
-			//	           function () {
-			//		           releaseButtonEvent();
-			//		           //tool.processBar("");
-			//	           }
-			//	);
-			//}
-			//else {
 			if(!responseObject.items.length){
 				tool.alert('服务器无任何数据',
 				           function () {
@@ -138,7 +116,6 @@
 			safeApply(function () {});
 
 			FunFreezeFrameGetDynamicData();
-			//}
 		};
 
 
@@ -204,27 +181,6 @@
 
 		win.serverRequestCallback.FREEZE_PAKID = function (responseObject, params) {
 			if (!showView) return;
-			//if (!status.ok) {
-			//
-			//	tool.alert(['服务器响应失败，请点击重试', '重试', '取消'],
-			//		function () {
-			//			getFreezeFramePakid(params);
-			//		},
-			//		function () {
-			//			freezeFrameIsBtnDisable();
-			//			//tool.processBar("");
-			//		}
-			//	);
-			//}
-			//else if (!responseObject || !responseObject.pakids.length) {
-			//	tool.alert('无任何动态数据信息',
-			//	           function () {
-			//		           releaseButtonEvent();
-			//		           //tool.processBar("");
-			//	           }
-			//	);
-			//}
-			//else {
 			if (!responseObject.pakids.length) {
 				tool.alert('服务器无数据支持',
 				           function () {
@@ -237,7 +193,6 @@
 			$scope.pakids = responseObject.pakids;
 			Fun31091A();
 
-			//}
 		};
 
 		function Fun31091A() {
@@ -281,27 +236,6 @@
 
 		win.serverRequestCallback.FREEZE_SUPPORT = function (responseObject, params) {
 			if (!showView)return;
-			//if (!status.ok) {
-			//
-			//	tool.alert(['服务器响应失败，请点击重试', '重试', '取消'],
-			//		function () {
-			//			getFreezeFrameSupport(params);
-			//		},
-			//		function () {
-			//			freezeFrameIsBtnDisable();
-			//			//tool.processBar("");
-			//		}
-			//	);
-			//}
-			//else if (!responseObject || responseObject.supportitems.length <= 0) {
-			//	tool.alert('无任何支持项信息',
-			//	           function () {
-			//		           releaseButtonEvent();
-			//		           //tool.processBar("");
-			//	           }
-			//	);
-			//}
-			//else {
 			if (!responseObject.supportitems.length) {
 				tool.alert('服务器无数据支持',
 				           function () {
@@ -313,7 +247,6 @@
 			}
 
 			FunFreezeFrameSupportProcess(responseObject);
-			//}
 			tool.layoutTable();
 		};
 
@@ -508,8 +441,8 @@
 		win.serverRequestCallback.FREEZE_RESULT = function (responseObject, params) {
 			if (!showView)return;
 
+			pidsCallback += responseObject.items.length ? responseObject.items.length : 3;
 			if (!responseObject.items.length) {
-				pidsCallback += responseObject.items.length ? responseObject.items.length : 3;
 				//当数据全部刷新完成再去掉限制
 				if (pidsCallback >= pidsCount) {
 					tool.loading(0);
@@ -524,10 +457,11 @@
 					//			function () { }
 					//		);
 					//}
-					tool.alert("无冻结帧数据", function () {});
-					$scope.freezeBtnDisable = true;
-					pidsCallback = 0;
-					safeApply(function () {});
+					tool.alert("无冻结帧数据", function () {
+						$scope.freezeBtnDisable = true;
+						pidsCallback = 0;
+						safeApply(function () {});
+					});
 				}
 				return;
 			}
@@ -544,7 +478,7 @@
 				})();
 			});
 
-			pidsCallback += responseObject.items.length;     //根据请求时的条数，算出结束时间,如果没有，默认为3
+			//pidsCallback += responseObject.items.length;     //根据请求时的条数，算出结束时间,如果没有，默认为3
 
 			if (pidsCallback >= pidsCount) {                 //当数据全部刷新完成再去掉限制
 				$scope.freezeBtnDisable = true;
