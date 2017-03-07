@@ -177,13 +177,6 @@
         var ansTimes = 0;
         win.serverRequestCallback.DTC_pro = function (responseObject, params) {
             if (!showView) return;
-            //if (!status.ok)
-            //    tool.alert(['服务器请求超时','重试','取消'],
-            //        function () { win.moduleEntry.funReadDTC(); },
-            //        function () {
-            //           // tool.processBar("");
-            //        }
-            //    );
             if(!responseObject.items.length){
                 tool.alert('服务器无任何数据',
                     function () {
@@ -192,7 +185,6 @@
                 );
                 return;
             }
-            //else {
                 switch (params) {
                     case dtcHistory:
                         bHistory = true;
@@ -261,7 +253,6 @@
                     tool.loading (0);
                 }
 
-            //}
         };
 
         //清除故障码

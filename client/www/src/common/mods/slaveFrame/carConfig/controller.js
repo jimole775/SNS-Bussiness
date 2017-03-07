@@ -231,7 +231,7 @@
 		}
 
 		//打包dataPack请求服务器
-		function getItemsByParents(pagesOptionChosenRecord, callback, handleBackRequest) {
+		function getItemsByParents(pagesOptionChosenRecord, callback, handleBadRequest) {
 			var DataPack = {
 				mkey: $scope.varmkey,
 				parents: pagesOptionChosenRecord  //服务器解析名为 parents；
@@ -239,35 +239,12 @@
 			win.server.request(global.businessInfo.serverType, {
 				key: "CTYPE",
 				cartype: global.businessInfo.carType
-			}, DataPack, callback, handleBackRequest);
+			}, DataPack, callback, handleBadRequest);
 		}
 
 
 		win.serverRequestCallback.CTYPE_CONFIG_pro = function (responseObject, params) {
 			if (!showView)return;
-			//if (!status.ok) {
-			//	safeApply(function () {
-			//		$scope.pagesOptionChosenRecord.length = 0;
-			//		$scope.pagesData.length = 0;
-			//	});
-			//
-			//	tool.alert(['服务器请求超时，请点击重试', '重试', '取消'],
-			//		function () { requestData(); },
-			//		function () {
-			//			backToPrvLevel();
-			//			//tool.processBar("");
-			//		}
-			//	);
-			//}
-			//else if (!responseObject || responseObject.items.length <= 0) {
-			//	tool.alert('无任何配置信息',
-			//	           function () {
-			//		           backToPrvLevel();
-			//		           //tool.processBar("");
-			//	           }
-			//	);
-			//}
-			//else {
 			if(!responseObject.items.length){
 				tool.alert('服务器无任何数据',
 				           function () {
@@ -299,7 +276,6 @@
 
 			//tool.processBar("请选择");
 			tool.loading(0);
-			//}
 			tool.layout('carType', 0);
 			tool.layout('CarConfig', 1);
 		};

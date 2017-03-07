@@ -125,7 +125,7 @@
 			$scope.btnScanText = OperationText[$scope.scanState];
 
 			//#hack for 远程简易诊断 按钮文本无法同步的问题
-			win.global.RMTInfo.systemScanState = $scope.scanState;
+			win.global.RMTID.systemScanState = $scope.scanState;
 		});
 
 		$scope.selectedSystemIndex = function () {
@@ -576,11 +576,11 @@
 				},
 				DataPack,
 				win.server.addCallbackParam(win.serverRequestCallback.DTC_simple, [markParams]),
-				[null,handleBackRequest]
+				[null,handleBadRequest]
 			);
 		}
 
-		function handleBackRequest(params){
+		function handleBadRequest(params){
 			cachebadRequestParamArr[params.webViewIndex] = params;
 			$scope.webViewSystemList_arr[params.webViewIndex].dtcScanStateText = '数据请求失败(点击重试)';
 			safeApply(function () {});

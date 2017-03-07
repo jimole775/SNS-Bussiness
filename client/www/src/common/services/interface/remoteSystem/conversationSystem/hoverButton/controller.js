@@ -6,12 +6,12 @@
 
 	App.controller("charHoverButtonController",["$scope","$element","$rootScope",function($scope, $element, $rootScope){
 
-		//监听远程协助的身份，global.RMTID默认为0（正常业务），APP推送身份信息的时候是有延迟的！
+		//监听远程协助的身份，global.remoteRole默认为0（正常业务），APP推送身份信息的时候是有延迟的！
 		$scope.isRMT = 0;
 		var watcher = setInterval(function(){
-			if(global.RMTInfo.ID != 0){
+			if(global.RMTID.role != 0){
 				$scope.$apply(function(){
-					$scope.isRMT = global.RMTInfo.ID;
+					$scope.isRMT = global.RMTID.role;
 				});
 				clearInterval(watcher);
 			}

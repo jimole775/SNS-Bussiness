@@ -233,7 +233,7 @@
 					pageHeight = ele.height ();
 					max_scrollTop = scrollHeight - pageHeight;
 					var curTop = ele.scrollTop ();
-					if (max_scrollTop > 0 && global.RMTInfo.ID == 2) {     //如果当前页面没有滚动条，最大滚动高度就为零，作为运算式的分母，为0的时候，除运算结果为 “NAN”,所以没必要进行转发
+					if (max_scrollTop > 0 && global.RMTID.role == 2) {     //如果当前页面没有滚动条，最大滚动高度就为零，作为运算式的分母，为0的时候，除运算结果为 “NAN”,所以没必要进行转发
 						win.sendRMTEventToApp ("global.RMTSlider.setScrollTop", [ele.parents (".data-box").attr ("id"), curTop / max_scrollTop]);
 					}
 				});

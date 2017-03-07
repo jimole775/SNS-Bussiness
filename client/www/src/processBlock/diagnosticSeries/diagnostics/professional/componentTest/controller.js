@@ -83,20 +83,13 @@
 				global.businessInfo.serverType,
 				{key: "ORGAN_TEST", cartype: global.businessInfo.carType},
 				dataPack,
-				win.server.addCallbackParam(win.serverRequestCallback[requestType], [dataPack,gRequestType]),
-			    [requestData,fnBack]
+				win.server.addCallbackParam(win.serverRequestCallback[requestType], [dataPack, gRequestType]),
+				[requestData, fnBack]
 			);
 		}
 
 		win.serverRequestCallback.ORGAN_GROUP = function (response, params) {
 			win.tool.loading(0);
-			//if (!status.ok) {
-			//	tool.alert(
-			//		["服务器响请求超时", "重试", "取消"],
-			//		function () { requestData(params, gRequestType) },
-			//		function () { fnBack() }
-			//	);
-			//}
 			if (response.items.length && response.items[0].groupitems.length && response.items[0].groupitems[0].group) {
 				response.items.forEach(function (item, index) {
 					$scope.groupNameList.push(item.groupName);
@@ -141,18 +134,21 @@
 		function getComponents() {
 			gRequestType = "ORGAN_COMPONENTS";
 
-			if (serviceSupportList._0x0F.value)
-			//当 31090F 被支持时
-			// 发送该指令获取当前哪些版本信息被支持，
-			// 将返回的动态数据信息索引号，用匹配算法计算计算 系统ECU表 内的 TYPE 字段为 5 的记录 的 SUPID 字段和返回数据是否匹配，
-			// ****（此操作由服务器完成，JS端只需要将获取到的pid发送给服务器，然后将返回的数据遍历 绑定就可以）；
+			if (serviceSupportList._0x0F.value) {
+				//当 31090F 被支持时
+				// 发送该指令获取当前哪些版本信息被支持，
+				// 将返回的动态数据信息索引号，用匹配算法计算计算 系统ECU表 内的 TYPE 字段为 5 的记录 的 SUPID 字段和返回数据是否匹配，
+				// ****（此操作由服务器完成，JS端只需要将获取到的pid发送给服务器，然后将返回的数据遍历 绑定就可以）；
 				win.sendDataToDev("31090F");
-			else
-			//当 31090F 不被支持时
-			//将本数据表内 <TYPE> 字段为 5 的记录 <GRUOP> 字段无重复的提取出来，作为分组显示在分组菜单内
-			// ****（此操作由服务器完成，JS端只需要将返回的数据遍历 绑定就可以）；
-				requestData(packingDataPack("", $scope.curGroupName), gRequestType);
-
+			}
+			else {
+				//检查分组状态
+				var curGroupName = ($scope.curGroupName === "无分组列表" || !$scope.curGroupName || $scope.curGroupName === "请选择") ? "" : $scope.curGroupName;
+				//当 31090F 不被支持时
+				//将本数据表内 <TYPE> 字段为 5 的记录 <GRUOP> 字段无重复的提取出来，作为分组显示在分组菜单内
+				// ****（此操作由服务器完成，JS端只需要将返回的数据遍历 绑定就可以）；
+				requestData(packingDataPack("", curGroupName), gRequestType);
+			}
 		}
 
 		win.devInterActive.Fun71090F = function (recvData) {
@@ -168,30 +164,23 @@
 
 		win.serverRequestCallback.ORGAN_COMPONENTS = function (response, params) {
 			win.tool.loading(0);
-			//if (!status.ok) {
-			//	tool.alert(
-			//		["服务器响请求超时", "重试", "取消"],
-			//		function () { requestData(params, gRequestType) },
-			//		function () { fnBack() }
-			//	);
-			//}
-			//if (response.items.length && response.items[0].groupitems.length) {
-
+			if (!response.items.length) {
+				tool.alert(
+					"服务器无数据支持",
+					function () {
+						fnBack();
+						safeApply(function () {});
+					}
+				);
+			}
+			else {
 				response.items[0].groupitems.forEach(function (item, index) {
 					item.state = "未知状态";
 					item.itemIndex = index;
 				});
 				groupItemsStorage[$scope.curGroupName] = $scope.Components = response.items[0].groupitems;
-
-			//}
-			//else {
-			//	tool.alert("服务器暂无数据支持", function () {
-			//		fnBack()
-			//	});
-			//}
-			safeApply(function () {});
-
-
+				safeApply(function () {});
+			}
 		};
 
 		var gCurPID = "";

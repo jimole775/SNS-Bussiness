@@ -125,63 +125,51 @@
 			win.server.request(
 				global.businessInfo.serverType,
 				{
-				key: "CALC_ONE_GROUP",
-				cartype: global.businessInfo.carType
-			},
+					key: "CALC_ONE_GROUP",
+					cartype: global.businessInfo.carType
+				},
 				dataPack,
-				win.server.addCallbackParam (win.serverRequestCallback.CALC_ONE_GROUP, [dataPack]),
-			    [FunGetGroup,dynamicBtn_Confirm_Assist_Back]
+				win.server.addCallbackParam(win.serverRequestCallback.CALC_ONE_GROUP, [dataPack]),
+				[FunGetGroup, dynamicBtn_Confirm_Assist_Back]
 			);
 		}
 
 		win.serverRequestCallback.CALC_ONE_GROUP = function (responseObject) {
 			if (!showView)return;
-			//if (!status || !responseObject || !status.ok) {
-			//	tool.alert(['服务器响应失败，请点击重试', '重试', '取消'],
-			//		function () { FunGetGroup(); },
-			//		function () {
-			//			dynamicBtn_Confirm_Assist_Back();
-			//			//tool.processBar("");
-			//		}
-			//	);
-			//
-			//}
-			//else {
-				if (!responseObject.groups || responseObject.groups.length <= 0) {
-
-					safeApply(function () {
-						$scope.hasGroup = false;
-						$scope.currentGroupName = "无分组信息";
-						//tool.processBar('无任何分组信息');
-					});
-
-					setTimeout(function () { FunGetPid(); }, 25);
-
-					return;
-				}
-
-				var tempGroup = responseObject.groups;
-				if (tempGroup[0].group != 0 && tempGroup[0].group != '')
-					safeApply(function () {
-						$scope.hasGroup = true;
-						$scope.currentGroupName = "请选择一个分组";
-					});
-
-				//取出所有不重复的group名；
-				$scope.groupList = _
-					.chain(responseObject.groups)
-					.groupBy(function (item) { return ((!item.group) || ("" == item.group.trim())) ? '0' : item.group; }) //空或者空字符串""一律以"0"分组
-					.value();
-				$scope.groupNameList = _.keys($scope.groupList);
+			if (!responseObject.groups || responseObject.groups.length <= 0) {
 
 				safeApply(function () {
-					$scope.btnConfirmDisable = true;
-					$scope.btnAssistAndBack = true;
-					//tool.processBar('分组信息获取成功');
+					$scope.hasGroup = false;
+					$scope.currentGroupName = "无分组信息";
+					//tool.processBar('无任何分组信息');
 				});
 
-				tool.loading(0);
-			//}
+				setTimeout(function () { FunGetPid(); }, 25);
+
+				return;
+			}
+
+			var tempGroup = responseObject.groups;
+			if (tempGroup[0].group != 0 && tempGroup[0].group != '')
+				safeApply(function () {
+					$scope.hasGroup = true;
+					$scope.currentGroupName = "请选择一个分组";
+				});
+
+			//取出所有不重复的group名；
+			$scope.groupList = _
+				.chain(responseObject.groups)
+				.groupBy(function (item) { return ((!item.group) || ("" == item.group.trim())) ? '0' : item.group; }) //空或者空字符串""一律以"0"分组
+				.value();
+			$scope.groupNameList = _.keys($scope.groupList);
+
+			safeApply(function () {
+				$scope.btnConfirmDisable = true;
+				$scope.btnAssistAndBack = true;
+				//tool.processBar('分组信息获取成功');
+			});
+
+			tool.loading(0);
 		};
 
 		/**
@@ -221,50 +209,32 @@
 
 		//12支持时，先从服务器请求PID，再打包发给设备；
 		function Fun310912RequstPid() {
-			if ($scope.pakidList.length <= 0){
+			if ($scope.pakidList.length <= 0) {
 
 				var dataPack = {dbfilename: global.businessInfo.dbFilename, pub: global.businessInfo.pubFilename};
-			win.server.request(
-				global.businessInfo.serverType,
-				{
-				key: "CALC_ONE_PID",
-				cartype: global.businessInfo.carType
-			},
-				dataPack,
-				win.server.addCallbackParam (win.serverRequestCallback.CALC_ONE_PID, [dataPack]),
-			    [FunGetPid,dynamicBtn_Assist_Back]
-			);
+				win.server.request(
+					global.businessInfo.serverType,
+					{
+						key: "CALC_ONE_PID",
+						cartype: global.businessInfo.carType
+					},
+					dataPack,
+					win.server.addCallbackParam(win.serverRequestCallback.CALC_ONE_PID, [dataPack]),
+					[FunGetPid, dynamicBtn_Assist_Back]
+				);
 
 				//win.RequestDataFromServer(
 				//	"CALC_ONE_PID", {dbfilename: global.businessInfo.dbFilename, pub: global.businessInfo.pubFilename},
 				//	function (responseObject) { serverRequestCallback.CALC_ONE_PID(responseObject) }
 				//);
-			}else
+			}
+			else
 				Fun310912();
 		}
 
 		win.serverRequestCallback.CALC_ONE_PID = function (responseObject) {
 
 			if (!showView)  return;
-			//if (!status || !responseObject || !status.ok) {
-			//	tool.alert(['服务器响应失败，请点击重试', '重试', '取消'],
-			//		function () { FunGetPid(); },
-			//		function () {
-			//			dynamicBtn_Assist_Back();
-			//			//tool.processBar("");
-			//		}
-			//	);
-			//}
-			//else {
-
-				//查询结果为零
-				//if (!responseObject.pakids || responseObject.pakids.length <= 0) {
-				//	tool.alert('无任何支持项信息', function () {
-				//		relativeButtonStatus();
-				//		//tool.processBar("");
-				//	});
-				//	return;
-				//}
 			if (!responseObject.pakids.length) {
 				tool.alert('服务器无数据支持',
 				           function () {
@@ -272,8 +242,8 @@
 					           //tool.processBar("");
 				           }
 				);
-				return;
 			}
+			else {
 				//如果有分组，则匹配group，打包group下的PID值
 				if ($scope.hasGroup)
 					$scope.pakidList =
@@ -286,9 +256,8 @@
 						$scope.pakidList.push(new PakId(item));
 					});
 
-
 				Fun310912();
-			//}
+			}
 		};
 
 		function Fun310912() {
@@ -380,43 +349,18 @@
 			win.server.request(
 				global.businessInfo.serverType,
 				{
-				key: "CALC_ONE_SUPPORT",
-				cartype: global.businessInfo.carType
-			},
+					key: "CALC_ONE_SUPPORT",
+					cartype: global.businessInfo.carType
+				},
 				dataPack,
-				win.server.addCallbackParam (win.serverRequestCallback.CALC_ONE_SUPPORT, [dataPack]),
-			    [FunGetSupportsFromServer,dynamicBtn_Confirm_Assist_Back]
+				win.server.addCallbackParam(win.serverRequestCallback.CALC_ONE_SUPPORT, [dataPack]),
+				[FunGetSupportsFromServer, dynamicBtn_Confirm_Assist_Back]
 			);
 
-			//win.RequestDataFromServer(
-			//	"CALC_ONE_SUPPORT", dataPack,
-			//	utilAddParams(
-			//		function (responseObject, params) {
-			//			serverRequestCallback.CALC_ONE_SUPPORT(responseObject, params)
-			//		}, dataPack
-			//	)
-			//);
 		}
 
 		win.serverRequestCallback.CALC_ONE_SUPPORT = function (responseObject, params) {
 			if (!showView)return;
-			//if (!status.ok) {
-			//	tool.alert(['服务器响应失败，请点击重试', '重试', '取消'],
-			//		function () { FunGetSupportsFromServer(params);},
-			//		function () {
-			//			dynamicBtn_Confirm_Assist_Back();
-			//			//tool.processBar("");
-			//		}
-			//	);
-			//}else if(!responseObject || !responseObject.supportitems.length){
-			//	tool.alert('服务器无数据支持',
-			//		function () {
-			//			dynamicBtn_Confirm_Assist_Back();
-			//			//tool.processBar("");
-			//		}
-			//	);
-			//}
-			//else {
 
 			if (!responseObject.supportitems.length) {
 				tool.alert('服务器无数据支持',
@@ -428,41 +372,39 @@
 				return;
 			}
 
-				var items = responseObject.supportitems || [];
-				var itemLen = items.length;
-				if (itemLen <= 0) {
-					tool.alert('无任何支持项信息', function () {
-						relativeButtonStatus();
-						//tool.processBar("");
-					});
-					return;
-				}
-
-				if (!$scope.DynamicWebView) $scope.DynamicWebView = [];
-
-				//给所有项都加上check和show属性；
-				while (itemLen--) items[itemLen] = new Support(items[itemLen]);
-
-				//按照 分组信息 获取当前支持项列表；
-				if ($scope.hasGroup) {
-					//取出符合group字段的对象；
-					$scope.cacheOfCurrentGroup_obj[$scope.currentGroupName] =
-						_.filter(items, function (item) { return item.group == $scope.currentGroupName});
-					$scope.DynamicWebView =
-						[].concat($scope.cacheOfCurrentGroup_obj[$scope.currentGroupName]);
-				}
-				else {
-					//如果没有分组，就列出所有项
-					$scope.DynamicWebView = items;
-				}
-				tool.loading(0);
-				safeApply(function () {
-					$scope.btnConfirmDisable = true;
-					$scope.btnAssistAndBack = true;
-					//tool.processBar('支持项解析成功');
+			var items = responseObject.supportitems || [];
+			var itemLen = items.length;
+			if (itemLen <= 0) {
+				tool.alert('无任何支持项信息', function () {
+					relativeButtonStatus();
+					//tool.processBar("");
 				});
-			//}
+				return;
+			}
 
+			if (!$scope.DynamicWebView) $scope.DynamicWebView = [];
+
+			//给所有项都加上check和show属性；
+			while (itemLen--) items[itemLen] = new Support(items[itemLen]);
+
+			//按照 分组信息 获取当前支持项列表；
+			if ($scope.hasGroup) {
+				//取出符合group字段的对象；
+				$scope.cacheOfCurrentGroup_obj[$scope.currentGroupName] =
+					_.filter(items, function (item) { return item.group == $scope.currentGroupName});
+				$scope.DynamicWebView =
+					[].concat($scope.cacheOfCurrentGroup_obj[$scope.currentGroupName]);
+			}
+			else {
+				//如果没有分组，就列出所有项
+				$scope.DynamicWebView = items;
+			}
+			tool.loading(0);
+			safeApply(function () {
+				$scope.btnConfirmDisable = true;
+				$scope.btnAssistAndBack = true;
+				//tool.processBar('支持项解析成功');
+			});
 		};
 
 		/**从设备读取动态数据原始值*/
@@ -673,12 +615,12 @@
 			checkDevResponse();
 			win.server.request(
 				global.businessInfo.serverType, {
-				key: "CALC_ONE",
-				cartype: global.businessInfo.carType
-			},
+					key: "CALC_ONE",
+					cartype: global.businessInfo.carType
+				},
 				dataPack,
-				win.server.addCallbackParam (win.serverRequestCallback.CALC_ONE_ANS, [param]),
-				[null,handleBackRequest]
+				win.server.addCallbackParam(win.serverRequestCallback.CALC_ONE_ANS, [param]),
+				[null, handleBadRequest]
 			)
 
 		}
@@ -686,14 +628,14 @@
 		/**
 		 //动态数据信息值返回无效时，刷新为'N/A'，每次3条
 		 */
-		function handleBackRequest(params) {
+		function handleBadRequest(params) {
 			if (!$scope.DynamicWebView || !params) return;
 			var curIndex = params.index;
-			var rowsInEachPage = global.RMTInfo.rowsInEachPage || 0;
+			var rowsInEachPage = global.RMTID.rowsInEachPage || 0;
 			safeApply(function () {
-                while ((params.index > curIndex - 3) && (params.index >= 0)) {
-                    $scope.DynamicWebView[params.index-- + ($scope.pagingIndex * rowsInEachPage)].ans = "N/A";
-                }
+				while ((params.index > curIndex - 3) && (params.index >= 0)) {
+					$scope.DynamicWebView[params.index-- + ($scope.pagingIndex * rowsInEachPage)].ans = "N/A";
+				}
 			});
 
 		}
@@ -717,25 +659,20 @@
 				//tool.processBar('正在计算信息值' + countStepFor710913 + "/" + supListLen);
 			});
 
-			//if (!responseObject.items.length) {
-			//	//todo 刷新信息值为“N/A”，每次刷新3条
-			//	handleBackRequest(params);
-			//}
-			//else {
-			if(!responseObject.items.length){
-				handleBackRequest(params);
+			//todo 刷新信息值为“N/A”，每次刷新3条
+			if (!responseObject.items.length) {
+				handleBadRequest(params);
 				return;
 			}
-				var supports = $scope.DynamicWebView || [];
+			var supports = $scope.DynamicWebView || [];
 
-				//刷新界面
-				safeApply(function () {
-					responseObject.items.forEach(function (item) {
-						var support = _.find(supports, function (temp) { return temp.index == item.index });
-						if (support) support.ans = item.ans;
-					});
+			//刷新界面
+			safeApply(function () {
+				responseObject.items.forEach(function (item) {
+					var support = _.find(supports, function (temp) { return temp.index == item.index });
+					if (support) support.ans = item.ans;
 				});
-			//}
+			});
 		};
 
 		/**
@@ -947,7 +884,7 @@
 					//显示所有未选中项
 					showAllUncheck();
 					//这个标记的意义在于，如果正在进行数据流任务，就把其他不必要的数据丢弃掉，比如：设备数据
-					win.global.RMTInfo.dataStream = false;
+					win.global.RMTID.dataStream = false;
 					showCheckBox();
 					//tool.processBar('暂停');
 				});
@@ -979,7 +916,7 @@
 			hideCheckBox();
 
 			//让远程操控端无法连续点击按钮，第一个数据从业务机返回时，再隐藏加载遮罩
-			if (global.RMTInfo.ID != "0") tool.loading({text: "等待远程端数据同步..."});
+			if (global.RMTID.role != "0") tool.loading({text: "等待远程端数据同步..."});
 
 			//进行分页处理，并创建翻页按钮，返回预处理的二维数组。
 			pagingManager.handlePaging(checkItemStore);
@@ -990,7 +927,7 @@
 		//todo 由于控制机不能同服务器通讯，
 		//todo 所以，解决方案为：设置全局变量，由APP进行转发，只取业务机的显示最大数
 		win.serverRequestCallback.SetRMTCountRowInScrollTable = function (rowsInEachPage, dataArr) {
-			win.global.RMTInfo.rowsInEachPage = parseFloat(rowsInEachPage);
+			win.global.RMTID.rowsInEachPage = parseFloat(rowsInEachPage);
 			var $pagingButton = $("#pagingButton");
 
 			//如果dataArr假，或者传入的数组为空，就退出函数
@@ -1003,15 +940,15 @@
 			$scope.DynamicWebView = dataArr;
 			var calcArr = [];
 			//计算分页数；
-			var countPages = Math.floor($scope.DynamicWebView.length / global.RMTInfo.rowsInEachPage);
+			var countPages = Math.floor($scope.DynamicWebView.length / global.RMTID.rowsInEachPage);
 			//分页是否整除
-			var lastPageRows = $scope.DynamicWebView.length % global.RMTInfo.rowsInEachPage;
+			var lastPageRows = $scope.DynamicWebView.length % global.RMTID.rowsInEachPage;
 
 			//每一页的数据存一个数组
 			for (var i = 0; i < countPages; i++) {
 				calcArr[i] = [];
-				for (var j = 0; j < global.RMTInfo.rowsInEachPage; j++)
-					calcArr[i].push($scope.DynamicWebView[global.RMTInfo.rowsInEachPage * i + j]);
+				for (var j = 0; j < global.RMTID.rowsInEachPage; j++)
+					calcArr[i].push($scope.DynamicWebView[global.RMTID.rowsInEachPage * i + j]);
 			}
 
 			//判断是否整除，如果不整除，就处理最后一页的数据
@@ -1019,7 +956,7 @@
 			if (lastPageRows) {
 				calcArr[countPages] = [];            //把二维数据变成一维数组；
 				for (var n = 0; n < lastPageRows; n++)
-					calcArr[countPages].push($scope.DynamicWebView[global.RMTInfo.rowsInEachPage * countPages + n]);
+					calcArr[countPages].push($scope.DynamicWebView[global.RMTID.rowsInEachPage * countPages + n]);
 			}
 
 			//存完数据之后，显示第一页；（两个方案，1：实现左右移动；2：修改【显示/隐藏】）
@@ -1038,7 +975,7 @@
 			win.global.DataStream_CurPageLinesCount = calcArr[$scope.pagingIndex].length;
 
 			//如果要分组的数组长度小于或等于单页的长度，就不需要进行分页，
-			if (dataArr.length <= global.RMTInfo.rowsInEachPage) {
+			if (dataArr.length <= global.RMTID.rowsInEachPage) {
 				if ($pagingButton.length) $pagingButton.hide();
 			}
 			else {
@@ -1068,7 +1005,7 @@
 			safeApply(function () {});
 
 			//这个标记的意义在于，如果正在进行数据流任务，就把其他不必要的数据丢弃掉，比如：设备数据
-			win.global.RMTInfo.dataStream = true;
+			win.global.RMTID.dataStream = true;
 			FunGetOriginal();
 		}
 
@@ -1175,7 +1112,7 @@
 			$scope.isCheckAll = false;
 
 			//取消数据流远程标识
-			global.RMTInfo.dataStream = false;
+			global.RMTID.dataStream = false;
 		}
 
 	}])
@@ -1202,7 +1139,7 @@
 				         handlePaging: function (dataArr) {
 
 					         //计算每页显示的最大行数，用于分页，控制机通过SetRMTCountRowInScrollTable在远程端获取！
-					         if (global.RMTInfo.ID != 2) {
+					         if (global.RMTID.role != 2) {
 						         var rowsInEachPage = this.countRowInScrollTable("ShowDynamicData", $);
 						         win.serverRequestCallback.SetRMTCountRowInScrollTable(rowsInEachPage, dataArr);
 					         }

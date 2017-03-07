@@ -116,25 +116,6 @@
         win.serverRequestCallback.specialPIDs = function(responseObject, params){
             if (!showView) return;
             win.tool.loading(0);
-            //if (!status.ok) {
-            //    tool.alert(['服务器请求超时','重试','取消'],
-            //        function () {
-            //            win.badRequest.PIDsRequest(params);
-            //        },
-            //        function () {
-            //            global.disconnectOBD();
-            //            //tool.processBar("");
-            //        }
-            //    );
-            //}else if(!responseObject || !responseObject.items.length){
-            //    tool.alert('服务器无数据支持',
-            //        function () {
-            //            global.disconnectOBD();
-            //            //tool.processBar("");
-            //        }
-            //    );
-            //}
-            //else {
             if(!responseObject.items.length){
                 tool.alert('服务器无任何数据',
                            function () {
@@ -164,9 +145,6 @@
                     safeApply(function(){});
                     win.moduleEntry.showServiceMenu();
                 }
-
-            //}
-
         };
 
 
@@ -223,18 +201,6 @@
         win.serverRequestCallback.specialServiceList = function(responseObject, params){
             if (!showView) return;
             win.tool.loading(0);
-            //if (!status || !responseObject || !status.ok) {
-            //    tool.alert(['服务器响应失败，请点击重试','重试','取消'],
-            //        function () {
-            //            win.badRequest.serviceListRequest(params);
-            //        },
-            //        function () {
-            //            global.disconnectOBD();
-            //            //tool.processBar("");
-            //        }
-            //    );
-            //}
-            //else {
             if (!responseObject.items.length) {
                 tool.alert('服务器无数据支持',
                            function () {
@@ -252,7 +218,6 @@
                 while(i--) $scope.serviceList[i].name = $scope.serviceList[i].name.split("\\n");
                 safeApply(function(){});
                 win.moduleEntry.showServiceMenu();
-            //}
 
         };
 

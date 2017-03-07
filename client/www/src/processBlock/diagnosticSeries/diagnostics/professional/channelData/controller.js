@@ -101,7 +101,7 @@
 		};
 
 
-		 function getChannelSupport(dataPack) {
+		function getChannelSupport(dataPack) {
 			if (!showView) {
 				$scope.isBtnBackEnable = true;
 				return;
@@ -111,12 +111,12 @@
 			win.server.request(
 				global.businessInfo.serverType,
 				{
-				key: "CHANNEL_SUPPORT",
-				cartype: global.businessInfo.carType
-			},
+					key: "CHANNEL_SUPPORT",
+					cartype: global.businessInfo.carType
+				},
 				dataPack,
 				win.server.addCallbackParam(win.serverRequestCallback.CHANNEL_SUPPORT, [dataPack]),
-			    [getChannelSupport,tcpChannelDataBack]
+				[getChannelSupport, tcpChannelDataBack]
 			);
 
 		}
@@ -124,30 +124,6 @@
 		win.serverRequestCallback.CHANNEL_SUPPORT = function (responseObject, params) {
 
 			if (!showView)return;
-			//if (!status.ok) {
-			//
-			//	tool.alert(
-			//		["服务器响应失败，请点击重试", "重试", "取消"],
-			//		function () {
-			//			getChannelSupport();
-			//		},
-			//		function () {
-			//			//tool.processBar("");
-			//			tcpChannelDataBack();
-			//		}
-			//	);
-			//
-			//}
-			//else if (!responseObject || responseObject.supportitems.length <= 0) {
-			//
-			//	tool.alert(
-			//		["无任何支持项信息"],
-			//		function () {
-			//			tcpChannelDataBack();
-			//		}
-			//	);
-			//}
-			//else {
 			if (!responseObject.supportitems.length) {
 				tool.alert('服务器无数据支持',
 				           function () {
@@ -157,18 +133,17 @@
 				);
 				return;
 			}
-				var supItems = responseObject.supportitems;
-				var i = supItems.length;
-				while (i--) supItems[i].show = true;
+			var supItems = responseObject.supportitems;
+			var i = supItems.length;
+			while (i--) supItems[i].show = true;
 
-				$scope.channelDataList = supItems;
-				$scope.isBtnOkEnable = true;
-				$scope.isBtnBackEnable = true;
-				releaseButtonEvent_tcpChannel();
-				//tool.processBar('支持项获取成功');
-				safeApply(function () {});
-				tool.layoutTable();
-			//}
+			$scope.channelDataList = supItems;
+			$scope.isBtnOkEnable = true;
+			$scope.isBtnBackEnable = true;
+			releaseButtonEvent_tcpChannel();
+			//tool.processBar('支持项获取成功');
+			safeApply(function () {});
+			tool.layoutTable();
 		};
 
 
@@ -183,17 +158,17 @@
 			win.server.request(
 				global.businessInfo.serverType,
 				{
-				key: "CHANNEL_DATA",
-				cartype: global.businessInfo.carType
-			},
+					key: "CHANNEL_DATA",
+					cartype: global.businessInfo.carType
+				},
 				dataPack,
 				win.server.addCallbackParam(win.serverRequestCallback.CHANNEL_DATA, [dataPack]),
-				[null,handleBackRequest]
+				[null, handleBadRequest]
 			);
 
 		}
 
-		function handleBackRequest(){
+		function handleBadRequest() {
 			var i = $scope.channelDataList.length;
 			while (i--) {
 				$scope.channelDataList[i].ans = 'N/A';
@@ -205,25 +180,14 @@
 
 			if (!showView)return;
 			tool.loading(0);
-			//if (!status.ok || !responseObject || !responseObject.items) {
-			//	//如果响应失败，就全部值更新为N/A
-			//	var i = $scope.channelDataList.length;
-             //   while (i--) {
-             //       $scope.channelDataList[i].ans = 'N/A';
-             //   }
-			//	safeApply(function () {});
-			//}
-			//else {
-
-			if(!responseObject.items.length){
-					//如果响应失败，就全部值更新为N/A
-					var i = $scope.channelDataList.length;
-				   while (i--) {
-				       $scope.channelDataList[i].ans = 'N/A';
-				   }
-					safeApply(function () {});
-				return;
+			if (!responseObject.items.length) {
+				//如果响应失败，就全部值更新为N/A
+				var i = $scope.channelDataList.length;
+				while (i--) {
+					$scope.channelDataList[i].ans = 'N/A';
+				}
 			}
+			else {
 
 				var data = $scope.channelDataList || [];
 				var items = responseObject.items;
@@ -239,9 +203,9 @@
 						}
 					}
 				}
+			}
 
-				safeApply(function () {});
-			//}
+			safeApply(function () {});
 		};
 
 		function releaseButtonEvent_tcpChannel() {
@@ -282,7 +246,7 @@
 			$scope.stateText = '开始';
 			$scope.channelDataList.length = 0;
 			safeApply(function () {});
-			win.global.RMTInfo.dataStream = false;
+			win.global.RMTID.dataStream = false;
 			win.global.DataStream_CurPageLinesCount = 7;     //动态数据默认每一页数据量为7；
 			tool.layout("channeldata", 0);
 			win.moduleEntry.showOperationMenu();
@@ -299,10 +263,10 @@
 				return;
 			}
 
-			if (global.RMTInfo.ID != 0) {
-				win.global.RMTInfo.dataStream = true;
+			if (global.RMTID.role != 0) {
+				win.global.RMTID.dataStream = true;
 				win.global.DataStream_CurPageLinesCount = $scope.channelDataList.length;
-				if (global.RMTInfo.ID == 2)win.tool.loading({text: "等待远程端数据同步..."});
+				if (global.RMTID.role == 2)win.tool.loading({text: "等待远程端数据同步..."});
 			}
 
 			safeApply(function () {

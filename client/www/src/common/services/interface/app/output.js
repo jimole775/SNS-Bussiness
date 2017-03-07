@@ -2,8 +2,6 @@
  * Created by Andy on 2017/2/13.
  */
 
-//win.appService = win.appService ? win.appService : {};
-
 (function (win) {
 	//兼容IOS设备数据交互，只有存在webkit对象的情况下才这样做
 	if (win.webkit) {

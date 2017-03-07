@@ -264,28 +264,6 @@
 		win.serverRequestCallback.bindingATViewFromServer = function (responseObject, params) {
 
 			try {
-				//if (!status.ok) {
-				//	//重新请求服务器，否则退到前一个业务界面 车型列表 || 配置列表 || 系统列表
-				//	tool.alert(['服务器响应失败，请点击重试', '重试', '取消'],
-				//		function () {
-				//			FunGetsupidDataFromServer(params);
-				//		},
-				//		function () {
-				//			global.disconnectOBD();
-				//			//tool.processBar("");
-				//		}
-				//	);
-				//}
-				//else if (!responseObject || !responseObject.items) {
-				//	//重新请求服务器，否则退到前一个业务界面 车型列表 || 配置列表 || 系统列表
-				//	tool.alert('无任何防盗匹配功能',
-				//	           function () {
-				//		           global.disconnectOBD();
-				//		           //tool.processBar("");
-				//	           }
-				//	);
-				//}
-				//else {
 				if(!responseObject.items.length){
 					tool.alert('服务器无任何数据',
 					           function () {
@@ -431,15 +409,11 @@
 							break;
 					}
 					safeApply(function () { });
-					//tool.processBar("");
-
-				//}
 			} catch (e) {
 				console.log(e);
 				tool.alert('服务器数据解析出错，业务无法继续！',
 				           function () {
 					           global.disconnectOBD();
-					           //tool.processBar("");
 				           }
 				);
 			}

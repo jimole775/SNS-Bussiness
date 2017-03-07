@@ -24,7 +24,7 @@ win.external.SendToApp = function (action, msg) {
 			//}
 			break;
 		case 1000:
-			win.jsRecvAppData(1000,{"screen":5.5,"head":60,"foot":60},"");
+			win.jsRecvAppData(1000,{screenInfo:{screenSize:5.5,headHeight:40,footHeight:40},serverHost:"http://112.124.26.243:8090",businessRole:0},"");
 			break;
 		}
 

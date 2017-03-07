@@ -81,7 +81,9 @@
 				});
 
 				tool.layout(thisBoxId, 1);//由于数据量有点大,css布局不合理,所以,拿到数据之后再格式化表格
-				tool._scroll.run();//表格显示之后再添加滑动插件，这样的计算更准确
+				setTimeout(function(){
+					tool._scroll.run();//表格显示之后再添加滑动插件，这样的计算更准确
+				},210);
 			});
 		}
 

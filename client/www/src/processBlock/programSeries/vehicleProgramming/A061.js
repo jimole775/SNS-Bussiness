@@ -906,8 +906,8 @@
 
 			data = getBse64Encode(data);   //编码
 
-			//var varSendData = "{'subURL':'" + CONSTANT.SERVER_ADDRESS + "','data':[{'ServerType':'15'},{'DataType':'7'},{'DataPack':'" + data + "'}]}";
-			//var varSendData = JSON.stringify({subURL: CONSTANT.SERVER_ADDRESS ,data:[{ServerType:"15"},{DataType:"7"},{DataPack: data }]});
+			//var varSendData = "{'subURL':'" + global.businessInfo.serverDst + "','data':[{'ServerType':'15'},{'DataType':'7'},{'DataPack':'" + data + "'}]}";
+			//var varSendData = JSON.stringify({subURL: global.businessInfo.serverDst ,data:[{ServerType:"15"},{DataType:"7"},{DataPack: data }]});
 			//win.external.RequestDataFromServer(3021, varSendData, getFileCallBack);
 
 			win.server.request(15, 7, {DataPack: data},win.serverRequestCallback.getFile_A061)
@@ -971,8 +971,8 @@
 
 	//编程密钥信息
 	win.devInterActive.Fun2703 = function (recvData) {
-		//var varSendData = "{'subURL':'" + CONSTANT.SERVER_ADDRESS + "','data':[{'ServerType':'15'},{'DataType':'8'},{'DataPack':''}]}";
-		//var varSendData = JSON.stringify({subURL: CONSTANT.SERVER_ADDRESS ,data:[{ServerType:"15"},{DataType:"8"},{DataPack:""}]});
+		//var varSendData = "{'subURL':'" + global.businessInfo.serverDst + "','data':[{'ServerType':'15'},{'DataType':'8'},{'DataPack':''}]}";
+		//var varSendData = JSON.stringify({subURL: global.businessInfo.serverDst ,data:[{ServerType:"15"},{DataType:"8"},{DataPack:""}]});
 		//win.external.RequestDataFromServer(3021, varSendData, getKeyCallBack);
 
 		win.server.request(15, 8, {DataPack: ""},win.serverRequestCallback.getKey_A061)
@@ -1086,7 +1086,7 @@
 		var data = getBse64Encode(type);   //编码
 
 		//扫描车辆类型信息
-		//var varSendData = JSON.stringify({subURL:CONSTANT.SERVER_ADDRESS ,data:[{ServerType:"15"},{DataType:"12"},{DataPack:data }]});
+		//var varSendData = JSON.stringify({subURL:global.businessInfo.serverDst ,data:[{ServerType:"15"},{DataType:"12"},{DataPack:data }]});
 		//if(sessionStorage)sessionStorage.setItem("getCarCategory",data);
 		//win.external.RequestDataFromServer(3021, varSendData, getCarCategoryCallBack);
 
@@ -1122,7 +1122,7 @@
 
 		//TODO 通过接口查询数据库/车型
 		//接口：获取数据版本列表
-		//var varSendData = JSON.stringify({subURL:CONSTANT.SERVER_ADDRESS ,data:[{ServerType:"15"},{DataType:"1"},{DataPack:""}]});
+		//var varSendData = JSON.stringify({subURL:global.businessInfo.serverDst ,data:[{ServerType:"15"},{DataType:"1"},{DataPack:""}]});
 		//win.external.RequestDataFromServer(3021, varSendData, getDatabaseCallBack);
 
 		win.server.request(15, 1, {DataPack: ""},win.serverRequestCallback.showDatabaseVersion_A061)
@@ -1210,7 +1210,7 @@
 			//TODO 如果执行了全车模块扫描，就不需要再查数据库及车型
 
 			//接口：获取数据版本列表
-			//var varSendData = JSON.stringify({subURL:CONSTANT.SERVER_ADDRESS ,data:[{ServerType:"15"},{DataType:"1"},{DataPack:""}]});
+			//var varSendData = JSON.stringify({subURL:global.businessInfo.serverDst ,data:[{ServerType:"15"},{DataType:"1"},{DataPack:""}]});
 			//win.external.RequestDataFromServer(3021, varSendData, getDatabaseCallBack);
 			win.server.request(15, 1, {DataPack: ""},win.serverRequestCallback.showDatabaseVersion_A061)
 		}
@@ -1254,7 +1254,7 @@
 
 		var data = getBse64Encode(dbVersion);   //编码
 
-		//var varSendData = JSON.stringify({subURL: CONSTANT.SERVER_ADDRESS ,data:[{ServerType:"15"},{DataType:2},{DataPack: data }]});
+		//var varSendData = JSON.stringify({subURL: global.businessInfo.serverDst ,data:[{ServerType:"15"},{DataType:2},{DataPack: data }]});
 		//win.external.RequestDataFromServer(3021, varSendData, getCarTypeCallBack);
 
 		win.server.request(15, 2, {DataPack: ""},win.serverRequestCallback.showCarType_A061)
@@ -1328,7 +1328,7 @@
 
 		var data = getBse64Encode(type);   //编码
 
-		//var varSendData = JSON.stringify({subURL:CONSTANT.SERVER_ADDRESS ,data:[{ServerType:"15"},{DataType:"3"},{DataPack:data }]});
+		//var varSendData = JSON.stringify({subURL:global.businessInfo.serverDst ,data:[{ServerType:"15"},{DataType:"3"},{DataPack:data }]});
 		//win.external.RequestDataFromServer(3021, varSendData, getModulesCallBack);
 
 		win.server.request(15, 3, {DataPack: data}, win.serverRequestCallback.showModules_A061)
@@ -1385,8 +1385,8 @@
 
 			data = getBse64Encode(module);   //编码
 
-			//varSendData = "{'subURL':'" + CONSTANT.SERVER_ADDRESS + "','data':[{'ServerType':'15'},{'DataType':'4'},{'DataPack':'" + data + "'}]}";
-			//varSendData = JSON.stringify({subURL: CONSTANT.SERVER_ADDRESS ,data:[{ServerType:"15"},{DataType:"4"},{DataPack:data}]});
+			//varSendData = "{'subURL':'" + global.businessInfo.serverDst + "','data':[{'ServerType':'15'},{'DataType':'4'},{'DataPack':'" + data + "'}]}";
+			//varSendData = JSON.stringify({subURL: global.businessInfo.serverDst ,data:[{ServerType:"15"},{DataType:"4"},{DataPack:data}]});
 			//win.external.RequestDataFromServer(3021, varSendData, getProgramCallBack);
 			win.server.request(15, 4, {DataPack: data},win.serverRequestCallback.showProgram_A061)
 		}
@@ -1403,8 +1403,8 @@
 			var arr = module.split('/');
 			$("#programTitle").html(arr[1] + ' &rarr; ' + arr[2] + ' &rarr; ' + arr[3] + ' &rarr; ' + '选择编程版本：');
 
-			//varSendData = "{'subURL':'" + CONSTANT.SERVER_ADDRESS + "','data':[{'ServerType':'15'},{'DataType':'9'},{'DataPack':'" + data + "'}]}";
-			//varSendData = JSON.stringify({subURL:CONSTANT.SERVER_ADDRESS ,data:[{ServerType:"15"},{DataType:"9"},{DataPack:data }]});
+			//varSendData = "{'subURL':'" + global.businessInfo.serverDst + "','data':[{'ServerType':'15'},{'DataType':'9'},{'DataPack':'" + data + "'}]}";
+			//varSendData = JSON.stringify({subURL:global.businessInfo.serverDst ,data:[{ServerType:"15"},{DataType:"9"},{DataPack:data }]});
 			//win.external.RequestDataFromServer(3021, varSendData, getProgramCallBack);
 			win.server.request(15, 9, {DataPack: data},win.serverRequestCallback.showProgram_A061)
 		}
@@ -1427,7 +1427,7 @@
 
 			data = getBse64Encode(module);   //编码
 
-			//varSendData = JSON.stringify({subURL:CONSTANT.SERVER_ADDRESS ,data:[{ServerType:"15"},{DataType:"10"},{DataPack:data }]});
+			//varSendData = JSON.stringify({subURL:global.businessInfo.serverDst ,data:[{ServerType:"15"},{DataType:"10"},{DataPack:data }]});
 			//win.external.RequestDataFromServer(3021, varSendData, getProgramFileCallBack);
 			win.server.request(15, 10, {DataPack: data},win.serverRequestCallback.getProgramFile_A061)
 		}
@@ -1520,7 +1520,7 @@
 
 			data = getBse64Encode(data);   //编码
 
-			//varSendData = JSON.stringify({subURL:CONSTANT.SERVER_ADDRESS ,data:[{ServerType:"15"},{DataType:"6"},{DataPack:data }]});
+			//varSendData = JSON.stringify({subURL:global.businessInfo.serverDst ,data:[{ServerType:"15"},{DataType:"6"},{DataPack:data }]});
 			//win.external.RequestDataFromServer(3021, varSendData, getAddressCallBack);
 			win.server.request(15, 6, {DataPack: data},win.serverRequestCallback.getECUAddress_A061)
 		}
@@ -1535,7 +1535,7 @@
 			data = getBse64Encode(module);   //编码
 
 
-			//varSendData = JSON.stringify({subURL:CONSTANT.SERVER_ADDRESS ,data:[{ServerType:"15"},{DataType:"6"},{DataPack:data }]});
+			//varSendData = JSON.stringify({subURL:global.businessInfo.serverDst ,data:[{ServerType:"15"},{DataType:"6"},{DataPack:data }]});
 			//win.external.RequestDataFromServer(3021, varSendData, getAddressCallBack);
 			win.server.request(15, 6, {DataPack: data},win.serverRequestCallback.getECUAddress_A061)
 		}
@@ -1684,7 +1684,7 @@
 		}
 		data = getBse64Encode(data);   //编码
 
-		//var varSendData = JSON.stringify({subURL:CONSTANT.SERVER_ADDRESS ,data:[{ServerType:"15"},{DataType:"5"},{DataPack:data }]});
+		//var varSendData = JSON.stringify({subURL:global.businessInfo.serverDst ,data:[{ServerType:"15"},{DataType:"5"},{DataPack:data }]});
 		//win.external.RequestDataFromServer(3021, varSendData, getPartCallBack);
 		win.server.request(15, 5, {DataPack: data},win.serverRequestCallback.getPart_A061)
 	};
@@ -1965,7 +1965,7 @@
 		data = getBse64Encode(data);   //编码
 
 
-		//var varSendData = JSON.stringify({subURL:CONSTANT.SERVER_ADDRESS ,data:[{ServerType:"15"},{DataType:"11"},{DataPack:data }]});
+		//var varSendData = JSON.stringify({subURL:global.businessInfo.serverDst ,data:[{ServerType:"15"},{DataType:"11"},{DataPack:data }]});
 		//win.external.RequestDataFromServer(3021, varSendData, getModuleNameCallBack);
 		win.server.request(15, 11, {DataPack: data},win.serverRequestCallback.getModuleName_A061);
 		if (!$("#carModuleList_A061").is(":visible")) {

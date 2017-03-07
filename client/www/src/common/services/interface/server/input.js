@@ -5,26 +5,23 @@
 	var win = window;
 	win.server = win.server ? win.server : {};
 
-
-
 	/**
 	 * APP从服务器获取到数据，转发给Js
-	 * @param action str
+	 * @param status str
 	 * @param response obj
 	 * @param callback str
-	 * @param handleBackRequest array or function
+	 * @param handleBadRequest array or function
 	 * */
-	win.server.jsRecvServerData = function (action, response, callback, handleBackRequest) {
-		if (global.RMTInfo.ID == 2) return;                           //控制机不需要有服务器交互行为
+	win.server.jsRecvServerData = function (status, response, callback, handleBadRequest) {
+		if (global.RMTID.role == 2) return;                           //控制机不需要有服务器交互行为
 
-
-		switch (action) {
+		switch (status) {
 			case "success":
-				this.successHandle(response, callback, handleBackRequest[1]);
+				this.successHandle(response, callback, handleBadRequest[1]);
 				break;
 			case "timeout":
 			case "error"://涵盖有服务器繁忙
-				win.serverRequestCallback.refreshHandle(response, callback.params, handleBackRequest);
+				win.serverRequestCallback.refreshHandle(response, callback.params, handleBadRequest);
 				break;
 		}
 	};
@@ -58,19 +55,19 @@
 		}
 	};
 
-	win.serverRequestCallback.refreshHandle = function (response, callbackParams, handleBackRequest) {
+	win.serverRequestCallback.refreshHandle = function (response, callbackParams, handleBadRequest) {
 		/**超时回调处理：
 		 * 如果回调参数传过来的是数组，就是两个函数实体
 		 * 如果回调参数穿过来的是函数，就是一个函数，直接调用
 		 * */
 
-		if (handleBackRequest[0]) {
+		if (handleBadRequest[0]) {
 			tool.alert([response, "重试", "取消"],
 				function () {
-					handleBackRequest[0].apply(null, callbackParams);
+					handleBadRequest[0].apply(null, callbackParams);
 				},
 				function () {
-					handleBackRequest[1].apply(null, callbackParams);
+					handleBadRequest[1].apply(null, callbackParams);
 				}
 			);
 		}
@@ -80,7 +77,7 @@
 		 * 在这里直接调用的时候，就可以对$scope.getResponse进行修改！！！
 		 * */
 		else{
-			handleBackRequest[1].apply(null, callbackParams);
+			handleBadRequest[1].apply(null, callbackParams);
 		}
 	};
 

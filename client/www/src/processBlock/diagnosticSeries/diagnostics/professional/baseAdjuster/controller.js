@@ -111,26 +111,6 @@
 
 		win.serverRequestCallback.BASE_ADJUST_SUPPORT = function (responseObject, params) {
 			if (!showView)return;
-			//if (!status.ok) {
-			//
-			//	tool.alert(['服务器响应失败，请点击重试', '重试', '取消'],
-			//		function () {
-			//			getBaseAdjustSupport(params);
-			//		},
-			//		function () {
-			//			tcpBaseAdjusterBack();
-			//		}
-			//	);
-			//
-			//}
-			//else if (!responseObject || !responseObject.supportitems.length ) {
-			//	tool.alert('无任何支持项信息',
-			//	           function () {
-			//		           tcpBaseAdjusterBack();
-			//	           }
-			//	);
-			//}
-			//else {
 			if (!responseObject.supportitems.length) {
 				tool.alert('服务器无数据支持',
 				           function () {
@@ -150,8 +130,6 @@
 			releaseButtonEvent_tcpBaseAdjust();
 			tool.layoutTable();
 			safeApply(function () {});
-			//tool.processBar('支持项获取成功');
-			//}
 		};
 
 		function getValue(dataPack) {
@@ -169,12 +147,12 @@
 				},
 				dataPack,
 				win.server.addCallbackParam(win.serverRequestCallback.BASE_ADJUST, [dataPack]),
-				[null,handleBackRequest]
+				[null, handleBadRequest]
 			);
 
 		}
 
-		function handleBackRequest(){
+		function handleBadRequest() {
 			var i = $scope.baseAdjuseterDataList.length;
 			safeApply(function () {
 				while (i--) {
@@ -185,34 +163,34 @@
 
 		win.serverRequestCallback.BASE_ADJUST = function (responseObject, params) {
 			if (!showView)return;
-			//if (!status || !responseObject || !status.ok) {
-			//	//如果响应失败，就全部值更新为N/A
-			//	var i = $scope.baseAdjuseterDataList.length;
-			//	safeApply(function () {
-			//		while (i--) {
-			//			$scope.baseAdjuseterDataList[i].ans = 'N/A';
-			//		}
-			//	});
-			//}
-			//else {
+			if (!responseObject.items.length) {
+				//如果响应失败，就全部值更新为N/A
+				var i = $scope.baseAdjuseterDataList.length;
+				safeApply(function () {
+					while (i--) {
+						$scope.baseAdjuseterDataList[i].ans = 'N/A';
+					}
+				});
+			}
+			else {
 
-			var data = $scope.baseAdjuseterDataList || [];
-			var items = responseObject.items;
-			var len = data.length;
-			var j = len;
-			while (j--) {
-				var k = len;
-				while (k--) {
-					if (data[j].pid === items[k].pid) {
-						data[j].ans = items[k].ans;
-						break;
+				var data = $scope.baseAdjuseterDataList || [];
+				var items = responseObject.items;
+				var len = data.length;
+				var j = len;
+				while (j--) {
+					var k = len;
+					while (k--) {
+						if (data[j].pid === items[k].pid) {
+							data[j].ans = items[k].ans;
+							break;
+						}
 					}
 				}
 			}
-
 			safeApply(function () {});
 			if (!finished && $scope.stateText == "暂停") win.sendDataToDev('310920' + cacheChannel);
-			//}
+
 		};
 
 
