@@ -11,13 +11,20 @@
     var chanelMap = [];
 
     var namesMap = [];
-    var protocolMap = {
+    var emitProtocolMap = {
         remoteRole: null,
         RMTInterActive: null,
         userList: null,
-        disconnect: false
+        disconnect: false,
+        answer:null
     };
-
+    var recvProtocolMap = {
+        RMTInterActive: null,
+        uid:null,
+        askUid:null,
+        asstUid:null,
+        asking:null
+    };
     function WebSocket() {
     }
 
@@ -46,38 +53,13 @@
             //});
             socket.on('data', function (e) {
                 var frame = decodeDataFrame(e);
-                console.log("一共接收了多少次数据：", frame);
                 //第一次握手
                 if (frame.FIN === 0) {
                     that.handshake(socket, e);
                 }
                 //数据交互
                 else {
-                    switch (frame.Opcode) {
-                        case 8:
-                            console.log("会话已经结束:", socket, frame.PayloadData);
-                            break;
-                        default :
-                            that.opcode = frame.Opcode;
-                            var data = JSON.parse(frame.PayloadData.toString()) || "";
-
-                            if (data.close) {
-                                that.close(data);
-                                return;
-                            }
-
-                            //如果map里面没有此用户，就存储session，并绑定用户名
-                            if (!namesMap.join(",").match(new RegExp(data.askUid, "g"))) {
-                                that.distributeUid(data, socket);
-                            }
-                            if (data.asstUid) {
-                                that.openChanel(data)
-                            }
-                            else if (data.RMTInterActive) {
-                                that.RMTInterActive(data)
-                            }
-                            break;
-                    }
+                    that.dataHost(socket, frame);
                 }
             });
 
@@ -85,6 +67,36 @@
         });
     };
 
+    WebSocket.prototype.dataHost = function (socket, frame){
+        var that = this;
+        switch (frame.Opcode) {
+            case 8:
+                console.log("会话已经结束:", socket, frame.PayloadData);
+                break;
+            default :
+                that.opcode = frame.Opcode;
+                var data = JSON.parse(frame.PayloadData.toString()) || "";
+
+                if (data.close) {
+                    that.close(data);
+                    return;
+                }
+
+                //如果map里面没有此用户，就存储session，并绑定用户名
+                if (!namesMap.join(",").match(new RegExp(data.askUid, "g"))) {
+                    that.distributeUid(data, socket);
+                }
+                if (data.asking) {
+
+                }else if(data.asstUid){
+                    that.openChanel(data)
+                }
+                else if (data.RMTInterActive) {
+                    that.RMTInterActive(data)
+                }
+                break;
+        }
+    };
     //单个用户的握手实例;
     WebSocket.prototype.handshake = function (socket, e) {
         var original = e.toString().match(/Sec-WebSocket-Key: (.+)/)[1];
@@ -99,8 +111,8 @@
     //两个用户的对接
     WebSocket.prototype.openChanel = function (data) {
         var that = this;
-        var asker = that.getSession(data.askUid, clients);
-        var asst = that.getSession(data.asstUid, clients);
+        var asker = that.tool.getSession(data.askUid, clients);
+        var asst = that.tool.getSession(data.asstUid, clients);
 
         //存储远程对话通道
         chanelMap.push({
@@ -114,35 +126,13 @@
 
     WebSocket.prototype.RMTInterActive = function (data) {
         var that = this;
-        var map = that.getChanelSession(data.uid);
+        var map = that.tool.getChanelSession(data.uid);
         if (data.RMTInterActive.remoteRole == 1) {
             that.send(map.asst, {RMTInterActive: data.RMTInterActive});
         }
         else if (data.RMTInterActive.remoteRole == 2) {
             that.send(map.asker, {RMTInterActive: data.RMTInterActive});
         }
-    };
-
-    WebSocket.prototype.getSession = function (uid, store) {
-        var i = store.length;
-        while (i--) {
-            if (store[i].uid === uid) {
-                return store[i].session;
-            }
-        }
-    };
-
-    WebSocket.prototype.getChanelSession = function (uid) {
-        var result = {};
-        chanelMap.forEach(function (item, index) {
-            if (item.asker.uid == uid || item.asst.uid == uid) {
-                result = {
-                    asker: item.asker.session,
-                    asst: item.asst.session
-                };
-            }
-        });
-        return result;
     };
 
     WebSocket.prototype.close = function (data) {
@@ -167,6 +157,23 @@
         });
     };
 
+    WebSocket.prototype.connectChanel = function (data) {
+        //如果是协助者的断开讯号,
+        var that = this;
+        var asker = null;
+        var asst = null;
+        chanelMap.forEach(function (item, index) {
+            if (item.asker.uid == data.uid || item.asst.uid == data.uid) {
+                asker = item.asker.session;
+                asst = item.asst.session;
+                that.send(asker, {disconnect: true});
+                that.send(asst, {disconnect: true});
+                chanelMap.splice(index, 1);   //删除远程会话通道
+            }
+        });
+
+    };
+
     WebSocket.prototype.disconnectChanel = function (data) {
         //如果是协助者的断开讯号,
         var that = this;
@@ -186,7 +193,7 @@
 
     WebSocket.prototype.send = function (socket, data) {
         var that = this;
-        var _data = that.tool.extend(protocolMap,data);
+        var _data = that.tool.extend(emitProtocolMap, data);
         var PayloadData = that.opcode == 1 ? JSON.stringify(_data) : new Buffer(JSON.stringify(_data));
         socket.write(
             encodeDataFrame({
@@ -195,7 +202,7 @@
                 PayloadData: PayloadData
             })
         );
-        protocolMap = {
+        emitProtocolMap = {
             remoteRole: null,
             RMTInterActive: null,
             userList: null,
@@ -207,13 +214,34 @@
     WebSocket.prototype.tool = {
         extend: function (_old, _new) {
             var result = {};
-            for(var oldItem in _old){
-                for(var newItem in _new){
-                    if(newItem === oldItem){
-                        if(_new.hasOwnProperty(newItem))result[newItem] = _new[newItem];
-                    }else{
-                        if(_old.hasOwnProperty(oldItem))result[oldItem] = _old[oldItem];
+            for (var oldItem in _old) {
+                for (var newItem in _new) {
+                    if (newItem === oldItem) {
+                        if (_new.hasOwnProperty(newItem))result[newItem] = _new[newItem];
+                    } else {
+                        if (_old.hasOwnProperty(oldItem))result[oldItem] = _old[oldItem];
                     }
+                }
+            }
+            return result;
+        },
+        getChanelSession: function (uid) {
+            var result = {};
+            chanelMap.forEach(function (item, index) {
+                if (item.asker.uid == uid || item.asst.uid == uid) {
+                    result = {
+                        asker: item.asker.session,
+                        asst: item.asst.session
+                    };
+                }
+            });
+            return result;
+        },
+        getSession: function (uid, store) {
+            var i = store.length;
+            while (i--) {
+                if (store[i].uid === uid) {
+                    return store[i].session;
                 }
             }
         }
