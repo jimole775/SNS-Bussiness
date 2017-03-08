@@ -2,6 +2,12 @@
  * Created by Andy on 2017/1/12.
  */
 var win = window;
+
+//如果窗口的大小改变,就重载资源(主要为了在PC端测试时使用)
+window.onresize = function(){
+	location.reload();
+};
+
 win.external = win.external ? win.external : {};
 win.devLoaded = false;
 win.external.SendToApp = function (action, msg) {

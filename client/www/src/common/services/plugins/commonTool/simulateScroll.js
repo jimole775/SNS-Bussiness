@@ -174,7 +174,6 @@
 
 				this.elements.context_main.on(win.CONSTANT.EVENT_TYPE.END, function (e) {
 					that.mouseEvent.down.flag = false;
-
 					that.count.slideTop = parseFloat(that.elements.scrollBodyController.curContentBox.css("top"));
 					that.count.slideLeft = parseFloat(that.elements.scrollBodyController.css("left"));
 					var target = e.originalEvent.changedTouches ? e.originalEvent.changedTouches[0] : e.originalEvent;

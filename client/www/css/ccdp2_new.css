@@ -10,7 +10,15 @@ html {
     font-family: ".PingFang-SC-Medium","微软雅黑","Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
 
 }
-
+*{
+    moz-user-select: -moz-none;
+    -moz-user-select: none;
+    -o-user-select:none;
+    -khtml-user-select:none;
+    -webkit-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
+}
 body {
     height: 100%;
     overflow: hidden;
@@ -1653,13 +1661,21 @@ option {
 .bottom-bar-button-special{
     padding:0;
 }
+
+.triangle-icon-basic{
+    width: 4rem;
+    height: 4rem;
+    position: absolute;
+    top: -2rem;
+    right: -2rem;
+}
 .triangle-icon{
     width: 2rem;
     height: 2rem;
     border: none;
     position: absolute;
     overflow: hidden;
-    top:0;
+    bottom:0;
     left:0;
 }
 .triangle-icon:after{
@@ -1671,4 +1687,42 @@ option {
     right: -1rem;
     top: -1rem;
     content: " ";
+}
+.extend-icon-basic{
+    width: 4rem;
+    height: 4rem;
+    position: absolute;
+    bottom: -2rem;
+    right: -2rem;
+}
+
+.extend-icon{
+    width: 2rem;
+    height: 2rem;
+    top: 0;
+    left: 0;
+    position: absolute;
+    overflow: hidden;
+}
+.extend-icon:after{
+    content: '';
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #00a7ff;
+    top: 1rem;
+    left: 1rem;
+    transform: rotate(45deg);
+}
+.extend-icon:before{
+    content: '';
+    display: block;
+    width: 200%;
+    height: 200%;
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    border: 1px solid #92b8ff;
+    transform: rotate(45deg);
 }
