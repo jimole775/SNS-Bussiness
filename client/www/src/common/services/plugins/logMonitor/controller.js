@@ -323,13 +323,13 @@
 
     $("body").on(dibClickEvent);
     activeTier.off().on(callConsole);
-    var _drag = new Drag();
+  /*  var _drag = new Drag();
 
     _drag.bindEvent("AppConsoleHead","extendFunTag","AppConsole");
     function Drag() {
-        /***************
+        /!***************
          * 绑定拖拽事件 *
-         **************/
+         **************!/
         this.init = function (dragTagId, extendTagId, bodyId) {
             this.dragTag = $("#" + dragTagId);
             this.extendTag = $("#" + extendTagId);
@@ -384,9 +384,9 @@
                 }
             });
 
-            /*******************
+            /!*******************
              * 绑定窗体拉伸事件 *
-             *****************/
+             *****************!/
             that.extendTag.on({
                 touchstart: function (e) {
                     that.startX = e.originalEvent.targetTouches[0].clientX;                        //获取点击点的X坐标
@@ -443,5 +443,5 @@
             });
         };
 
-    }
+    }*/
 })();
