@@ -11,6 +11,7 @@
     var chanelMap = [];
 
     var namesMap = [];
+
     var emitProtocolMap = {
         remoteRole: null,
         RMTInterActive: null,
@@ -18,13 +19,17 @@
         disconnect: false,
         answer:null
     };
+
     var recvProtocolMap = {
-        RMTInterActive: null,
         uid:null,
-        askUid:null,
-        asstUid:null,
-        asking:null
+        RMTInterActive:null,
+        oppositeUid:null,
+        close:false,
+        connectAsk:false,
+        disconnect:false
     };
+
+
     function WebSocket() {
     }
 
@@ -83,12 +88,12 @@
                 }
 
                 //如果map里面没有此用户，就存储session，并绑定用户名
-                if (!namesMap.join(",").match(new RegExp(data.askUid, "g"))) {
+                if (!namesMap.join(",").match(new RegExp(data.oppositeUid, "g"))) {
                     that.distributeUid(data, socket);
                 }
-                if (data.asking) {
+                if (data.connectAsk) {
 
-                }else if(data.asstUid){
+                }else if(data.oppositeUid){
                     that.openChanel(data)
                 }
                 else if (data.RMTInterActive) {
@@ -97,6 +102,7 @@
                 break;
         }
     };
+
     //单个用户的握手实例;
     WebSocket.prototype.handshake = function (socket, e) {
         var original = e.toString().match(/Sec-WebSocket-Key: (.+)/)[1];

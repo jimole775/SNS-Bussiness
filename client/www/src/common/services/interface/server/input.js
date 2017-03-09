@@ -44,7 +44,8 @@
 			Array.prototype.unshift.call(params, jsonData);
 
 			callback.apply(null, params);
-			//console.log("接收数据：",JSON.stringify(jsonData));
+
+			console.log("服务器数据：",JSON.stringify(jsonData),"服务器回调:",params);
 		}
 		
 		//如果服务器查询失败，就不必再给用户请求的机会！

@@ -10,8 +10,8 @@ function Drag() {
 	var $ = jQuery;
 	this.init = function (dragTagId, bodyId, extendTagId) {
 		this.body = $("#" + bodyId)[0];
-		this.windowHeight = win.CONSTANT.WINDOW_HEIGHT;
-		this.windowWidth = win.CONSTANT.WINDOW_WIDTH;
+		this.windowHeight = window.CONSTANT.WINDOW_HEIGHT;
+		this.windowWidth = window.CONSTANT.WINDOW_WIDTH;
 		this.mouseEnvent = {};
 		this.EVENT_TYPE = {};
 		this.EVENT_TYPE.START = "ontouchstart" in window ? "touchstart" : "mousedown";

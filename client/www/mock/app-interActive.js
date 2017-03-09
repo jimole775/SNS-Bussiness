@@ -30,8 +30,13 @@ win.external.SendToApp = function (action, msg) {
 			//}
 			break;
 		case 1000:
-			win.jsRecvAppData(1000,{screenInfo:{screenSize:5.5,headHeight:40,footHeight:40},serverHost:"http://112.124.26.243:8090",businessRole:0},"");
+			win.jsRecvAppData(1000,{screenInfo:{screenSize:5.5,headHeight:60,footHeight:60},serverHost:"http://112.124.26.243:8090",businessRole:0},"");
 			break;
 		}
 
+};
+
+win.external.RequestDataFromServer = function (action, pack, abandonParam){
+	//offline mock,don't need to handles badRequest status!
+	win.server.ajaxHandle(pack, function(){}, [function(){},null]);
 };

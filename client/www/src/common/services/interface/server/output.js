@@ -55,7 +55,7 @@ $(document).ready(function () {
 		}
 		else {
 			//离线版本的服务器数据走这个通道;
-			win.external.RequestDataFromServer(3021, pack, "");
+			win.external.RequestDataFromServer(3021, JSON.stringify(pack), "");
 
 			//并且同时创建一个全局函数接受APP推送的数据,第三个参数暂时用不到!
 			if (!win.jsRecvServerData) {
