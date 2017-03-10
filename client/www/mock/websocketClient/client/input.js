@@ -12,8 +12,9 @@ var win = window;
 	ws.onopen = function (res) {
 		console.log(res);
 		console.log("握手成功");
-		ws.send({uid: win.global.RMTID.userName});
-
+		if(win.global.RMTID.userName) {
+			ws.send({uid: win.global.RMTID.userName});
+		}
 	};
 
 	ws.onerror = function (e) {

@@ -1,10 +1,11 @@
 /**
  * Created by Andy on 2017/3/2.
  */
-(function(){
+(function () {
 
 	//还不清楚tab的用意，看使用的地方，只是简单的字串拼接，如果不需要用到，可以使用""代替
-	CommonTool.prototype.xml2json = function(xml, tab) {
+	window.xmlTool = {};
+	xmlTool.xml2json = function (xml, tab) {
 		var X = {
 			toObj: function (xml) {
 				var o = {};
@@ -153,7 +154,7 @@
 		return "{\n" + tab + (tab ? json.replace(/\t/g, tab) : json.replace(/\t|\n/g, "")) + "\n}";
 	};
 
-	CommonTool.prototype.json2xml = function(o, tab) {
+	xmlTool.json2xml = function (o, tab) {
 		var toXml = function (v, name, ind) {
 			var xml = "";
 			if (v instanceof Array) {
@@ -191,4 +192,17 @@
 			xml += toXml(o[m], m, "");
 		return tab ? xml.replace(/\t/g, tab) : xml.replace(/\t|\n/g, "");
 	};
+
+	xmlTool.string2xml = function (str) {
+		if (document.all) {//IE浏览器
+			var xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
+			xmlDoc.async = false;
+			xmlDoc.loadXML(str);
+			return xmlDoc;
+		}
+		else {//非IE浏览器
+			return new DOMParser().parseFromString(str, "text/xml");
+		}
+	};
+
 })();

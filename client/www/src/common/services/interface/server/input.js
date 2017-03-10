@@ -37,6 +37,7 @@
 			 * 然后再判断是否是json类型，
 			 * */
 			jsonData = getBse64Decode(tool.hex2a(response.CODEDATA));
+			//jsonData = getBse64Decode(response.CODEDATA);
 			jsonData = typeof jsonData === "string" && jsonData.match(/^[\{\[]/) ? JSON.parse(jsonData) : jsonData;
 
 			//统一使用apply调用，所以先把params整合成数组形式

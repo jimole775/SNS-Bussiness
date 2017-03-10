@@ -13,21 +13,27 @@
     var namesMap = [];
 
     var emitProtocolMap = {
+        status:0,
+        uid:null,
         remoteRole: null,
         RMTInterActive: null,
         userList: null,
         disconnect: false,
-        answer:null
+        close:false,
+        answer:null,
+        oppositeUid:null,
+        connectAsk:false
     };
 
-    var recvProtocolMap = {
-        uid:null,
-        RMTInterActive:null,
-        oppositeUid:null,
-        close:false,
-        connectAsk:false,
-        disconnect:false
-    };
+    //var recvProtocolMap = {
+    //    status:0,
+    //    uid:null,
+    //    RMTInterActive:null,
+    //    oppositeUid:null,
+    //    close:false,
+    //    connectAsk:false,
+    //    disconnect:false
+    //};
 
 
     function WebSocket() {
@@ -209,10 +215,16 @@
             })
         );
         emitProtocolMap = {
+            status:0,
+            uid:null,
             remoteRole: null,
             RMTInterActive: null,
             userList: null,
-            disconnect: false
+            disconnect: false,
+            close:false,
+            answer:null,
+            oppositeUid:null,
+            connectAsk:false
         };
 
     };

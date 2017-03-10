@@ -3,14 +3,10 @@
  */
 $(document).ready(function () {
 	var win = window;
-	//var _callback = null;	//存储这个空间的回调函数；
-	//var _handleBadRequest = null;	//存储这个空间的重试按钮的回调；
 	win.server = win.server ? win.server : {};
 	win.server.request = function (serverType, dataType, dataPack, callback, handleBadRequest) {
 		if (global.RMTID.role == 2) return;   //控制机不需要有服务器交互行为
 		var that = this;
-		//_callback = callback;
-		//_handleBadRequest = handleBadRequest;
 		var sendDataStr = JSON.stringify({
 			subURL: win.global.businessInfo.serverDst,
 			data: [
@@ -59,8 +55,11 @@ $(document).ready(function () {
 
 			//并且同时创建一个全局函数接受APP推送的数据,第三个参数暂时用不到!
 			if (!win.jsRecvServerData) {
-				win.jsRecvServerData = function (status, xml, abandonParam) {
-					that.jsRecvServerData(status, that.analyzeXml(xml), callback, handleBadRequest);
+
+				//走离线的时候,APP反馈的是json数据
+				win.jsRecvServerData = function (status, json, abandonParam) {
+					var _json = /^[\{\[]/.test(json) ? JSON.parse(json) : json;
+					that.jsRecvServerData(status, _json, callback, handleBadRequest);
 				};
 			}
 		}
@@ -70,9 +69,20 @@ $(document).ready(function () {
 
 
 	win.server.analyzeXml = function (xml) {
+		var _xml = null;
+
+		//如果输入是一个string,就转成document类型
+		if(typeof xml === "string"){
+			_xml = win.xmlTool.string2xml(xml);
+		}else{
+			_xml = xml;
+		}
+
 		//CodeData的值在服务器端被转了2次base64,APP底层的工作就解一次base64，并把内容再转成16进制，在此模拟APP的工作
-		xml.getElementsByTagName("CodeData")[0].textContent = tool.asc2hex(getBse64Decode(xml.getElementsByTagName("CodeData")[0].textContent));
-		return JSON.parse(tool.xml2json(xml.childNodes[0], "").toUpperCase()).ROOT;
+		_xml.getElementsByTagName("CodeData")[0].textContent = tool.asc2hex(getBse64Decode(_xml.getElementsByTagName("CodeData")[0].textContent));
+
+		//最后输出ROOT的内容
+		return JSON.parse(win.xmlTool.xml2json(_xml.childNodes[0], "").toUpperCase()).ROOT;
 	};
 
 	//把参数添加到回调的属性上

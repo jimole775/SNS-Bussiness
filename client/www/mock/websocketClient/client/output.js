@@ -53,5 +53,4 @@
     };
 
 
-})(WebSocket ? WebSocket : function WebSocket() {
-});
+})(WebSocket ? WebSocket : function WebSocket() {});
