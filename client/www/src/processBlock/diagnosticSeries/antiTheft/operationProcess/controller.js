@@ -14,7 +14,6 @@
 
 		var $ = angular.element;
 
-
 		$scope.buttons_arr = [                                                  //按钮文本,用于模板绑定
 			//{supid:"",name:""}
 		];
@@ -73,8 +72,8 @@
 				cmdLen_int = tool.hex2dec(varRecvData.substr(10, 4));             //【C】--后缀指令长度；
 				requestType = "01";                                                 //请求类型为01时，代表datapack会打包所有的supid
 				switch ($scope.BombBoxType) {
-					case "01":                                                      //提示框
-					case "02":                                                      //输入框
+					case "01":  //提示框
+					case "02":  //输入框
 					{
 						pidCacheFromDev.contents_arr.push(varRecvData.substr(14, 8)); //前八位为supid,和菜单有区别
 
@@ -86,7 +85,7 @@
 								8);                                                 //步进数值
 					}
 						break;
-					case "03":                                                      //普通菜单
+					case "03":  //普通菜单
 					{
 						var menuType = varRecvData.substr(14, 2);
 						var menuItemsSum = tool.hex2dec(varRecvData.substr(16, 2));
@@ -122,7 +121,7 @@
 					}
 						break;
 
-					case "04":                                                      //带读值的菜单
+					case "04":  //带读值的菜单
 					{
 						var readValueBindOnsupid = false;                           //第一,第二种supid解析模式可以对读值进行绑定,将此变量设置为flag,由于第三种要去服务器解组数据,所以暂时忽略
 						menuType04 = varRecvData.substr(14, 2);
@@ -202,11 +201,17 @@
 
 					}
 						break;
+					case "05":  //设备请求上传,下载文件
+					{
+						handleFiles(varRecvData);
+					}
+						break;
 					default :                                                                               //如果是未知弹框类型，就退到主界面
 						win.sendDataToDev("310902");
 						return;
 						break;
 				}
+
 				var temObjFromClone = angular.extend({}, pidCacheFromDev);
 				//pidCacheFromDev.contents_arr
 				//pidCacheFromDev.buttons_arr
@@ -232,6 +237,46 @@
 			}
 		}
 
+		function handleFiles(varRecvData) {
+			//功能ID：
+			//00: 回应PC
+			//01: 对PC发送数据
+			//02: 申请从手机拿文件数据下传
+			//03: 申请从服务器拿文件数据下传
+			//04: 申请数据文件上传到PC(收到这个后，在传输数据前要弹出让用户选择文件存储路径并可以重命名（默认名字由设备传上来）的对话框)
+			//05: 申请数据文件上传到服务器
+			//FF: 出错。
+			var processType = varRecvData.substr(14, 2);
+			switch (processType) {
+				case "00":
+					tool.alert("数据传输完成!",function(){
+						//win.sendDataToDev("710902");
+					});
+					break;
+				case "01":
+
+					break;
+				case "02":
+					//sendFileToDevFromApp();
+					break;
+				case "03":
+					//sendFileToDevFromServer();
+					break;
+				case "04":
+					//sendFileToAppFromDev();
+					break;
+				case "05":
+					//sendFileToServerFromDev();
+					break;
+				case "FF":
+					tool.alert("数据解析出错!",function(){
+						win.sendDataToDev("710902");
+					});
+					break;
+			}
+		}
+
+
 		/****************************************************************
 		 * 从服务器获取supid匹配的内容
 		 * @param supids
@@ -255,7 +300,7 @@
 				},
 				dataPack,
 				win.server.addCallbackParam(win.serverRequestCallback.bindingATViewFromServer, [supids]),
-			    [FunGetsupidDataFromServer,global.disconnectOBD]
+				[FunGetsupidDataFromServer, global.disconnectOBD]
 			);
 
 			dataPack.supids.length = 0;
@@ -264,7 +309,7 @@
 		win.serverRequestCallback.bindingATViewFromServer = function (responseObject, params) {
 
 			try {
-				if(!responseObject.items.length){
+				if (!responseObject.items.length) {
 					tool.alert('服务器无任何数据',
 					           function () {
 						           //tool.processBar("");
@@ -273,142 +318,142 @@
 					);
 					return;
 				}
-					//todo 由于存在读秒框体，需要马上计算发送 指令给设备，所以在不能发送之后 马上重置数据
+				//todo 由于存在读秒框体，需要马上计算发送 指令给设备，所以在不能发送之后 马上重置数据
 
-					$scope.contents_arr.length = 0;                                 //webview内容文本数据
-					$scope.buttons_arr.length = 0;                                  //webview按钮文本数据
-					tool.popShow("bombTipBox", 0);
-					tool.popShow("bombMenuBox", 0);
+				$scope.contents_arr.length = 0;                                 //webview内容文本数据
+				$scope.buttons_arr.length = 0;                                  //webview按钮文本数据
+				tool.popShow("bombTipBox", 0);
+				tool.popShow("bombMenuBox", 0);
 
-					//var theDataModel = tool.objToArr (responseObject.items, "supid", "name");
-					var theDataModel = responseObject.items;
-					switch ($scope.BombBoxType) {
-						case "01":                                                      //构造提示框内容或输入框内容
-						case "02":
-						{
-							//1,获取源格式
-							//{
-							//    "requestDataType": "01/02/03",
-							//    "supids": {
-							//    "00000001": "点击确认或者取消",
-							//    "00000002": "确定"
-							//     }
-							//}
+				//var theDataModel = tool.objToArr (responseObject.items, "supid", "name");
+				var theDataModel = responseObject.items;
+				switch ($scope.BombBoxType) {
+					case "01":                                                      //构造提示框内容或输入框内容
+					case "02":
+					{
+						//1,获取源格式
+						//{
+						//    "requestDataType": "01/02/03",
+						//    "supids": {
+						//    "00000001": "点击确认或者取消",
+						//    "00000002": "确定"
+						//     }
+						//}
 
-							//2,转成model需要的格式
-							//[
-							// {name:"点击确认或者取消",supid:"00000001"},
-							// {name:"确定",supid:"0001"},
-							// {name:"取消",supid:"0002"}
-							// ]
+						//2,转成model需要的格式
+						//[
+						// {name:"点击确认或者取消",supid:"00000001"},
+						// {name:"确定",supid:"0001"},
+						// {name:"取消",supid:"0002"}
+						// ]
 
-							//3,匹配supid,决定是按钮还是正文文本,下面是supid数据格式
-							//    var pidCacheFromDev = {
-							//        contents_arr:[],
-							//        buttons_arr:[]
-							//    };
+						//3,匹配supid,决定是按钮还是正文文本,下面是supid数据格式
+						//    var pidCacheFromDev = {
+						//        contents_arr:[],
+						//        buttons_arr:[]
+						//    };
 
-							//最后再组成webView格式:
-							//$scope.tipsDataList_obj = {
-							//    contents_arr: [],
-							//    buttons_arr: []
-							//};
-							var i;
-							for (i = 0; i < theDataModel.length; i++) {
-								var j = pidCacheFromDev.contents_arr.length;
-								while (j--) {
-									if (theDataModel[i].supid === pidCacheFromDev.contents_arr[j]) {
-										$scope.contents_arr.push(theDataModel[i]);
-									}
-									else {
-										//比对supid之后才决定buttons_arr数组的index
-										pidCacheFromDev.buttons_arr.forEach(function (item) {
-											if (theDataModel[i].supid === item.value)
-												$scope.buttons_arr[item.index] = theDataModel[i];
-										});
-									}
+						//最后再组成webView格式:
+						//$scope.tipsDataList_obj = {
+						//    contents_arr: [],
+						//    buttons_arr: []
+						//};
+						var i;
+						for (i = 0; i < theDataModel.length; i++) {
+							var j = pidCacheFromDev.contents_arr.length;
+							while (j--) {
+								if (theDataModel[i].supid === pidCacheFromDev.contents_arr[j]) {
+									$scope.contents_arr.push(theDataModel[i]);
+								}
+								else {
+									//比对supid之后才决定buttons_arr数组的index
+									pidCacheFromDev.buttons_arr.forEach(function (item) {
+										if (theDataModel[i].supid === item.value)
+											$scope.buttons_arr[item.index] = theDataModel[i];
+									});
 								}
 							}
-
-							//由于ng-bind和ng-bind-html无法解决 【\r\n】转义符换行问题，所以使用ng-repeat代替
-							// 以 “\N” 换行符作为 基准，把文本转换成数组，逐一绑定给 <p> 标签， 以达到换行的目的
-							var temp = $scope.contents_arr[0]['name'];
-							if (/\\r\\n/ig.test(temp))$scope.contents_arr[0]['name'] = $scope.contents_arr[0]['name'].replace(/\\r\\n/ig, "\\n");
-							if (/\\n\\r/ig.test(temp))$scope.contents_arr[0]['name'] = $scope.contents_arr[0]['name'].replace(/\\n\\r/ig, "\\n");
-							if (/\\r/ig.test(temp))$scope.contents_arr[0]['name'] = $scope.contents_arr[0]['name'].replace(/\\r/ig, "\\n");
-
-							$scope.contents_arr[0]['name'] = $scope.contents_arr[0]['name'].split("\\n");
-
-							tool.popShow("bombTipBox", 1);
-
-							/****************************************************************
-							 * 如果没有按钮，就说明是一个倒计时提示框，直接请求下一个提示框,按钮值为00
-							 * sendData 属性列表 : buttonIndex :提示框按钮和输入框按钮
-							 *                    inputValue :输入框的值
-							 *                    menuItemLen :菜单的选项的总长度
-							 *                    menuItemWitchWasChecked :菜单的选项的下标
-							 ****************************************************************/
-							if (!$scope.buttons_arr.length) {
-								win.devInterActive.Fun31096x({
-									menuItemWitchWasChecked: "",
-									menuItemLen: "",
-									inputValue: "",
-									buttonIndex: "00"
-								});
-							}
 						}
-							break;
-						case "03":                                                          //构造菜单内容
-						{
-							$scope.contents_arr = theDataModel;
-							$scope.buttons_arr.push({name: "退出"});
-							tool.popShow("bombMenuBox", 1);
+
+						//由于ng-bind和ng-bind-html无法解决 【\r\n】转义符换行问题，所以使用ng-repeat代替
+						// 以 “\N” 换行符作为 基准，把文本转换成数组，逐一绑定给 <p> 标签， 以达到换行的目的
+						var temp = $scope.contents_arr[0]['name'];
+						if (/\\r\\n/ig.test(temp))$scope.contents_arr[0]['name'] = $scope.contents_arr[0]['name'].replace(/\\r\\n/ig, "\\n");
+						if (/\\n\\r/ig.test(temp))$scope.contents_arr[0]['name'] = $scope.contents_arr[0]['name'].replace(/\\n\\r/ig, "\\n");
+						if (/\\r/ig.test(temp))$scope.contents_arr[0]['name'] = $scope.contents_arr[0]['name'].replace(/\\r/ig, "\\n");
+
+						$scope.contents_arr[0]['name'] = $scope.contents_arr[0]['name'].split("\\n");
+
+						tool.popShow("bombTipBox", 1);
+
+						/****************************************************************
+						 * 如果没有按钮，就说明是一个倒计时提示框，直接请求下一个提示框,按钮值为00
+						 * sendData 属性列表 : buttonIndex :提示框按钮和输入框按钮
+						 *                    inputValue :输入框的值
+						 *                    menuItemLen :菜单的选项的总长度
+						 *                    menuItemWitchWasChecked :菜单的选项的下标
+						 ****************************************************************/
+						if (!$scope.buttons_arr.length) {
+							win.devInterActive.Fun31096x({
+								menuItemWitchWasChecked: "",
+								menuItemLen: "",
+								inputValue: "",
+								buttonIndex: "00"
+							});
 						}
-							break;
-						case "04":                                                          //构造读值菜单内容
-						{
-
-							/****************************************************************
-							 *  解成{supid:"00000001",menuItemsValue:"文本内容"}的形式,
-							 *  再和响应的数据 {supid:"00000001",name:"文本内容"} 进行比对,
-							 *  最后生成 {supid:"00000001",name:"文本内容",menuItemsValue:"文本内容"} 的数据形式
-							 ****************************************************************/
-							var theDataModelLen = theDataModel.length;
-							if (menuType04 !== "03") {                                      // 如果不是组数据,就根据绑定的supid,
-								var tempArr = tool.objToArr(bindsupidWithValueForMenuType04_obj, "supid", "menuItemsValue");
-
-								for (var k = 0; k < theDataModelLen; k++) {
-									var tempArrLen = tempArr.length;
-									for (var kk = 0; kk < tempArrLen; kk++) {
-										if (theDataModel[k].supid === tempArr[kk].supid) {
-											theDataModel[k].menuItemsValue = tempArr[kk].menuItemsValue;
-											tempArr.splice(kk, 1);                          //比对完毕，就删除当前下标的值
-											break;
-										}
-									}
-								}
-
-							}
-							else {
-								/****************************************************************
-								 *  如果是组数据,就把截取的所有读值依次填入相应的项,
-								 *  如果 读值的数量>项的数量, 就忽略后面的读值;
-								 *  如果 项的数量>读值的数量, 就全部填入0;
-								 ****************************************************************/
-								for (k = 0; k < theDataModelLen; k++) {
-									theDataModel[k].menuItemsValue =
-										!!menuItemsValue_arr[k] ? menuItemsValue_arr[k] : 0;
-								}
-							}
-
-							$scope.contents_arr = theDataModel;
-							$scope.buttons_arr[0] = ({name: "退出"});
-
-							tool.popShow("bombMenuBox", 1);
-						}
-							break;
 					}
-					safeApply(function () { });
+						break;
+					case "03":                                                          //构造菜单内容
+					{
+						$scope.contents_arr = theDataModel;
+						$scope.buttons_arr.push({name: "退出"});
+						tool.popShow("bombMenuBox", 1);
+					}
+						break;
+					case "04":                                                          //构造读值菜单内容
+					{
+
+						/****************************************************************
+						 *  解成{supid:"00000001",menuItemsValue:"文本内容"}的形式,
+						 *  再和响应的数据 {supid:"00000001",name:"文本内容"} 进行比对,
+						 *  最后生成 {supid:"00000001",name:"文本内容",menuItemsValue:"文本内容"} 的数据形式
+						 ****************************************************************/
+						var theDataModelLen = theDataModel.length;
+						if (menuType04 !== "03") {                                      // 如果不是组数据,就根据绑定的supid,
+							var tempArr = tool.objToArr(bindsupidWithValueForMenuType04_obj, "supid", "menuItemsValue");
+
+							for (var k = 0; k < theDataModelLen; k++) {
+								var tempArrLen = tempArr.length;
+								for (var kk = 0; kk < tempArrLen; kk++) {
+									if (theDataModel[k].supid === tempArr[kk].supid) {
+										theDataModel[k].menuItemsValue = tempArr[kk].menuItemsValue;
+										tempArr.splice(kk, 1);                          //比对完毕，就删除当前下标的值
+										break;
+									}
+								}
+							}
+
+						}
+						else {
+							/****************************************************************
+							 *  如果是组数据,就把截取的所有读值依次填入相应的项,
+							 *  如果 读值的数量>项的数量, 就忽略后面的读值;
+							 *  如果 项的数量>读值的数量, 就全部填入0;
+							 ****************************************************************/
+							for (k = 0; k < theDataModelLen; k++) {
+								theDataModel[k].menuItemsValue =
+									!!menuItemsValue_arr[k] ? menuItemsValue_arr[k] : 0;
+							}
+						}
+
+						$scope.contents_arr = theDataModel;
+						$scope.buttons_arr[0] = ({name: "退出"});
+
+						tool.popShow("bombMenuBox", 1);
+					}
+						break;
+				}
+				safeApply(function () { });
 			} catch (e) {
 				console.log(e);
 				tool.alert('服务器数据解析出错，业务无法继续！',
@@ -478,7 +523,6 @@
 
 			tool.popShow("bombMenuBox", 0);
 		};
-
 
 		/****************************************************************
 		 *sendData 属性列表 : buttonIndex :提示框按钮和输入框按钮

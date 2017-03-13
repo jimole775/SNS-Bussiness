@@ -15,23 +15,33 @@
 
 	//数组去重方案
 	Array.prototype.unDuplicate = function (condition) {
-		var len = this.length;
-		var i = 0;
-		var j = len;
-		while (i < len) {
-			j = len - i - 1;
-			while (j > i) {
-				var perv = condition ? this[i][condition] : this[i];
-				var next = condition ? this[j][condition] : this[j];
-				if (perv === next) {
-					this.splice(j, 1);
-				}
-				j--;
-			}
-			i++;
-		}
+		//var len = this.length;
+		//var i = 0;
+		//var j = len;
+		//while (i < len) {
+		//	j = len - i - 1;
+		//	while (j > i) {
+		//		var perv = condition ? this[i][condition] : this[i];
+		//		var next = condition ? this[j][condition] : this[j];
+		//		if (perv === next) {
+		//			this.splice(j, 1);
+		//		}
+		//		j--;
+		//	}
+		//	i++;
+		//}
 
-		return this;
+		var result = [];
+		var len = this.length;
+		result.push(this[0]);
+		for (var i = 1; i < len; i++) {
+			var cur = condition ? this[i - 1][condition] : this[i - 1];
+			var next = condition ? this[i][condition] : this[i];
+			if (cur !== next) {
+				result.push(this[i]);
+			}
+		}
+		return result;
 	};
 
 	//扩展Date的format方法

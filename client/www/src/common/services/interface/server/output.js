@@ -54,14 +54,12 @@ $(document).ready(function () {
 			win.external.RequestDataFromServer(3021, JSON.stringify(pack), "");
 
 			//并且同时创建一个全局函数接受APP推送的数据,第三个参数暂时用不到!
-			if (!win.jsRecvServerData) {
 
-				//走离线的时候,APP反馈的是json数据
-				win.jsRecvServerData = function (status, json, abandonParam) {
-					var _json = /^[\{\[]/.test(json) ? JSON.parse(json) : json;
-					that.jsRecvServerData(status, _json, callback, handleBadRequest);
-				};
-			}
+			//走离线的时候,APP反馈的是json数据
+			win.jsRecvServerData = function (status, json, abandonParam) {
+				var _json = /^[\{\[]/.test(json) ? JSON.parse(json) : json;
+				that.jsRecvServerData(status, _json, callback, handleBadRequest);
+			};
 		}
 
 		console.log('toServer：serverType：', serverType, 'dataType：', dataType, 'dataPack：', JSON.stringify(dataPack));
@@ -72,9 +70,10 @@ $(document).ready(function () {
 		var _xml = null;
 
 		//如果输入是一个string,就转成document类型
-		if(typeof xml === "string"){
+		if (typeof xml === "string") {
 			_xml = win.xmlTool.string2xml(xml);
-		}else{
+		}
+		else {
 			_xml = xml;
 		}
 

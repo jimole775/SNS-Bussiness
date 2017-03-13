@@ -1,10 +1,10 @@
 /**
  * Created by Andy on 2017/2/6.
  */
-var win = window;
-
 (function () {
+	var win = window;
 	win.global.RMTID.userName = win.prompt("输入一个用户名，用于远程交互！");
+	var userName = win.global.RMTID.userName;
 	var ws = new WebSocket("ws://127.0.0.1:81");
 
 	var _drag = new Drag();
@@ -12,8 +12,11 @@ var win = window;
 	ws.onopen = function (res) {
 		console.log(res);
 		console.log("握手成功");
-		if(win.global.RMTID.userName) {
-			ws.send({uid: win.global.RMTID.userName});
+		if (userName) {
+			ws.send({
+				status: 0,
+				uid: userName
+			});
 		}
 	};
 
@@ -28,54 +31,100 @@ var win = window;
 	};
 
 	win.onbeforeunload = function () {
-		ws.send({uid: win.global.RMTID.userName, close: true});
+		console.log("关闭窗口");
+		ws.send({status: 5, uid: userName, items: {close: true}});
+	};
+
+	win.onunload=function () {
+		console.log("刷新窗口");
+		ws.send({status: 5, uid: userName, items: {close: true}});
 	};
 
 	ws.onmessage = function (res) {
 		this.tool.decodeBlob(res.data, function (data) {
 
 			if (!data) return;
-			if (data.userList) {
-				addFriend(data.userList);
-			}
-			else if (data.remoteRole) {
-				distributeRemoteRole(data.remoteRole);
-			}
-			else if (data.RMTInterActive) {
-				win.RecvRMTEventFromApp(data.RMTInterActive.remoteRole, data.RMTInterActive.funcName, data.RMTInterActive.expression);
-			}
-			else if (data.disconnect) {
 
-				$("#RMTCover").hide();
-				win.global.RMTID.role = 0;
-				tool.alert("对方已经断开连接!", function () {
-				});
-
+			switch (data.status) {
+				case 0:
+					addFriend(data.items);
+					break;
+				case 1:   //协助通道的询问
+					tool.alert(
+						["【" + data.items.helper + "】请求您协助，请做出回应！", "确定", "取消"],
+						function () {
+							ws.send({
+								status: 2,
+								uid: userName,
+								items: {
+									helper:data.items.helper,
+									asker:data.items.asker,
+									RMTResponse: true
+								}
+							});
+						},
+						function () {
+							ws.send({
+								status: 2,
+								uid: userName,
+								items: {
+									helper:data.items.helper,
+									asker:data.items.asker,
+									RMTResponse: false
+								}
+							});
+						});
+					break;
+				case 2:   //协助通道的应答
+					RMTResponse(data.items);
+					break;
+				case 3:   //远程协助交互通道
+					win.RecvRMTEventFromApp(data.items.remoteRole, data.items.funcName, data.items.expression);
+					break;
+				case 4:   //断开协助通道
+					$("#RMTCover").hide();
+					win.global.RMTID.role = 0;
+					tool.alert("对方已经断开连接!", function () {
+					});
+					break;
+				case 5:   //关闭ws
+					break;
+				case 6:
+					break;
+				case 7:
+					break;
+				default :
+					break;
 			}
 		});
 
 	};
 
-	function distributeRemoteRole(remoteRole) {
-		win.jsRecvAppData(1000, {
-			screenInfo: {screenSize: 5.5, headHeight: 60, footHeight: 60},
-			serverHost: "http://112.124.26.243:8090",
-			businessRole: remoteRole
-		}, "");
+	function RMTResponse(items) {
+		if (items.RMTResponse) {
+			win.jsRecvAppData(1000, {
+				screenInfo: {screenSize: 5.5, headHeight: 60, footHeight: 60},
+				serverHost: "http://112.124.26.243:8090",
+				businessRole: items.remoteRole
+			}, "");
+		}
+		else {
+			tool.alert("对方正在忙碌,无法给予协助!", function () {});
+		}
 	}
 
 	function encodeBlob() {
 
 	}
 
-	function addFriend(names) {
+	function addFriend(items) {
 		//当有多个用户名的时候
 		_drag.bindEvent("friendListHeader", "friendFrame", "friendListExtend");
 		var friendList = document.getElementById("friendList");
-		if (/,/g.test(names)) {
+		if (/,/g.test(items.userList)) {
 			document.getElementById("friendList").innerHTML = "";
 
-			names.split(",").forEach(function (newName) {
+			items.userList.split(",").forEach(function (newName) {
 				if (win.global.RMTID.userName === newName) return;
 				var li = document.createElement("li");
 				li.innerHTML = '<button class="item-button" style="height:3.6rem;">' + newName + '</button>';
@@ -86,47 +135,44 @@ var win = window;
 		else {
 			//当只有一个用户名的时候
 			document.getElementById("friendList").innerHTML = "";
-			if (win.global.RMTID.userName === names) return;
+			if (win.global.RMTID.userName === items.userList) return;
 			var li = document.createElement("li");
-			li.innerHTML = '<button class="item-button" style="height:3.6rem;">' + names + '</button>';
+			li.innerHTML = '<button class="item-button" style="height:3.6rem;">' + items.userList + '</button>';
 			friendList.appendChild(li);
-
 		}
 
+		//绑定点击事件
 		setTimeout(function () {
 			var lis = friendList.children;
 			Array.prototype.forEach.call(lis, function (item) {
 				item.onclick = function () {
 					tool.alert("是否请求【" + item.innerText + "】的协助！确定之后将失去控制权，直到你选择退出！",
 					           function () {
+						           tool.loading({text:"等待对方响应..."});
 						           ws.send({
-							           uid: win.global.RMTID.userName,
-							           oppositeUid: item.innerText,
-							           connectAsk: true
+							           status: 1,
+							           uid: userName,
+							           items: {
+								           helperUid: item.innerText,
+								           askerUid: userName,
+								           RMTRequest: true
+							           }
 						           });
-					           }, function () {
-						})
+					           },
+					           function () {
+					           })
 				}
 			})
 		}, 45);
 	}
 
-	//win.test_1 = function (assistantName) {
-	//	tool.alert("是否请求【" + assistantName + "】的协助！确定之后将失去控制权，直到你选择退出！",
-	//	           function () {
-	//		           ws.send({
-	//			           uid: win.global.RMTID.userName,
-	//			           oppositeUid: assistantName,
-	//			           connectAsk: true
-	//		           });
-	//	           }, function () {
-	//		})
-	//};
-
+	//模拟APP交互端口;
 	win.external.SendRMTEventToApp = function (localID, funcName, expression) {
+
 		var msg = {
-			uid: win.global.RMTID.userName,
-			RMTInterActive: {
+			status: 3,
+			uid: userName,
+			items: {
 				remoteRole: global.RMTID.role,
 				funcName: funcName,
 				expression: expression
