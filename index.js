@@ -6,6 +6,6 @@ global.HOST_DIR = __dirname + "/client/www";
 var createHttp = require("./server/http.js");
 createHttp.run();
 
-var createTcp = require("./server/socket.js");
+var createTcp = require("./server/socket/socket.js");
 createTcp.run();
 

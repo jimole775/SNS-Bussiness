@@ -108,8 +108,8 @@
                 "601",
                 0,
                 dataPack,
-                win.server.addCallbackParam(win.serverRequestCallback.specialPIDs,[dataPack]),
-                [PIDsRequest,global.disconnectOBD]
+                win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.specialPIDs,[dataPack]),
+                [PIDsRequest,global.disconnectOBD])
             );
         }
 
@@ -193,8 +193,8 @@
                 "601",
                 0,
                 dataPack,
-                win.server.addCallbackParam(win.serverRequestCallback.specialServiceList,[dataPack]),
-                [serviceListRequest,global.disconnectOBD]
+                win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.specialServiceList,[dataPack]),
+                [serviceListRequest,global.disconnectOBD])
             );
         }
 

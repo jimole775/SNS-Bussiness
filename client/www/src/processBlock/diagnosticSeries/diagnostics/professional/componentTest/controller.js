@@ -83,8 +83,8 @@
 				global.businessInfo.serverType,
 				{key: "ORGAN_TEST", cartype: global.businessInfo.carType},
 				dataPack,
-				win.server.addCallbackParam(win.serverRequestCallback[requestType], [dataPack, gRequestType]),
-				[requestData, fnBack]
+				win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback[requestType], [dataPack, gRequestType]),
+				[requestData, fnBack])
 			);
 		}
 

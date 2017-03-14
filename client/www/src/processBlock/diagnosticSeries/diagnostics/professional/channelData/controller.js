@@ -115,8 +115,8 @@
 					cartype: global.businessInfo.carType
 				},
 				dataPack,
-				win.server.addCallbackParam(win.serverRequestCallback.CHANNEL_SUPPORT, [dataPack]),
-				[getChannelSupport, tcpChannelDataBack]
+				win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.CHANNEL_SUPPORT, [dataPack]),
+				[getChannelSupport, tcpChannelDataBack])
 			);
 
 		}
@@ -162,8 +162,8 @@
 					cartype: global.businessInfo.carType
 				},
 				dataPack,
-				win.server.addCallbackParam(win.serverRequestCallback.CHANNEL_DATA, [dataPack]),
-				[null, handleBadRequest]
+				win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.CHANNEL_DATA, [dataPack]),
+				[null, handleBadRequest])
 			);
 
 		}

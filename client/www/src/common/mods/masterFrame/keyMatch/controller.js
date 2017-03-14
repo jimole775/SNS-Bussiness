@@ -190,8 +190,13 @@
 					"dbfilename": dbfilename,
 					"pub": ""
 				},
-				win.server.addCallbackParam(win.serverRequestCallback.helpMenu,[requestType, carType, dbfilename]),
-				[helpInfoRequest,backToPrvLevel]
+				win.server.addRetryFn(
+					win.server.addCallbackParam(
+						win.serverRequestCallback.helpMenu,
+						[requestType, carType, dbfilename]
+					),
+					[helpInfoRequest,backToPrvLevel]
+				)
 			);
 		}
 
@@ -314,8 +319,8 @@
 					"cartype": global.businessInfo.carType
 				},
 				DataPack,
-				win.server.addCallbackParam(win.serverRequestCallback.keyMatch,[pagesOptionChosenRecord]),
-				[requestData,backToPrvLevel]
+				win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.keyMatch,[pagesOptionChosenRecord]),
+				[requestData,backToPrvLevel])
 			);
 		}
 

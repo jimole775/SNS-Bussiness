@@ -4,8 +4,8 @@
 $(document).ready(function () {
 	var win = window;
 	win.server = win.server ? win.server : {};
-	win.server.request = function (serverType, dataType, dataPack, callback, handleBadRequest) {
-		if (global.RMTID.role == 2) return;   //控制机不需要有服务器交互行为
+	win.server.request = function (serverType, dataType, dataPack, callback) {
+		if (global.RMTID.role == 2) return;
 		var that = this;
 		var sendDataStr = JSON.stringify({
 			subURL: win.global.businessInfo.serverDst,
@@ -47,7 +47,7 @@ $(document).ready(function () {
 		var link = global.businessInfo.link;
 		//在线模式,使用AJAX请求服务器;
 		if (link.indexOf("=online&") >= 0) {
-			that.ajaxHandle(pack, callback, handleBadRequest);
+			that.ajaxHandle(pack, callback);
 		}
 		else {
 			//离线版本的服务器数据走这个通道;
@@ -58,7 +58,7 @@ $(document).ready(function () {
 			//走离线的时候,APP反馈的是json数据
 			win.jsRecvServerData = function (status, json, abandonParam) {
 				var _json = /^[\{\[]/.test(json) ? JSON.parse(json) : json;
-				that.jsRecvServerData(status, _json, callback, handleBadRequest);
+				that.jsRecvServerData(status, _json, callback);
 			};
 		}
 
@@ -90,7 +90,12 @@ $(document).ready(function () {
 		return func;
 	};
 
-	win.server.ajaxHandle = function (pack, callback, handleBadRequest) {
+	win.server.addRetryFn = function (func, ary) {
+		func.retryFn = ary;
+		return func;
+	};
+
+	win.server.ajaxHandle = function (pack, callback) {
 		var that = this;
 		var ajaxInstance = $.ajax({
 			type: "POST",
@@ -103,14 +108,14 @@ $(document).ready(function () {
 				switch (status) {
 					case "success":
 						var xml = XMLHttpRequest.responseXML;
-						that.jsRecvServerData("success", that.analyzeXml(xml), callback, handleBadRequest);
+						that.jsRecvServerData("success", that.analyzeXml(xml), callback);
 						break;
 					case "timeout":
 						ajaxInstance.abort();
-						that.jsRecvServerData("timeout", "服务器请求超时", callback, handleBadRequest);
+						that.jsRecvServerData("timeout", "服务器请求超时", callback);
 						break;
 					case "error":
-						that.jsRecvServerData("error", "服务器请求失败", callback, handleBadRequest);
+						that.jsRecvServerData("error", "服务器请求失败", callback);
 						console.log('http请求失败:', XMLHttpRequest);
 						break;
 				}

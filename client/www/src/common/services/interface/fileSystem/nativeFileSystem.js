@@ -2,7 +2,7 @@
  * Created by Andy on 2016/8/19.
  */
 (function () {
-	document.getElementById("processBlock").innerHTML += [
+	document.body.innerHTML += [
 		'<div id="fileSelect" class="data-box">',
 		'   <header class="scroll-table-header">',
 		'       <h1 class="box-title" style="text-indent: 0"><span id="fileSelectType">FA/SVT</span>文件选择 <em style="display:none" id="lastBoxId"></em></h1>',
@@ -380,7 +380,7 @@
 		tool.warnTip ("fileTip", "");
 		tool.warnTip ("fileNameTip", "");
 	}
-	/*function fun3029(option) {
+	function fun3029(option) {
 		try {
 			var type = "[" + $("#fileSelectType").html() + "]";
 			var code = $("input[name='codeRaido']:checked").val();
@@ -389,61 +389,61 @@
 				if (type == "[FA]" || type == "[SVT]") {
 					var fileInfo = $("input[name='fileRadio']:checked").val();
 					if (fileInfo == undefined || fileInfo == null) {
-						tool.showTip("fileNameTip", "请选择对应的" + type + "文件");
+						tool.warnTip("fileNameTip", "请选择对应的" + type + "文件");
 						return;
 					} else {
-						tool.showTip("fileNameTip", "");
+						tool.warnTip("fileNameTip", "");
 					}
 					fileName = fileInfo.split(",")[0];
 					if (fileName == undefined || fileName == null) {
-						tool.showTip("fileNameTip", "请选择对应的" + type + "文件");
+						tool.warnTip("fileNameTip", "请选择对应的" + type + "文件");
 						return;
 					} else {
-						tool.showTip("fileNameTip", "");
+						tool.warnTip("fileNameTip", "");
 					}
 				}
 				//恢复设码的处理，计算MD5，然后调用APP接口缓存文件名
 				if (code == "04") {
 					gFileNameSizeMap = {}; //每次选择前重置
 					//调用接口计算MD5
-					//tool.SendDataToApp(3028, '{"Data":"'+fileName+'", "Type":"file"}', "3028");
+					//win.sendDataToApp(3028, '{"Data":"'+fileName+'", "Type":"file"}', "3028");
 					var key = "";
 					var paramArr = "";
 					try {
 						$("#fileList").find('input[name="fileRadio"]:checked').each(function (index) {
-							paramArr += '{"Data":"' + gCurdir + "/" + $(this).val().split(",")[0] + '","Type":"file"},';
+							paramArr += '{"Data":"' + gCurDir_String + "/" + $(this).val().split(",")[0] + '","Type":"file"},';
 							//TEST
-							gFileNameSizeMap[gCurdir + "/" + $(this).val().split(",")[0]] = tool.toHex($(this).val().split(",")[1], 8);
+							gFileNameSizeMap[gCurDir_String + "/" + $(this).val().split(",")[0]] = tool.toHex($(this).val().split(",")[1], 8);
 						});
 					} catch (e) {
-						tool.showTip("fileNameTip", "请选择对应的" + type + "文件");
+						tool.warnTip("fileNameTip", "请选择对应的" + type + "文件");
 						return;
 					}
 					if (paramArr == "") {
-						tool.showTip("fileNameTip", "请选择对应的" + type + "文件");
+						tool.warnTip("fileNameTip", "请选择对应的" + type + "文件");
 						return;
 					} else {
-						tool.showTip("fileNameTip", "");
+						tool.warnTip("fileNameTip", "");
 					}
 					paramArr = '[' + paramArr.substr(0, paramArr.length - 1) + ']';
 					//批量计算MD5
-					tool.SendDataToApp(3028, '{"Data":"","Type":"","arrays":' + paramArr + '}', "3028");
-					tool.ShowOrHide("fileSelect", 0);
+					win.appService.sendDataToApp(3028, '{"Data":"","Type":"","arrays":' + paramArr + '}', "3028");
+					tool.layout("fileSelect", 0);
 					return;
 				}
 				//把文件名发给APP，然后上传到服务器，回调里响应设备
-				fileName = gCurdir + "/" + fileName;
+				fileName = gCurDir_String + "/" + fileName;
 				//数据源，FFFF(客户端软件日志),0000(预留),0001(日志文件),0002(防盗数据文件),0003(EEPROM文件),0004(FLASH文件),0005(设码数据文件),0006(编程文件)
-				tool.SendDataToApp(3032, '{"file":"' + fileName + '", "type":"0006"}', "3032");
+				win.appService.sendDataToApp(3032, '{"file":"' + fileName + '", "type":"0006"}', "3032");
 				tool.log("正在上传" + type + "文件");
 				tool.processBar("正在上传" + type + "文件");
 			}
 			if (option == "02") {
-				tool.showTip("fileNameTip", "");
+				tool.warnTip("fileNameTip", "");
 				//恢复设码
 				if (code == "04") {
-					tool.ShowOrHide("fileSelect", 0);
-					tool.ShowOrHide("codeType", 1);
+					tool.layout("fileSelect", 0);
+					tool.layout("codeType", 1);
 					return;
 				}
 				if (type == "[FA]") {
@@ -454,9 +454,9 @@
 				}
 				$("#fileList").html(""); //返回后清空
 			}
-			tool.ShowOrHide("fileSelect", 0);
+			tool.layout("fileSelect", 0);
 		} catch (e) {
 			//alert(e.message);
 		}
-	}*/
+	}
 }) ();

@@ -3,7 +3,6 @@
  */
 (function () {
 
-	var win = window;
 	var doc = document;
 	doc.body.innerHTML += [
 		'<!-- 中心加载动画 -->',

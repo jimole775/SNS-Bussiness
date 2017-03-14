@@ -104,8 +104,8 @@
 					cartype: global.businessInfo.carType
 				},
 				dataPack,
-				win.server.addCallbackParam(win.serverRequestCallback.BASE_ADJUST_SUPPORT, [dataPack]),
-				[getBaseAdjustSupport, tcpBaseAdjusterBack]
+				win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.BASE_ADJUST_SUPPORT, [dataPack]),
+				[getBaseAdjustSupport, tcpBaseAdjusterBack])
 			);
 		}
 
@@ -146,8 +146,8 @@
 					cartype: global.businessInfo.carType
 				},
 				dataPack,
-				win.server.addCallbackParam(win.serverRequestCallback.BASE_ADJUST, [dataPack]),
-				[null, handleBadRequest]
+				win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.BASE_ADJUST, [dataPack]),
+				[null, handleBadRequest])
 			);
 
 		}

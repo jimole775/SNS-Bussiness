@@ -148,8 +148,8 @@
 			BMWF18ServerType,
 			0,
 			gCarTypeInfo,
-			win.server.addCallbackParam(win.serverRequestCallback.showPersonalizeModule, [gCarTypeInfo]),
-			[requestSetCodeModule, quitBusiness]
+			win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.showPersonalizeModule, [gCarTypeInfo]),
+			[requestSetCodeModule, quitBusiness])
 		);
 	}
 
@@ -507,8 +507,8 @@
 			BMWF18ServerType,
 			1,
 			dataPack,
-			win.server.addCallbackParam(win.serverRequestCallback.bindFunctionSetData, [dataPack]),
-			[SendDevFileNameToServer, quitBusiness]
+			win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.bindFunctionSetData, [dataPack]),
+			[SendDevFileNameToServer, quitBusiness])
 		);
 	}
 

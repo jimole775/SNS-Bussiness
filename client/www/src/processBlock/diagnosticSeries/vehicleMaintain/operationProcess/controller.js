@@ -266,8 +266,8 @@
 				600,
 				0,
 				dataPack,
-				win.server.addCallbackParam(win.serverRequestCallback.bindingViewFromServer, [cacheSupidsForbadRequest_arr]),
-				[FunGetSupidDataFromServer, global.disconnectOBD]
+				win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.bindingViewFromServer, [cacheSupidsForbadRequest_arr]),
+					[FunGetSupidDataFromServer, global.disconnectOBD])
 			);
 
 			dataPack.supids.length = 0;

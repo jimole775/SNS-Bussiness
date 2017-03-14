@@ -113,8 +113,8 @@
                 cartype: global.businessInfo.carType
             },
                 dataPack,
-                win.server.addCallbackParam (win.serverRequestCallback.CALC_VER_SUPPORT,[dataPack]),
-                [getVersionInfoSurpports,computerVerBack]
+                win.server.addRetryFn(win.server.addCallbackParam (win.serverRequestCallback.CALC_VER_SUPPORT,[dataPack]),
+                [getVersionInfoSurpports,computerVerBack])
             );
         }
 
@@ -203,8 +203,8 @@
                 cartype: global.businessInfo.carType
             },
                 dataPack,
-                win.server.addCallbackParam (win.serverRequestCallback.CALC_VER, [dataPack]),
-                [getVersionInfoValue,computerVerBack]
+                win.server.addRetryFn(win.server.addCallbackParam (win.serverRequestCallback.CALC_VER, [dataPack]),
+                [getVersionInfoValue,computerVerBack])
             );
         }
 

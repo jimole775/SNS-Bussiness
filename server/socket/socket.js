@@ -12,35 +12,8 @@
 
 	var namesMap = [];
 
-	var emitProtocolMap = {
-		status: 0,
-		uid: null,
-		items: {
-			remoteRole: null,
-			RMTInterActive: null,
-			userList: null,
-			disconnect: false,
-			close: false,
-			answer: null,
-			oppositeUid: null,
-			connectAsk: false
-		}
+	global.WebSocket = function WebSocket() {
 	};
-
-	//var recvProtocolMap = {
-	//status:0,
-	//    uid: win.global.businessInfo.userName,
-	//    items:{
-	//        oppositeUid: null,
-	//        close: false,
-	//        ask: false,
-	//        disconnect: false
-	//}
-	//};
-
-
-	function WebSocket() {
-	}
 
 	WebSocket.prototype.init = function () {
 
@@ -128,7 +101,6 @@
 		this.send(
 			helper,
 			1,
-			data.items.helperUid,
 			{
 				helper: data.items.helperUid,
 				RMTResponse: data.items.RMTResponse
@@ -147,7 +119,6 @@
 			this.send(
 				asker,
 				2,
-				data.uid,
 				{
 					RMTResponse: data.items.RMTResponse
 				}
@@ -179,18 +150,18 @@
 			helper: {uid: data.items.helper, session: helper}
 		});
 
-		that.send(asker, 2, data.uid, {remoteRole: 1});
-		that.send(helper, 2, data.items.helper, {remoteRole: 2});
+		that.send(asker, 2, {remoteRole: 1});
+		that.send(helper, 2, {remoteRole: 2});
 	};
 
 	WebSocket.prototype.RMTInterActive = function (data) {
 		var that = this;
 		var map = that.tool.getChanelSession(data.uid);
 		if (data.items.remoteRole == 1) {
-			that.send(map.helper, 3, data.uid, data.items);
+			that.send(map.helper, 3, data.items);
 		}
 		else if (data.items.remoteRole == 2) {
-			that.send(map.asker, 3, data.uid, data.items);
+			that.send(map.asker, 3,  data.items);
 		}
 	};
 
@@ -212,7 +183,7 @@
 		});
 
 		clients.forEach(function (item, index) {
-			that.send(item.session, 0, item.uid, {userList: namesMap.join(",")});
+			that.send(item.session, 0,{userList: namesMap.join(",")});
 		});
 	};
 
@@ -225,19 +196,18 @@
 			if (item.asker.uid == data.uid || item.helper.uid == data.uid) {
 				asker = item.asker.session;
 				helper = item.helper.session;
-				that.send(asker, 4, item.asker.uid, {disconnect: true});
-				that.send(helper, 4, item.helper.uid, {disconnect: true});
+				that.send(asker, 4, {disconnect: true});
+				that.send(helper, 4, {disconnect: true});
 				chanelMap.splice(index, 1);   //删除远程会话通道
 			}
 		});
 
 	};
 
-	WebSocket.prototype.send = function (socket, status, uid, data) {
+	WebSocket.prototype.send = function (socket, status, data) {
 		var that = this;
 		var emitProtocolMap = {
 			status: status,
-			uid: uid,
 			items: data
 		};
 
@@ -285,7 +255,7 @@
 
 		//向所有的用户推送用户名
 		clients.forEach(function (item, index) {
-			that.send(item.session, 0, item.uid, {userList: namesMap.join(",")});
+			that.send(item.session, 0, {userList: namesMap.join(",")});
 		});
 	};
 
@@ -341,6 +311,6 @@
 		return result;
 	}
 
-	module.exports = new WebSocket();
+	module.exports = WebSocket;
 
 })();

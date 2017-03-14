@@ -239,7 +239,7 @@
 			win.server.request(global.businessInfo.serverType, {
 				key: "CTYPE",
 				cartype: global.businessInfo.carType
-			}, DataPack, callback, handleBadRequest);
+			}, DataPack, win.server.addRetryFn(callback, handleBadRequest));
 		}
 
 

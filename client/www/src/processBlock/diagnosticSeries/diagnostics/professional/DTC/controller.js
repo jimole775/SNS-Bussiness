@@ -167,8 +167,8 @@
                 cartype: global.businessInfo.carType
             },
                 DataPack,
-                win.server.addCallbackParam (win.serverRequestCallback.DTC_pro, [varType]),
-                [win.moduleEntry.funReadDTC,function(){}]
+                win.server.addRetryFn(win.server.addCallbackParam (win.serverRequestCallback.DTC_pro, [varType]),
+                [win.moduleEntry.funReadDTC,function(){}])
             );
 
             requestTimes ++;

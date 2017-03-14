@@ -163,7 +163,6 @@ $(document).ready(function () {
 			strShowMsg = '设备检查失败';
 		}
 
-		//tool.processBar(strShowMsg);
 		tool.log(strShowMsg);
 	};
 

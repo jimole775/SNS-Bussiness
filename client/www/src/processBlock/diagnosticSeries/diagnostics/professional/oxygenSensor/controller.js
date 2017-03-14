@@ -90,8 +90,8 @@
 					cartype: global.businessInfo.carType
 				},
 				dataPack,
-				win.server.addCallbackParam(win.serverRequestCallback.EGOS_GROUP, [dataPack]),
-				[getGroupFromServer, oxygenIsBtnDisable]
+				win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.EGOS_GROUP, [dataPack]),
+				[getGroupFromServer, oxygenIsBtnDisable])
 			);
 		}
 
@@ -150,8 +150,8 @@
 					cartype: global.businessInfo.carType
 				},
 				dataPack,
-				win.server.addCallbackParam(win.serverRequestCallback.EGOS_SUPPORT, [dataPack]),
-				[getSupportsFromServer, oxygenIsBtnDisable]
+				win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.EGOS_SUPPORT, [dataPack]),
+				[getSupportsFromServer, oxygenIsBtnDisable])
 			);
 		}
 
@@ -272,8 +272,8 @@
 					cartype: global.businessInfo.carType
 				},
 				DataPack,
-				win.server.addCallbackParam(win.serverRequestCallback.EGOS_RESULT, [DataPack]),
-				[FunCalculateOxygenSensorResult, oxygenIsBtnDisable]
+				win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.EGOS_RESULT, [DataPack]),
+				[FunCalculateOxygenSensorResult, oxygenIsBtnDisable])
 			);
 		}
 

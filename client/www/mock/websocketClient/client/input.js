@@ -13,10 +13,7 @@
 		console.log(res);
 		console.log("握手成功");
 		if (userName) {
-			ws.send({
-				status: 0,
-				uid: userName
-			});
+			ws.send(0);
 		}
 	};
 
@@ -32,12 +29,12 @@
 
 	win.onbeforeunload = function () {
 		console.log("关闭窗口");
-		ws.send({status: 5, uid: userName, items: {close: true}});
+		ws.send(5);
 	};
 
-	win.onunload=function () {
+	win.onunload = function () {
 		console.log("刷新窗口");
-		ws.send({status: 5, uid: userName, items: {close: true}});
+		ws.send(5);
 	};
 
 	ws.onmessage = function (res) {
@@ -53,26 +50,10 @@
 					tool.alert(
 						["【" + data.items.helper + "】请求您协助，请做出回应！", "确定", "取消"],
 						function () {
-							ws.send({
-								status: 2,
-								uid: userName,
-								items: {
-									helper:data.items.helper,
-									asker:data.items.asker,
-									RMTResponse: true
-								}
-							});
+							ws.send(2, data.items.helper, data.items.asker, true);
 						},
 						function () {
-							ws.send({
-								status: 2,
-								uid: userName,
-								items: {
-									helper:data.items.helper,
-									asker:data.items.asker,
-									RMTResponse: false
-								}
-							});
+							ws.send(2, data.items.helper, data.items.asker, false);
 						});
 					break;
 				case 2:   //协助通道的应答
@@ -101,6 +82,7 @@
 	};
 
 	function RMTResponse(items) {
+		tool.loading(0);
 		if (items.RMTResponse) {
 			win.jsRecvAppData(1000, {
 				screenInfo: {screenSize: 5.5, headHeight: 60, footHeight: 60},
@@ -148,16 +130,8 @@
 				item.onclick = function () {
 					tool.alert("是否请求【" + item.innerText + "】的协助！确定之后将失去控制权，直到你选择退出！",
 					           function () {
-						           tool.loading({text:"等待对方响应..."});
-						           ws.send({
-							           status: 1,
-							           uid: userName,
-							           items: {
-								           helperUid: item.innerText,
-								           askerUid: userName,
-								           RMTRequest: true
-							           }
-						           });
+						           tool.loading({text: "等待对方响应..."});
+						           ws.send(1, item.innerText, userName, true);
 					           },
 					           function () {
 					           })
@@ -169,17 +143,7 @@
 	//模拟APP交互端口;
 	win.external.SendRMTEventToApp = function (localID, funcName, expression) {
 
-		var msg = {
-			status: 3,
-			uid: userName,
-			items: {
-				remoteRole: global.RMTID.role,
-				funcName: funcName,
-				expression: expression
-			}
-		};
-
-		ws.send(msg);
+		ws.send(3, global.RMTID.role, funcName, expression);
 
 	};
 

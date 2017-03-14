@@ -78,8 +78,8 @@
 					cartype: global.businessInfo.carType
 				},
 				dataPack,
-				win.server.addCallbackParam(win.serverRequestCallback.SYS, [dataPack]),
-				[null,handleBadRequest]
+				win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.SYS, [dataPack]),
+				[null,handleBadRequest])
 			);
 		}
 

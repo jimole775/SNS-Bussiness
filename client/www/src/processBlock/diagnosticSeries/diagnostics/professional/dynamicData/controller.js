@@ -129,8 +129,8 @@
 					cartype: global.businessInfo.carType
 				},
 				dataPack,
-				win.server.addCallbackParam(win.serverRequestCallback.CALC_ONE_GROUP, [dataPack]),
-				[FunGetGroup, dynamicBtn_Confirm_Assist_Back]
+				win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.CALC_ONE_GROUP, [dataPack]),
+				[FunGetGroup, dynamicBtn_Confirm_Assist_Back])
 			);
 		}
 
@@ -219,8 +219,8 @@
 						cartype: global.businessInfo.carType
 					},
 					dataPack,
-					win.server.addCallbackParam(win.serverRequestCallback.CALC_ONE_PID, [dataPack]),
-					[FunGetPid, dynamicBtn_Assist_Back]
+					win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.CALC_ONE_PID, [dataPack]),
+					[FunGetPid, dynamicBtn_Assist_Back])
 				);
 
 				//win.RequestDataFromServer(
@@ -353,8 +353,8 @@
 					cartype: global.businessInfo.carType
 				},
 				dataPack,
-				win.server.addCallbackParam(win.serverRequestCallback.CALC_ONE_SUPPORT, [dataPack]),
-				[FunGetSupportsFromServer, dynamicBtn_Confirm_Assist_Back]
+				win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.CALC_ONE_SUPPORT, [dataPack]),
+				[FunGetSupportsFromServer, dynamicBtn_Confirm_Assist_Back])
 			);
 
 		}
@@ -619,8 +619,8 @@
 					cartype: global.businessInfo.carType
 				},
 				dataPack,
-				win.server.addCallbackParam(win.serverRequestCallback.CALC_ONE_ANS, [param]),
-				[null, handleBadRequest]
+				win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.CALC_ONE_ANS, [param]),
+				[null, handleBadRequest])
 			)
 
 		}

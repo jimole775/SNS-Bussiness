@@ -575,8 +575,8 @@
 					cartype: global.businessInfo.carType
 				},
 				DataPack,
-				win.server.addCallbackParam(win.serverRequestCallback.DTC_simple, [markParams]),
-				[null,handleBadRequest]
+				win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.DTC_simple, [markParams]),
+				[null,handleBadRequest])
 			);
 		}
 

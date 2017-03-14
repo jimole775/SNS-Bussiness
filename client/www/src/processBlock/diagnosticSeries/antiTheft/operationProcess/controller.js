@@ -258,6 +258,7 @@
 					break;
 				case "02":
 					//sendFileToDevFromApp();
+					win.appService.sendDataToApp(3029, JSON.stringify({"ope":0}), win.serverRequestCallback.requestDir);
 					break;
 				case "03":
 					//sendFileToDevFromServer();
@@ -275,7 +276,6 @@
 					break;
 			}
 		}
-
 
 		/****************************************************************
 		 * 从服务器获取supid匹配的内容
@@ -299,8 +299,8 @@
 					"cartype": global.businessInfo.carType
 				},
 				dataPack,
-				win.server.addCallbackParam(win.serverRequestCallback.bindingATViewFromServer, [supids]),
-				[FunGetsupidDataFromServer, global.disconnectOBD]
+				win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.bindingATViewFromServer, [supids]),
+				[FunGetsupidDataFromServer, global.disconnectOBD])
 			);
 
 			dataPack.supids.length = 0;

@@ -88,8 +88,8 @@
 					cartype: global.businessInfo.carType
 				},
 				dataPack,
-				win.server.addCallbackParam(win.serverRequestCallback.FREEZE_DTC, [dataPack]),
-				[getFreezeFrameDtc, freezeFrameIsBtnDisable]
+				win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.FREEZE_DTC, [dataPack]),
+				[getFreezeFrameDtc, freezeFrameIsBtnDisable])
 			);
 
 		}
@@ -174,8 +174,8 @@
 					cartype: global.businessInfo.carType
 				},
 				dataPack,
-				win.server.addCallbackParam(win.serverRequestCallback.FREEZE_PAKID, [dataPack]),
-				[getFreezeFramePakid, freezeFrameIsBtnDisable]
+				win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.FREEZE_PAKID, [dataPack]),
+				[getFreezeFramePakid, freezeFrameIsBtnDisable])
 			);
 		}
 
@@ -229,8 +229,8 @@
 					cartype: global.businessInfo.carType
 				},
 				dataPack,
-				win.server.addCallbackParam(win.serverRequestCallback.FREEZE_SUPPORT, [dataPack]),
-				[getFreezeFrameSupport, freezeFrameIsBtnDisable]
+				win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.FREEZE_SUPPORT, [dataPack]),
+				[getFreezeFrameSupport, freezeFrameIsBtnDisable])
 			);
 		}
 
@@ -432,8 +432,8 @@
 					cartype: global.businessInfo.carType
 				},
 				dataPack,
-				win.server.addCallbackParam(win.serverRequestCallback.FREEZE_RESULT, [dataPack]),
-				[getFreezeFrameValue, function () {}]
+				win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.FREEZE_RESULT, [dataPack]),
+				[getFreezeFrameValue, function () {}])
 			);
 		}
 

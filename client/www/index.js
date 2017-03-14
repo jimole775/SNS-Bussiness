@@ -74,7 +74,7 @@
 
 	var programScripts = {};
 	programScripts["_公共"] = [
-		"src/common/interface/fileSystem/nativeFileSystem.js"
+		//"src/common/interface/fileSystem/nativeFileSystem.js"
 	];
 
 	programScripts["_编程"] = [

@@ -112,8 +112,8 @@
 					"cartype": global.businessInfo.carType
 				},
 				dataPack,
-				win.server.addCallbackParam(win.serverRequestCallback.specialPIDs, [dataPack]),
-				[PIDsRequest, global.disconnectOBD]
+				win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.specialPIDs, [dataPack]),
+				[PIDsRequest, global.disconnectOBD])
 			);
 		}
 
@@ -199,8 +199,8 @@
 					"cartype": global.businessInfo.carType
 				},
 				dataPack,
-				win.server.addCallbackParam(win.serverRequestCallback.ATServiceList, [dataPack]),
-				[serviceListRequest, global.disconnectOBD]
+				win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.ATServiceList, [dataPack]),
+				[serviceListRequest, global.disconnectOBD])
 			);
 		}
 

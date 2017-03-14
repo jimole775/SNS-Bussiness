@@ -253,8 +253,8 @@
 				600,
 				0,
 				dataPack,
-				win.server.addCallbackParam(win.serverRequestCallback.bindingViewFromServer,[cachesupidsForbadRequest_arr]),
-			    [FunGetsupidDataFromServer,global.disconnectOBD]
+				win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.bindingViewFromServer,[cachesupidsForbadRequest_arr]),
+			    [FunGetsupidDataFromServer,global.disconnectOBD])
 			);
 
 			dataPack.supids.length = 0;
