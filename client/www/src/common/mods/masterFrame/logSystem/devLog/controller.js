@@ -11,7 +11,7 @@
 			document.getElementById ("Title").innerText = "流程记录";
 			document.getElementById ("ShowMessage").style.display = "block";
 			devMessagesBindBtn ();
-			tool.layoutBottomBtn("ShowMessage");
+			//tool.layoutBottomBtn("ShowMessage");
 		};
 
 

@@ -147,7 +147,6 @@ var temp5 = [
 
 	'<p class="box-p"><span class="box-tip">恢复设码：</span>恢复车辆备份的原始设码数据，如车辆出现异常可使用。</p>',
 
-	'<div id="codeTypeTip"></div>',
 	'</div>',
 	'<div class="scroll-table-body">',
 	'<table>',
@@ -212,7 +211,6 @@ var temp6 = [
 
 	'<p class="box-warn">设码存在一定风险可能会导致模块损坏（异常）或者车辆无法启动，是否继续设码？</p>',
 
-	'<p class="box-warn" id="programTip"></p>',
 	'</div>',
 	'<div class="scroll-table-body">',
 	'<table id="moduleInfosSelect">',
@@ -310,7 +308,6 @@ var temp9 = [
 	'<p class="box-p">',
 	'<label><input type="text" id="funInput"></label>',
 	'</p>',
-	'<div id="funInputTip"></div>',
 	'<div id="editTip"></div>',
 	'</div>',
 	//'<div class="scroll-table-footer">',

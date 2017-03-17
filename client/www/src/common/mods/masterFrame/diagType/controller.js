@@ -19,6 +19,7 @@
 				//}
 		];
 
+
 		win.moduleEntry.diagType = function(support){
 			if(support && support != -1){
 				safeApply(function(){

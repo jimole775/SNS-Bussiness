@@ -317,7 +317,7 @@
 	'<p class="box-p" data-id="resBtn">请输入零件编号：</p>'+
 	'<hr/>'+
 	'<p class="box-p"><label><input type="text" id="inputPartNum_A061" maxlength=17 size="28"/></label></p>'+
-	'<div id="tipPartNum"></div>'+
+
 	'</div>'+
 
 	'<div class="bottom-bar-button-box">'+

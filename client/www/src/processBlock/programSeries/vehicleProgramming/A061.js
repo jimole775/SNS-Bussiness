@@ -540,7 +540,7 @@
 				var jsonData = recvData;
 
 				if (jsonData.length <= 0) {
-					tool.warnTip("tipPartNum", "输入的零件号不存在，请检查输入是否正确");
+					tool.warnTip("#inputPartNum_A061", "输入的零件号不存在，请检查输入是否正确");
 					tool.popShow("partNum_A061", 1);		//查不到则返回
 					return;
 				}
@@ -1676,11 +1676,8 @@
 		var data = $("#inputPartNum_A061").val();
 
 		if (data == null || data == undefined || data.length != 7) {
-			tool.warnTip("tipPartNum", "请输入7位零件号!");
+			tool.warnTip("#inputPartNum_A061", "请输入7位零件号!");
 			return;
-		}
-		else {
-			tool.warnTip("tipPartNum", "");
 		}
 		data = getBse64Encode(data);   //编码
 

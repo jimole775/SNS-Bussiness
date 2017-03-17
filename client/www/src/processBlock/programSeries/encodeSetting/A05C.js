@@ -823,10 +823,8 @@
             var code = inputChecked.value;
             //var code = $("input[name='codeRadio']:checked").val();
             if (code == undefined || code == null) {
-                tool.warnTip("codeTypeTip", "*请选择设码方式");
+                tool.warnTip("#codeRadio01", "*请选择设码方式");
                 return;
-            } else {
-                tool.warnTip("codeTypeTip", "");
             }
             var t = {
                 "01": "原车设码",
@@ -934,13 +932,12 @@
             }
 
             if (!count) {
-                tool.warnTip("programTip", "*请选择要编程的模块");
+                tool.warnTip(checkboxs, "*请选择要编程的模块");
                 tool.layoutTable();
                 return;
             }
 
             tool.layout("moduleSelect", 0);
-            tool.warnTip("programTip", "");
             tool.layoutTable();
 
             tool.loading({text: "数据交互中..."});
@@ -1088,7 +1085,7 @@
                 var key = keyDetails + "," + $("#functionEditTitle").html();
                 gEditDatas[key] = $("#funInput").val();
                 gEditDataId[key] = '"start":"' + $("#start").html() + '","end":"' + $("#end").html() + '","mask":"' + $("#mask").html() + '"';
-                tool.warnTip("funInputTip", "");
+
                 //修改选项跟着改变
                 var selectIndex = $('#funSelect option').index($('#funSelect option:selected')); //$('#funSelect').prop('selectedIndex');//$('#funSelect').find('option:selected').selectedIndex;
                 if (gDetails[keyDetails][selectIndex].check != "true") {
@@ -1100,7 +1097,7 @@
                 }
                 gDetails[keyDetails][selectIndex].check = "true";
             } else {
-                tool.warnTip("funInputTip", "请输入范围内的值");
+                tool.warnTip("#funInput", "请输入范围内的值");
                 return;
             }
 

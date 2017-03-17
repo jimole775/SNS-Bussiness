@@ -118,17 +118,17 @@ $(document).ready(function () {
 		var cmdStr = varRecvData.substr(0, 6);
 		var _func = "";
 		switch (cmdStr) {
-			case "710901":
-			case "710905":
-			case "710906":
-			case "710914":
-			case "710981":
-			case "710985":
-			case "710986":
-			case "710994":
-			case "710902":
-			case "710982":
-			case "710907":
+			case "710901": 	//连接OBD系统
+			case "710905":	//故障码
+			case "710906":	//故障码
+			case "710914":	//故障码
+			case "710981":	//连接OBD失败
+			case "710985":	//故障码失败
+			case "710986":	//故障码失败
+			case "710994":	//故障码失败
+			case "710902":	//断开OBD系统
+			case "710982":	//断开失败
+			case "710907":	//车辆系统模块细节
 			case "710987":  //诊断的指令区分:710901_pro 710901_simp
 				if (global.businessInfo.diagType) {_func = "Fun" + cmdStr + "_" + global.businessInfo.diagType;}
 				else { _func = "Fun" + cmdStr }

@@ -118,8 +118,9 @@ $ (document).ready (function () {
 			})());
 
 			document.getElementById("ShowMessage").style.display = "block";
-			document.getElementById("bottomButton").style.width = "0";
-			document.getElementById("footer").style.width = "100%";
+			//document.getElementById("bottomButton").style.width = "0";
+			//document.getElementById("footer").style.width = "100%";
+			tool.bottomBtn(0);
 		}
 
 		if (/主程序版本/g.test (recvData)) {                                         //截取主程序版本信息；
@@ -187,9 +188,9 @@ $ (document).ready (function () {
 		else docEl.style.fontSize = '50%';
 
 		//根据项目需求，头部和脚部高度需要和APP首页相同
-		$(".title")[0].style.height = json.screenInfo.headHeight + "px";
-		$("#footer")[0].style.height = json.screenInfo.footHeight + "px";
-		$("#bottomButton")[0].style.height = json.screenInfo.footHeight + "px";
+		document.getElementById("headBar").style.height = json.screenInfo.headHeight + "px";
+		document.getElementById("footer").style.height = json.screenInfo.footHeight + "px";
+		document.getElementById("bottomButton").style.height = json.screenInfo.footHeight + "px";
 
 		setTimeout(function(){
 			tool.layoutTable(); //重新计算页面的布局,会导致页面重绘

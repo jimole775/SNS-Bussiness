@@ -306,7 +306,6 @@
 				//var flag = recvData;
 				//todo 处理不同类型的ajax数据类型
 				if (recvData == {blean:"true"}) {
-					tool.warnTip ("moduleInputTip", "");
 					var input = $ ("#moduleInput").val ().toUpperCase ();
 
 					//将文件插入列表
@@ -340,7 +339,7 @@
 					tool.popShow ("addModule", 0);
 				}
 				else {
-					tool.warnTip ("moduleInputTip", "文件不存在");
+					tool.warnTip ("#moduleInput", "文件不存在");
 				}
 
 			//}
@@ -882,9 +881,9 @@
 
 			var count = 0;
 			var nSGBMIDs = "";
-			$ ("#moduleInfosSelect")
-				.find ('input[type="checkbox"]')
-				.each (function (index) {
+			var checkboxs =
+			$ ("#moduleInfosSelect").find ('input[type="checkbox"]');
+			checkboxs.each (function (index) {
 				if ($ (this).is (':checked')) {
 					nSGBMIDs += versionToSgbmidForOne ($ (this).val ());
 					count++;
@@ -892,12 +891,11 @@
 			});
 
 			if (!count) {
-				tool.warnTip ("programTip", "*请选择要编程的模块");
+				tool.warnTip (checkboxs, "*请选择要编程的模块");
 				tool.layoutTable ();
 				return;
 			}
 
-			tool.warnTip ("programTip", "");
 			tool.layoutTable ();
 			tool.layout ("moduleSelect", 0);
 			var command = "71053601" + tool.toHex (count, 4) + nSGBMIDs;
@@ -1020,7 +1018,7 @@
 			//1、验证格式（每一段长度暂时不检查），2、调接口验证是否存在  xxxx_xxxxxxxx_xxx_xxx_xxx
 			var input = $ ("#moduleInput").val ();
 			if (input.length != 25 || input.split ("_").length != 5) {
-				tool.warnTip ("moduleInputTip", "输入格式不正确，请检查！");
+				tool.warnTip ("#moduleInput", "输入格式不正确，请检查！");
 				return;
 			}
 			else {
@@ -1029,7 +1027,7 @@
 
 				$ ("#moduleInfosSelect").find ('input[type="checkbox"]').each (function (index) {
 					if (input.toUpperCase () == $ (this).val ()) {
-						tool.warnTip ("moduleInputTip", "文件已存在");
+						tool.warnTip ("#moduleInput", "文件已存在");
 						flag = true;
 						return false;	//只是跳出循环
 					}
@@ -1037,7 +1035,6 @@
 				if (flag) {
 					return;
 				}
-				tool.warnTip ("moduleInputTip", "");
 			}
 
 			var input_checked = tool.getCheckedElement ("dbOption");
@@ -1057,7 +1054,6 @@
 			win.server.request(17,6,{DataPack:data},win.serverRequestCallback.checkModule_A040)
 		}
 		if (option == "02") {
-			tool.warnTip ("moduleInputTip", "");
 			tool.popShow ("addModule", 0);
 		}
 	};

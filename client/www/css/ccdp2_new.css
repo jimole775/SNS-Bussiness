@@ -7,18 +7,20 @@ html {
     -ms-text-size-adjust: 100%;
     font-size: 62.5%;
     height: 100%;
-    font-family: ".PingFang-SC-Medium","微软雅黑","Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
+    font-family: ".PingFang-SC-Medium", "微软雅黑", "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
 
 }
-*{
+
+* {
     moz-user-select: -moz-none;
     -moz-user-select: none;
-    -o-user-select:none;
-    -khtml-user-select:none;
-    -webkit-user-select:none;
-    -ms-user-select:none;
-    user-select:none;
+    -o-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
+
 body {
     height: 100%;
     overflow: hidden;
@@ -226,6 +228,10 @@ ul, li, dl, dd, dt {
     height: 100% !important;
 }
 
+.full-width {
+    width: 100% !important;
+}
+
 /*common*/
 body.log {
     overflow: hidden;
@@ -244,12 +250,12 @@ body.log {
     border-top: 1px solid #416A96;
     /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#295788+0,1b3a5b+100 */
     background: #295788; /* Old browsers */
-    background: -moz-linear-gradient(top,  #295788 0%, #1b3a5b 100%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(top,  #295788 0%,#1b3a5b 100%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to bottom,  #295788 0%,#1b3a5b 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#295788', endColorstr='#1b3a5b',GradientType=0 ); /* IE6-9 */
+    background: -moz-linear-gradient(top, #295788 0%, #1b3a5b 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, #295788 0%, #1b3a5b 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, #295788 0%, #1b3a5b 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#295788', endColorstr='#1b3a5b', GradientType=0); /* IE6-9 */
     box-sizing: border-box;
-    box-shadow: 0 1px 2px rgba(0,0,0,.5);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .5);
 }
 
 .title > h1 {
@@ -291,7 +297,7 @@ body.log {
 .cur-text {
     margin: 0 1.0rem;
     overflow: hidden;
-    height:100%;
+    height: 100%;
     display: table;
 }
 
@@ -342,7 +348,7 @@ body.log {
 .over {
     position: absolute;
     width: 100%;
-    height:100%;
+    height: 100%;
     top: 0;
     left: 0;
     background-color: #000;
@@ -651,12 +657,12 @@ body.log {
     position: absolute;
     color: #fff;
     width: 15%;
-    height: 6.9rem;/*th高度4.5trm,但是上下有1.2的padding值,所以,要完美覆盖th的话,高度就是6.9rem*/
+    height: 6.9rem; /*th高度4.5trm,但是上下有1.2的padding值,所以,要完美覆盖th的话,高度就是6.9rem*/
     background: #477CB3;
     border: none;
     padding: 0;
     box-shadow: none;
-    margin:0 auto;
+    margin: 0 auto;
 }
 
 .top-nav-button:disabled {
@@ -759,7 +765,7 @@ body.log {
     background-color: #477CB3;
     z-index: 16;
     overflow: hidden;
-    height:6rem;
+    height: 6rem;
     box-shadow: 0 -3px 4px rgba(0, 0, 0, 0.2);
 
 }
@@ -916,6 +922,7 @@ body.log {
     padding-top: 14rem;
     z-index: 1;
 }
+
 /*
 #bodyLoading {
     display: none;
@@ -986,7 +993,7 @@ body.log {
     border-radius: 100%;
 }
 
-.checkbox input, .checkbox-new input, .radioBox-new input, .radioBox input{
+.checkbox input, .checkbox-new input, .radioBox-new input, .radioBox input {
     display: none;
 }
 
@@ -1044,7 +1051,7 @@ option {
     font-size: 1.7rem;
     text-align: center;
     width: 33%;
-    height:100%;
+    height: 100%;
     display: table-cell;
     vertical-align: middle;
     border-top: 1px solid #B3D8FF;
@@ -1115,8 +1122,8 @@ option {
     overflow: hidden;
 }
 
-.padding-when-without-inner-class{
-    padding:1.5rem 1.2rem;
+.padding-when-without-inner-class {
+    padding: 1.5rem 1.2rem;
 }
 
 .item-button:focus {
@@ -1133,21 +1140,22 @@ option {
     max-width: 47%;
 }
 
-.item-description{
+.item-description {
     float: left;
 }
 
-.item-value{
+.item-value {
     float: right;
 }
 
 .item-description-layout-table {
     display: table;
     float: left;
-    width: 77%;
+    width: 60%;
     max-width: none;
     position: relative;
     height: 6rem;
+    word-break: break-all;
 }
 
 .item-description-layout-cell {
@@ -1158,7 +1166,7 @@ option {
     word-break: break-all;
 }
 
-.item-description-single{
+.item-description-single {
     width: 100%;
 }
 
@@ -1171,10 +1179,11 @@ option {
 .item-value-layout-table {
     display: table;
     float: right;
-    width: 22%;
+    width: 35%;
     max-width: none;
     position: relative;
     height: 6rem;
+    word-break: break-all;
 }
 
 .item-value-layout-cell {
@@ -1241,9 +1250,8 @@ option {
     display: block;
 }
 
-.arrow-right-without-text
-{
-    right:1.6rem;
+.arrow-right-without-text {
+    right: 1.6rem;
 }
 
 .title-footer-desc-text {
@@ -1260,6 +1268,7 @@ option {
     color: #006DFF;
     font-size: 1.6rem
 }
+
 .current-time, .current-mileage, .current-state {
     color: #006DFF;
     padding: 0 .7rem;
@@ -1269,14 +1278,15 @@ option {
     color: #ADD2FA;
 }
 
-.list{
+.list {
     position: relative;
     padding-top: 1px;
     padding-bottom: 1px;
     padding-left: 0;
 }
-.list .item{
-    height:5rem;
+
+.list .item {
+    height: 5rem;
 }
 
 .toggle .handle {
@@ -1292,7 +1302,7 @@ option {
     box-shadow: 0 2px 7px rgba(0, 0, 0, 0.35), 0 1px 1px rgba(0, 0, 0, 0.15);
 }
 
-.toggle-default{
+.toggle-default {
     -webkit-transform: translate3d(2.5rem, 0, 0);
     transform: translate3d(2.5rem, 0, 0);
 }
@@ -1373,7 +1383,7 @@ option {
     z-index: 3;
 }
 
-.toggle-switch-status-desc{
+.toggle-switch-status-desc {
     /*position: relative;*/
     /*top: -1rem;*/
     /*font-size: 1.6rem;*/
@@ -1381,9 +1391,9 @@ option {
     /*font-weight: bold;*/
     font-size: 1.6rem;
     display: block;
-    float:left;
+    float: left;
     padding: 0.5rem;
-    color:#ccc;
+    color: #ccc;
 }
 
 .toggle.toggle-positive input:checked + .track {
@@ -1391,10 +1401,11 @@ option {
     background-color: #387ef5;
 }
 
-.toggle-switch-right-side{
+.toggle-switch-right-side {
     left: 1rem;
 }
-.toggle-switch-left-side{
+
+.toggle-switch-left-side {
     left: -1rem;
 }
 
@@ -1473,20 +1484,50 @@ option {
     background: none;
 }
 
-.handle-list-item-for-switch li{
-    border-top:1px #ECF3F7 solid;
-    border-bottom:none;
+.handle-list-item-for-switch li {
+    border-top: 1px #ECF3F7 solid;
+    border-bottom: none;
 }
-.item-notice{
+
+.item-notice {
     font-size: 1.3rem;
     color: #8d8d8d;
 }
-.sprite {display:inline-block; overflow:hidden; background-repeat: no-repeat;background-image:url('../images/arrow.png');}
-.arrow-left-normal {width:67px; height:83px; background-position: -0px -0px;float:left;}
-.arrow-left-press {width:67px; height:83px; background-position: -67px -0px;float:left;}
-.arrow-right-normal {width:67px; height:83px; background-position: -134px -0px;float:right;}
-.arrow-right-press {width:67px; height:83px; background-position: -201px -0px;float:right;}
 
+.sprite {
+    display: inline-block;
+    overflow: hidden;
+    background-repeat: no-repeat;
+    background-image: url('../images/arrow.png');
+}
+
+.arrow-left-normal {
+    width: 67px;
+    height: 83px;
+    background-position: -0px -0px;
+    float: left;
+}
+
+.arrow-left-press {
+    width: 67px;
+    height: 83px;
+    background-position: -67px -0px;
+    float: left;
+}
+
+.arrow-right-normal {
+    width: 67px;
+    height: 83px;
+    background-position: -134px -0px;
+    float: right;
+}
+
+.arrow-right-press {
+    width: 67px;
+    height: 83px;
+    background-position: -201px -0px;
+    float: right;
+}
 
 .animation {
     transition: all 0.5s ease;
@@ -1502,17 +1543,17 @@ option {
     -moz-transition: top 0.3s ease;
 }
 
-.load-refresh{
-    animation: .75s rotate 0s normal none infinite ;
-    -webkit-animation: .75s rotate 0s normal none infinite ;
+.load-refresh {
+    animation: .75s rotate 0s normal none infinite;
+    -webkit-animation: .75s rotate 0s normal none infinite;
     background: url(/images/refresh2.png) no-repeat left top;
 }
 
-.menu-hint-pev{
+.menu-hint-pev {
     position: relative;
 }
 
-.menu-hint-pev i.menu-hint{
+.menu-hint-pev i.menu-hint {
     DISPLAY: block;
     position: absolute;
     right: 1px;
@@ -1526,24 +1567,24 @@ option {
     border-bottom: 0;
 }
 
-.event-disable{
+.event-disable {
     pointer-events: none;
 }
 
-.button-disable{
-    color:#5A627C;
+.button-disable {
+    color: #5A627C;
     background: #454169;
 }
 
-.message-desc-header{
+.message-desc-header {
     /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,edeff3+100 */
     background: #ffffff; /* Old browsers */
-    background: -moz-linear-gradient(top,  #ffffff 0%, #edeff3 100%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(top,  #ffffff 0%,#edeff3 100%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to bottom,  #ffffff 0%,#edeff3 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#edeff3',GradientType=0 ); /* IE6-9 */
+    background: -moz-linear-gradient(top, #ffffff 0%, #edeff3 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, #ffffff 0%, #edeff3 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, #ffffff 0%, #edeff3 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#edeff3', GradientType=0); /* IE6-9 */
     border-radius: 4px 4px 0 0;
-    box-shadow: 0 2px 6px rgba(0,0,0,.2);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .2);
     box-sizing: border-box;
     /*min-height: 6rem;*/
     height: 6rem;
@@ -1553,7 +1594,7 @@ option {
     overflow: auto;
 }
 
-.message-desc-footer{
+.message-desc-footer {
     border-top: 0;
     height: 4rem;
     border-bottom: 1px solid #E5E5E7;
@@ -1563,19 +1604,35 @@ option {
     box-sizing: border-box;
 }
 
-.extend-font-size{
-    font-size: 1.8rem;      /**老板嗜好大字体，用于车型选择页面，系统选择页面，车辆配置页面*/
+.extend-font-size {
+    font-size: 1.8rem; /**老板嗜好大字体，用于车型选择页面，系统选择页面，车辆配置页面*/
 }
 
 .disable-text {
     color: #999 !important;
 }
 
-.subordination-text{
-    color:#ccc !important;
+.warn-tip {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #f18a59;
+    color: #fff;
+    padding: 1.6rem;
+    font-size: 1.6rem;
+    box-sizing: border-box;
+    z-index: 999;
+    opacity: 1;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0px 4px 5px rgba(33,33,33,0.3);
 }
 
-.light-text{
+.subordination-text {
+    color: #ccc !important;
+}
+
+.light-text {
     color: #027dff !important;
 }
 
@@ -1589,96 +1646,175 @@ option {
     color: #FF3834 !important;
 }
 
-.ellipsis{
+.ellipsis {
     overflow: hidden;
     text-overflow: ellipsis;
-    -o-text-overflow:ellipsis;
+    -o-text-overflow: ellipsis;
     white-space: nowrap;
 }
-.paging-button{
-    position: fixed;z-index: 990;background-image: none;width: 100%;top: 45%;padding: 0 1rem;box-sizing: border-box;display: none;
+
+.paging-button {
+    position: fixed;
+    z-index: 990;
+    background-image: none;
+    width: 100%;
+    top: 45%;
+    padding: 0 1rem;
+    box-sizing: border-box;
+    display: none;
 }
 
-.arrow-back-cover{
-    display:table;position: absolute;top:0;width:15%;height:100%;background: rgba(0, 0, 0, .1);z-index: 102;
+.arrow-back-cover {
+    display: table;
+    position: absolute;
+    top: 0;
+    width: 15%;
+    height: 100%;
+    background: rgba(0, 0, 0, .1);
+    z-index: 102;
 }
-.arrow-back-cover-left{
+
+.arrow-back-cover-left {
 
     /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+0,000000+100&0.65+0,0+100;Neutral+Density */
-    background: -moz-linear-gradient(left,  rgba(0,0,0,0) 0%, rgba(0,0,0,0.65) 100%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(left, rgba(0,0,0,0)   0%,rgba(0,0,0,0.65) 100%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to right,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.65) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6000000', endColorstr='#00000000',GradientType=1 ); /* IE6-9 */
+    background: -moz-linear-gradient(left, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.65) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.65) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.65) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#a6000000', endColorstr='#00000000', GradientType=1); /* IE6-9 */
 
-    left:-10%;
+    left: -10%;
 }
 
-.arrow-back-cover-right{
+.arrow-back-cover-right {
     /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+0,000000+100&0.65+0,0+100;Neutral+Density */
-    background: -moz-linear-gradient(left,  rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 100%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(left,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to right,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6000000', endColorstr='#00000000',GradientType=1 ); /* IE6-9 */
+    background: -moz-linear-gradient(left, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#a6000000', endColorstr='#00000000', GradientType=1); /* IE6-9 */
 
-    right:-10%;
+    right: -10%;
 }
 
-.help-pop-close-button{
-    border-radius:3px;position: absolute;right: 0;top: 0;opacity: .7;z-index: 998;width: 2rem;box-sizing: border-box;padding:0.3rem
+.help-pop-close-button {
+    border-radius: 3px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    opacity: .7;
+    z-index: 998;
+    width: 2rem;
+    box-sizing: border-box;
+    padding: 0.3rem
 }
-.help-pop-content{
-    z-index: 101;text-align: center;color: #fff;font-size: 1.8rem;position: relative;overflow: hidden;padding:1.6rem;
+
+.help-pop-content {
+    z-index: 101;
+    text-align: center;
+    color: #fff;
+    font-size: 1.8rem;
+    position: relative;
+    overflow: hidden;
+    padding: 1.6rem;
 }
-.help-pop-layout-slave{
-    z-index:998;height: inherit;width: inherit;
+
+.help-pop-layout-slave {
+    z-index: 998;
+    height: inherit;
+    width: inherit;
 }
-.help-pop-layout{
-    height: inherit;width: inherit;position: relative;
+
+.help-pop-layout {
+    height: inherit;
+    width: inherit;
+    position: relative;
 }
-.help-pop-frame{
-    display: none;height: 100%;width: 100%;z-index: 998;position: fixed;top: 0;left: 0;
+
+.help-pop-frame {
+    display: none;
+    height: 100%;
+    width: 100%;
+    z-index: 998;
+    position: fixed;
+    top: 0;
+    left: 0;
 }
-.help-pop-content-box{
-    position:relative;background:#333333;width: 80%;height: 50%;z-index: 997;margin:0 auto;
+
+.help-pop-content-box {
+    position: relative;
+    background: #333333;
+    width: 80%;
+    height: 50%;
+    z-index: 997;
+    margin: 0 auto;
 }
-.help-pop-content-background{
-    text-align: center;position: absolute;left: 0;top: 0;width: 100%;height: 100%;z-index: 996;background: rgba(0, 0, 0, .2);
+
+.help-pop-content-background {
+    text-align: center;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 996;
+    background: rgba(0, 0, 0, .2);
 }
-.help-pop-close-img{
-    position: relative;margin: 1.0rem auto;display: block;width: 5.0rem;
+
+.help-pop-close-img {
+    position: relative;
+    margin: 1.0rem auto;
+    display: block;
+    width: 5.0rem;
 }
-.help-pop-desc{
-    display:block;position: absolute;bottom:0;padding:1rem 1.6rem;left:0;height:auto;width:100%;background: rgba(0,0,0,0.4);
-    text-align: center;color: #fff;font-size: 1.6rem;box-sizing: border-box;letter-spacing: 0.05rem;
+
+.help-pop-desc {
+    display: block;
+    position: absolute;
+    bottom: 0;
+    padding: 1rem 1.6rem;
+    left: 0;
+    height: auto;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    text-align: center;
+    color: #fff;
+    font-size: 1.6rem;
+    box-sizing: border-box;
+    letter-spacing: 0.05rem;
 }
-.help-pop-content > img{
-    /*display:block;position: absolute;top:0;left:0;*/width:inherit;
+
+.help-pop-content > img {
+    /*display:block;position: absolute;top:0;left:0;*/
+    width: inherit;
 }
-.bottomButton{
-    display:none;width:100%;
+
+.bottomButton {
+    width: 100%;
 }
+
 /*底部集成按钮专用*/
-.bottom-bar-button-special{
-    padding:0;
+.bottom-bar-button-special {
+    padding: 0;
 }
 
-.triangle-icon-basic{
+.triangle-icon-basic {
     width: 4rem;
     height: 4rem;
     position: absolute;
     top: -2rem;
     right: -2rem;
 }
-.triangle-icon{
+
+.triangle-icon {
     width: 2rem;
     height: 2rem;
     border: none;
     position: absolute;
     overflow: hidden;
-    bottom:0;
-    left:0;
+    bottom: 0;
+    left: 0;
 }
-.triangle-icon:after{
+
+.triangle-icon:after {
     width: 2rem;
     height: 2rem;
     background: #fff;
@@ -1688,7 +1824,8 @@ option {
     top: -1rem;
     content: " ";
 }
-.extend-icon-basic{
+
+.extend-icon-basic {
     width: 4rem;
     height: 4rem;
     position: absolute;
@@ -1696,7 +1833,7 @@ option {
     right: -2rem;
 }
 
-.extend-icon{
+.extend-icon {
     width: 2rem;
     height: 2rem;
     top: 0;
@@ -1704,7 +1841,8 @@ option {
     position: absolute;
     overflow: hidden;
 }
-.extend-icon:after{
+
+.extend-icon:after {
     content: '';
     display: block;
     position: absolute;
@@ -1715,7 +1853,8 @@ option {
     left: 1rem;
     transform: rotate(45deg);
 }
-.extend-icon:before{
+
+.extend-icon:before {
     content: '';
     display: block;
     width: 200%;
