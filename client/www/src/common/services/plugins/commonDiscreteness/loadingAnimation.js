@@ -61,26 +61,8 @@
 			if(bodyLoading.style.display === "none" && tool.alert.status && tool.alert.status.display) self.status.text = "";
 
 			bodyLoading.style.display = "none";
-			//clearTimeout(self.loadingCloseBtnWatcher);
-			//clearTimeout(self.loadingCloseWatcher);
 			return;
 		}
-
-
-		//clearTimeout(self.loadingCloseBtnWatcher);
-		//clearTimeout(self.loadingCloseWatcher);
-		//loadingClose.style.display = "none";
-
-		//10秒之后，给出关闭功能
-		//self.loadingCloseBtnWatcher = setTimeout(function(){
-		//	loadingClose.style.display = "block";
-		//
-		//	//再过5秒不管如何都关闭loading窗体；
-		//	self.loadingCloseWatcher = setTimeout(function(){
-		//		bodyLoading.style.display = "none";
-		//	},5000);
-		//
-		//},10000);
 
 		var defaultOption = {
 			    pos    : 'body',        //废弃属性

@@ -5,6 +5,7 @@
 
 function WebSocket() {}
 WebSocket.prototype.tool = {
+
     getChanelSession: function (chanelMap,uid) {
         var result = {};
         chanelMap.forEach(function (item, index) {
@@ -17,6 +18,7 @@ WebSocket.prototype.tool = {
         });
         return result;
     },
+
     getSession: function (uid, store) {
         var i = store.length;
         while (i--) {
@@ -26,7 +28,7 @@ WebSocket.prototype.tool = {
         }
     },
 
-//websocket数据的加解密工作
+    //websocket数据的加解密工作
     decodeDataFrame:function(e){
         var i = 0, j, s, frame = {
             //解析前两个字节的基本数据
@@ -58,6 +60,7 @@ WebSocket.prototype.tool = {
         //返回数据帧
         return frame;
     },
+
     encodeDataFrame : function(e){
         var s = [], o = new Buffer(e.PayloadData), l = o.length;
         //输入第一个字节
@@ -77,7 +80,38 @@ WebSocket.prototype.tool = {
 };
 
 WebSocket.prototype.init = function () {
+    var that = this;
+    require('net').createServer(function (socket) {
+        console.log("服务器net会话：", socket);
+        socket.on("connect", function (sock) {
+            console.log("connect:", sock);
+        });
+        socket.on('error', function (sock) {
+            console.log("error：", sock);
+        });
+        socket.on('lookup', function (sock) {
+            console.log("lookup：", sock);
+        });
+        socket.on('timeout', function (sock) {
+            console.log("timeout：", sock);
+        });
+        //socket.on('drain',function(sock){
+        //	console.log("drain：",sock);
+        //});
+        socket.on('data', function (e) {
+            var frame = that.tool.decodeDataFrame(e);
+            //第一次握手
+            if (frame.FIN === 0) {
+                that.handshake(socket, e);
+            }
+            //数据交互
+            else {
+                that.dataHost(socket, frame);
+            }
+        });
 
+    }).listen(81, function () {
+    });
 };
 
 module.exports = WebSocket;

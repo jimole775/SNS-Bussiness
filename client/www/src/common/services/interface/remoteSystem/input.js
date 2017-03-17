@@ -24,14 +24,6 @@
 		//远程数据都是以字串的形式传入，所以要使用数字，就需要转换一次
 		var action_int = parseFloat(action);
 
-		//第一次RecvRMTEventFromApp被调用时，初始化远程身份，并且激活非操作方的遮罩
-		//if (global.RMTID.role == 0) {
-		//	win.global.RMTID.role = action_int;
-		//	win.global.RMTID.userName = varFuncName;
-		//	activeRMTCover();
-		//	return;
-		//}
-
 		var funcName = "";
 		//转发的函数名有时候不需要拼接_|_
 		if (/_|_/.test(varFuncName)) {

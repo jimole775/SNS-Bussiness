@@ -6,41 +6,6 @@
     var key;
     var mask = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
 
-    WebSocket.prototype.run = function () {
-        var that = this;
-        require('net').createServer(function (socket) {
-            console.log("服务器net会话：", socket);
-            socket.on("connect", function (sock) {
-                console.log("connect:", sock);
-            });
-            socket.on('error', function (sock) {
-                console.log("error：", sock);
-            });
-            socket.on('lookup', function (sock) {
-                console.log("lookup：", sock);
-            });
-            socket.on('timeout', function (sock) {
-                console.log("timeout：", sock);
-            });
-            //socket.on('drain',function(sock){
-            //	console.log("drain：",sock);
-            //});
-            socket.on('data', function (e) {
-                var frame = that.tool.decodeDataFrame(e);
-                //第一次握手
-                if (frame.FIN === 0) {
-                    that.handshake(socket, e);
-                }
-                //数据交互
-                else {
-                    that.dataHost(socket, frame);
-                }
-            });
-
-        }).listen(81, function () {
-        });
-    };
-
     WebSocket.prototype.dataHost = function (socket, frame) {
         var that = this;
         switch (frame.Opcode) {

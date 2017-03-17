@@ -101,7 +101,6 @@
 	 */
 	CommonTool.prototype.popBox = function (boxID) {
 		this.loading(0);
-		//if (global && typeof global.extendButton === "function")global.extendButton ();
 
 		var that = this;
 		var objBox = $("#" + boxID);

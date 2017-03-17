@@ -123,42 +123,42 @@
 
 					case "04":  //带读值的菜单
 					{
-						var readValueBindOnsupid = false;                           //第一,第二种supid解析模式可以对读值进行绑定,将此变量设置为flag,由于第三种要去服务器解组数据,所以暂时忽略
+						var readValueBindOnsupid = false;   //第一,第二种supid解析模式可以对读值进行绑定,将此变量设置为flag,由于第三种要去服务器解组数据,所以暂时忽略
 						menuType04 = varRecvData.substr(14, 2);
 						var menuItemsSum04 = tool.hex2dec(varRecvData.substr(16, 2));
-						var cutStrFinalIncreaseIndex = 18;                          //由于读值信息最后处理，所以需要截取出来，此变量就是用于计算后续的指令长度,初始值为18,每截取一段指令,就加上相应的位数
+						var stepCount04 = 18; //由于读值信息最后处理，所以需要截取出来，此变量就是用于计算后续的指令长度,初始值为18,每截取一段指令,就加上相应的位数
 
-						switch (menuType04) {                                       //计算出读值菜单的菜单提示文本；
+						switch (menuType04) {   //计算出读值菜单的菜单提示文本；
 
-							case "01":                                              //当菜单类型为01时，第二字节代表菜单条目数，后每8字节代表一个supid；
+							case "01":  //当菜单类型为01时，第二字节代表菜单条目数，后每8字节代表一个supid；
 							{
 								readValueBindOnsupid = true;
 								for (var k = 0; k < menuItemsSum04; k++) {
 									menusupid_arr.push(varRecvData.substr(18 + k * 8, 8));
 								}
-								cutStrFinalIncreaseIndex += menuItemsSum04 * 8;
+								stepCount04 += menuItemsSum04 * 8;
 							}
 								break;
 
-							case "02":                                              //当菜单类型为02时，前4字节代表菜单条目的起始，后4字节代表菜单条目的结束索引
+							case "02":  //当菜单类型为02时，前4字节代表菜单条目的起始，后4字节代表菜单条目的结束索引
 							{
 								readValueBindOnsupid = true;
 								var startsupid04 = tool.hex2dec(varRecvData.substr(18, 8));
 								var endsupid04 = tool.hex2dec(varRecvData.substr(26, 8));
 								menuItemsSum04 = endsupid04 - startsupid04 + 1;
 
-								for (var l = 0; l < menuItemsSum04; l++)           //补全supid，扔到menusupid_arr数组里
+								for (var l = 0; l < menuItemsSum04; l++)    //补全supid，扔到menusupid_arr数组里
 									menusupid_arr.push(tool.toHex(endsupid04--, 8));
 
-								cutStrFinalIncreaseIndex += 2 * 8;
+								stepCount04 += 2 * 8;
 							}
 								break;
 
-							case "03":                                              //当菜单类型为03时，4字节代表分组号，如00000001代表取GROUP字段为 00000001 的所有分组显示出来。
+							case "03":  //当菜单类型为03时，4字节代表分组号，如00000001代表取GROUP字段为 00000001 的所有分组显示出来。
 							{
 								menusupid_arr.push(varRecvData.substr(18, 8));
 								requestType = "03";
-								cutStrFinalIncreaseIndex += 8;
+								stepCount04 += 8;
 							}
 								break;
 						}
@@ -170,13 +170,13 @@
 						 *  去掉最后四位的“0000”，可以让split()方法正确分割成非空数组
 						 ****************************************************************/
 						var lastCmdStrArea_str =
-							varRecvData.substring(cutStrFinalIncreaseIndex, varRecvData.length - 4) || '';
+							varRecvData.substring(stepCount04, varRecvData.length - 4) || '';
 
-						var temp_str = tool.addSplitMarkInStringEachStep(lastCmdStrArea_str, ',', 2);       //每两个字串添加一个逗号，防止在分割“00”的时候遇到“3000”这样的情况
+						var temp_str = tool.addSplitMarkInStringEachStep(lastCmdStrArea_str, ',', 2);   //每两个字串添加一个逗号，防止在分割“00”的时候遇到“3000”这样的情况
 
-						menuItemsValue_arr = temp_str.split("00");                                          //把已经做好处理的字串以“00”为基准，分割成数组
+						menuItemsValue_arr = temp_str.split("00");  //把已经做好处理的字串以“00”为基准，分割成数组
 
-						var arrLen = menuItemsValue_arr.length;                                             //把长度预存起来,防止对数组操作的时候造成死循环
+						var arrLen = menuItemsValue_arr.length; //把长度预存起来,防止对数组操作的时候造成死循环
 
 						for (var m = 0; m < arrLen; m++) {
 
@@ -198,7 +198,6 @@
 							bindsupidWithValueForMenuType04_obj =
 								tool.contact2ArrToObj(menusupid_arr, menuItemsValue_arr);
 						}
-
 					}
 						break;
 					case "05":  //设备请求上传,下载文件
@@ -206,16 +205,104 @@
 						handleFiles(varRecvData);
 					}
 						break;
-					default :                                                                               //如果是未知弹框类型，就退到主界面
-						win.sendDataToDev("310902");
+
+					case "06":  //带读值的提示框
+					{
+
+						var btnAmount = varRecvData.substr(14, 2);
+						var stepCount06 = 16;
+						for (var p = 0; p < btnAmount; p++) {
+							pidCacheFromDev.contents_arr.push(varRecvData.substr(16 + p * 8, p * 8 + 8));   //前八位为supid,和菜单有区别
+							stepCount06 += 8;
+						}
+
+						menuType04 = varRecvData.substr(stepCount06, 2);
+						stepCount06 += 2;
+						var menuItemsSum06 = tool.hex2dec(varRecvData.substr(stepCount06, 2));
+						stepCount06 += 2;
+						switch (menuType04) {   //计算出读值菜单的菜单提示文本；
+
+							case "01":  //当菜单类型为01时，第二字节代表菜单条目数，后每8字节代表一个supid；
+							{
+								readValueBindOnsupid = true;
+								for (var k = 0; k < menuItemsSum06; k++) {
+									menusupid_arr.push(varRecvData.substr(stepCount06, 8));
+									stepCount06 += 8;
+								}
+							}
+								break;
+
+							case "02":  //当菜单类型为02时，前4字节代表菜单条目的起始，后4字节代表菜单条目的结束索引
+							{
+								readValueBindOnsupid = true;
+								var startsupid06 = tool.hex2dec(varRecvData.substr(stepCount06, 8));
+								stepCount06 += 8;
+								var endsupid06 = tool.hex2dec(varRecvData.substr(stepCount06, 8));
+								stepCount06 += 8;
+								menuItemsSum06 = endsupid06 - startsupid06 + 1;
+
+								for (var l = 0; l < menuItemsSum06; l++)    //补全supid，扔到menusupid_arr数组里
+									menusupid_arr.push(tool.toHex(endsupid06--, 8));
+
+								//stepCount06 += 2 * 8;
+							}
+								break;
+
+							case "03":  //当菜单类型为03时，4字节代表分组号，如00000001代表取GROUP字段为 00000001 的所有分组显示出来。
+							{
+								menusupid_arr.push(varRecvData.substr(stepCount06, 8));
+								requestType = "03";
+								stepCount06 += 8;
+							}
+								break;
+						}
+
+						/****************************************************************
+						 *  指令的样例格式：7109500104001901030011010100110102001101033130300032303000330000
+						 *  计算菜单内每条选项的值，全部为asc字符串，以00为一个读值的结束符；
+						 *  去掉最后四位的“0000”，可以让split()方法正确分割成非空数组
+						 ****************************************************************/
+						var lastCmdStrArea_str06 =
+							varRecvData.substring(stepCount04, varRecvData.length - 4) || '';
+
+						var temp_str06 = tool.addSplitMarkInStringEachStep(lastCmdStrArea_str06, ',', 2);   //每两个字串添加一个逗号，防止在分割“00”的时候遇到“3000”这样的情况
+
+						menuItemsValue_arr = temp_str06.split("00");  //把已经做好处理的字串以“00”为基准，分割成数组
+
+						var arrLen06 = menuItemsValue_arr.length; //把长度预存起来,防止对数组操作的时候造成死循环
+
+						for (var m = 0; m < arrLen06; m++) {
+
+							var eachDigit_str06 = "";
+							var tempArrItem06 = menuItemsValue_arr[0].split(",").join("");                    //把逗号去掉之后再拼成字串
+
+							for (var step06 = 0; step < tempArrItem06.length;) {
+								var tempAsc06 = tool.hex2dec(tempArrItem06.substr(step, 2));                    //每次提取两位字符，转成10进制
+								eachDigit_str06 += String.fromCharCode(tempAsc06);                              //再把asc码解出来
+								step06 += 2;
+							}
+
+							menuItemsValue_arr.shift();                                                     //循环完毕之后删除第一项
+							menuItemsValue_arr.push(eachDigit_str06);                                         //把计算出来的10进制字符串Push到数组最后一位;
+						}
+
+						//todo menuItemsValue_arr获取到所有的值之后，转换成数字，然后跟前面的supid配对绑定
+						if (!!readValueBindOnsupid) {
+							bindsupidWithValueForMenuType04_obj =
+								tool.contact2ArrToObj(menusupid_arr, menuItemsValue_arr);
+						}
+
+					}
+						break;
+					default :   //如果是未知弹框类型，就退到主界面
+						tool.alert("未知响应类型！", function () {
+							win.sendDataToDev("310902");
+						});
 						return;
 						break;
 				}
 
 				var temObjFromClone = angular.extend({}, pidCacheFromDev);
-				//pidCacheFromDev.contents_arr
-				//pidCacheFromDev.buttons_arr
-
 				//把temObjFromClone.buttons_arr里面每个value的值取出来，重新拼成数组；
 				var tempButtons_arr = [];
 				temObjFromClone.buttons_arr.forEach(function (item) {
@@ -224,7 +311,7 @@
 
 				var supids = menusupid_arr.length ?
 					menusupid_arr :
-					(temObjFromClone.contents_arr.concat(tempButtons_arr));                     //如果是弹出框类型是01或者02,就把它合并成一个数组
+					(temObjFromClone.contents_arr.concat(tempButtons_arr)); //如果是弹出框类型是01或者02,就把它合并成一个数组
 
 
 				FunGetsupidDataFromServer(supids);
@@ -249,7 +336,7 @@
 			var processType = varRecvData.substr(14, 2);
 			switch (processType) {
 				case "00":
-					tool.alert("数据传输完成!",function(){
+					tool.alert("数据传输完成!", function () {
 						//win.sendDataToDev("710902");
 					});
 					break;
@@ -258,7 +345,7 @@
 					break;
 				case "02":
 					//sendFileToDevFromApp();
-					win.appService.sendDataToApp(3029, JSON.stringify({"ope":0}), win.serverRequestCallback.requestDir);
+					win.appService.sendDataToApp(3029, JSON.stringify({"ope": 0}), win.serverRequestCallback.requestDir);
 					break;
 				case "03":
 					//sendFileToDevFromServer();
@@ -270,8 +357,8 @@
 					//sendFileToServerFromDev();
 					break;
 				case "FF":
-					tool.alert("数据解析出错!",function(){
-						win.sendDataToDev("710902");
+					tool.alert("数据解析出错!", function () {
+						win.sendDataToDev("310902");
 					});
 					break;
 			}
@@ -300,7 +387,7 @@
 				},
 				dataPack,
 				win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.bindingATViewFromServer, [supids]),
-				[FunGetsupidDataFromServer, global.disconnectOBD])
+					[FunGetsupidDataFromServer, global.disconnectOBD])
 			);
 
 			dataPack.supids.length = 0;
@@ -320,15 +407,15 @@
 				}
 				//todo 由于存在读秒框体，需要马上计算发送 指令给设备，所以在不能发送之后 马上重置数据
 
-				$scope.contents_arr.length = 0;                                 //webview内容文本数据
-				$scope.buttons_arr.length = 0;                                  //webview按钮文本数据
+				$scope.contents_arr.length = 0; //webview内容文本数据
+				$scope.buttons_arr.length = 0;  //webview按钮文本数据
 				tool.popShow("bombTipBox", 0);
 				tool.popShow("bombMenuBox", 0);
 
 				//var theDataModel = tool.objToArr (responseObject.items, "supid", "name");
 				var theDataModel = responseObject.items;
 				switch ($scope.BombBoxType) {
-					case "01":                                                      //构造提示框内容或输入框内容
+					case "01":  //构造提示框内容或输入框内容
 					case "02":
 					{
 						//1,获取源格式
@@ -403,14 +490,15 @@
 						}
 					}
 						break;
-					case "03":                                                          //构造菜单内容
+					case "03":  //构造菜单内容
 					{
 						$scope.contents_arr = theDataModel;
 						$scope.buttons_arr.push({name: "退出"});
 						tool.popShow("bombMenuBox", 1);
 					}
 						break;
-					case "04":                                                          //构造读值菜单内容
+					case "04":  //构造读值菜单内容
+					case "06":  //构造读值菜单内容
 					{
 
 						/****************************************************************
@@ -419,7 +507,7 @@
 						 *  最后生成 {supid:"00000001",name:"文本内容",menuItemsValue:"文本内容"} 的数据形式
 						 ****************************************************************/
 						var theDataModelLen = theDataModel.length;
-						if (menuType04 !== "03") {                                      // 如果不是组数据,就根据绑定的supid,
+						if (menuType04 !== "03") {  // 如果不是组数据,就根据绑定的supid,
 							var tempArr = tool.objToArr(bindsupidWithValueForMenuType04_obj, "supid", "menuItemsValue");
 
 							for (var k = 0; k < theDataModelLen; k++) {
@@ -427,7 +515,7 @@
 								for (var kk = 0; kk < tempArrLen; kk++) {
 									if (theDataModel[k].supid === tempArr[kk].supid) {
 										theDataModel[k].menuItemsValue = tempArr[kk].menuItemsValue;
-										tempArr.splice(kk, 1);                          //比对完毕，就删除当前下标的值
+										tempArr.splice(kk, 1);  //比对完毕，就删除当前下标的值
 										break;
 									}
 								}
@@ -451,6 +539,14 @@
 
 						tool.popShow("bombMenuBox", 1);
 					}
+						break;
+
+					case "05":  //处理文件请求
+						break;
+					default :
+						tool.alert("未知的响应类型！", function () {
+							win.sendDataToDev("310902")
+						});
 						break;
 				}
 				safeApply(function () { });
