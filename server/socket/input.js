@@ -9,29 +9,29 @@
     WebSocket.prototype.run = function () {
         var that = this;
         require('net').createServer(function (socket) {
-            console.log("·şÎñÆ÷net»á»°£º", socket);
+            console.log("æœåŠ¡å™¨netä¼šè¯ï¼š", socket);
             socket.on("connect", function (sock) {
                 console.log("connect:", sock);
             });
             socket.on('error', function (sock) {
-                console.log("error£º", sock);
+                console.log("errorï¼š", sock);
             });
             socket.on('lookup', function (sock) {
-                console.log("lookup£º", sock);
+                console.log("lookupï¼š", sock);
             });
             socket.on('timeout', function (sock) {
-                console.log("timeout£º", sock);
+                console.log("timeoutï¼š", sock);
             });
             //socket.on('drain',function(sock){
-            //	console.log("drain£º",sock);
+            //	console.log("drainï¼š",sock);
             //});
             socket.on('data', function (e) {
                 var frame = that.tool.decodeDataFrame(e);
-                //µÚÒ»´ÎÎÕÊÖ
+                //ç¬¬ä¸€æ¬¡æ¡æ‰‹
                 if (frame.FIN === 0) {
                     that.handshake(socket, e);
                 }
-                //Êı¾İ½»»¥
+                //æ•°æ®äº¤äº’
                 else {
                     that.dataHost(socket, frame);
                 }
@@ -45,29 +45,29 @@
         var that = this;
         switch (frame.Opcode) {
             case 8:
-                console.log("»á»°ÒÑ¾­½áÊø:", socket, frame.PayloadData);
+                console.log("ä¼šè¯å·²ç»ç»“æŸ:", socket, frame.PayloadData);
                 break;
             default :
                 that.opcode = frame.Opcode;
                 var data = JSON.parse(frame.PayloadData.toString()) || "";
                 switch (data.status) {
-                    case 0:   //Á¬½Ó,°ó¶¨ÓÃ»§Ãû
-                        //Èç¹ûmapÀïÃæÃ»ÓĞ´ËÓÃ»§£¬¾Í´æ´¢session£¬²¢°ó¶¨ÓÃ»§Ãû
+                    case 0:   //è¿æ¥,ç»‘å®šç”¨æˆ·å
+                        //å¦‚æœmapé‡Œé¢æ²¡æœ‰æ­¤ç”¨æˆ·ï¼Œå°±å­˜å‚¨sessionï¼Œå¹¶ç»‘å®šç”¨æˆ·å
                         that.distributeUid(data, socket);
                         break;
-                    case 1:   //Ğ­ÖúÍ¨µÀµÄÑ¯ÎÊ
+                    case 1:   //ååŠ©é€šé“çš„è¯¢é—®
                         that.handleRMTRequest(data, socket);
                         break;
-                    case 2:   //Ğ­ÖúÍ¨µÀµÄÓ¦´ğ
+                    case 2:   //ååŠ©é€šé“çš„åº”ç­”
                         that.handleRMTResponse(data, socket);
                         break;
-                    case 3:   //Ô¶³ÌĞ­Öú½»»¥Í¨µÀ
+                    case 3:   //è¿œç¨‹ååŠ©äº¤äº’é€šé“
                         that.RMTInterActive(data);
                         break;
-                    case 4:   //¶Ï¿ªĞ­ÖúÍ¨µÀ
+                    case 4:   //æ–­å¼€ååŠ©é€šé“
 
                         break;
-                    case 5:   //¹Ø±Õws
+                    case 5:   //å…³é—­ws
                         that.close(data);
                         break;
                     case 6:
@@ -83,7 +83,7 @@
 
 
     var crypto = require('crypto');
-    //µ¥¸öÓÃ»§µÄÎÕÊÖÊµÀı;
+    //å•ä¸ªç”¨æˆ·çš„æ¡æ‰‹å®ä¾‹;
     WebSocket.prototype.handshake = function (socket, e) {
         var original = e.toString().match(/Sec-WebSocket-Key: (.+)/)[1];
         key = crypto.createHash("sha1").update(original + mask).digest("base64");
