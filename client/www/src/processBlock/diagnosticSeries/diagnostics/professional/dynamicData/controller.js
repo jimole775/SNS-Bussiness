@@ -204,7 +204,7 @@
 
 		//08支持时，直接发送指令给设备；
 		function Fun310908() {
-			win.sendDataToDev("310908");
+			win.devService.sendDataToDev("310908");
 		}
 
 		//12支持时，先从服务器请求PID，再打包发给设备；
@@ -273,15 +273,15 @@
 				for (i = 0; i < count; i++) sendStr += $scope.pakidList[i].supid;
 			}
 
-			win.sendDataToDev("310912" + tool.toHex(count, 4) + sendStr);
+			win.devService.sendDataToDev("310912" + tool.toHex(count, 4) + sendStr);
 		}
 
 		/***************************
 		 设备响应PID请求后的处理；
 		 ***************************/
-		win.devInterActive.Fun710912 = function (varRecvData) {
+		win.devService.Fun710912 = function (varRecvData) {
 
-			var count = tool.hex2dec(varRecvData.substr(win.getIndexByDevIndex(10), 2 * 2));
+			var count = tool.hex2dec(varRecvData.substr(6, 2 * 2));
 			if (count <= 0)
 				tool.alert('无任何支持项信息', function () {
 					relativeButtonStatus();
@@ -292,15 +292,15 @@
 
 		};
 
-		win.devInterActive.Fun710992 = function (varRecvData) {
+		win.devService.Fun710992 = function (varRecvData) {
 			tool.alert('设备数据读取失败', function () {
 				relativeButtonStatus();
 				//tool.processBar("");
 			});
 		};
 
-		win.devInterActive.Fun710908 = function (varRecvData) {
-			var count = tool.hex2dec(varRecvData.substr(win.getIndexByDevIndex(10), 2 * 2));
+		win.devService.Fun710908 = function (varRecvData) {
+			var count = tool.hex2dec(varRecvData.substr(6, 2 * 2));
 			if (count <= 0)
 				tool.alert('无任何支持项信息', function () {
 					relativeButtonStatus();
@@ -311,7 +311,7 @@
 
 		};
 
-		win.devInterActive.Fun710988 = function () {
+		win.devService.Fun710988 = function () {
 			tool.alert('设备数据读取失败', function () {
 				relativeButtonStatus();
 				//tool.processBar("");
@@ -334,7 +334,7 @@
 			};
 
 			for (var i = 0; i < count; i++)
-				dataPack.pids[i] = varRecvData.substr(win.getIndexByDevIndex(12) + 8 * i, 8)
+				dataPack.pids[i] = varRecvData.substr(10 + 8 * i, 8)
 
 			dataPack.pids.unDuplicate();
 			FunGetSupportsFromServer(dataPack);
@@ -431,20 +431,20 @@
 
 			switch ($scope.valueCalculationMode) {
 				case 1:
-					win.sendDataToDev('310909' + '01' + support.pid);
+					win.devService.sendDataToDev('310909' + '01' + support.pid);
 					break;
 				case 2:
-					win.sendDataToDev('31091C' + support.pid + support.diagid.substr(support.diagid.length - 4, 4));
+					win.devService.sendDataToDev('31091C' + support.pid + support.diagid.substr(support.diagid.length - 4, 4));
 					break;
 				case 3://710913，只发送一次PAKID给设备
-					win.sendDataToDev('310913' + count + pakids + pakpos);
+					win.devService.sendDataToDev('310913' + count + pakids + pakpos);
 					break;
 				case 4:
 					if (support.type == '3') {
-						win.sendDataToDev('310909' + '01' + support.pid);
+						win.devService.sendDataToDev('310909' + '01' + support.pid);
 					}
 					else if (support.type == '8') {     //710913，只发送一次PAKID给设备
-						win.sendDataToDev('310913' + count + pakids + pakpos);
+						win.devService.sendDataToDev('310913' + count + pakids + pakpos);
 					}
 					break;
 				default :
@@ -457,27 +457,27 @@
 		}
 
 		/**设备响应原始值请求之后的处理*/
-		win.devInterActive.Fun710909 = function (varRecvData) {
+		win.devService.Fun710909 = function (varRecvData) {
 
 			//未停止数据流状态之前退出数据流，会有后续设备指令续传，但是在退出之后， $scope.calculateSupportList已经被置空；
 			if (!$scope.calculateSupportList.length) return;
 
 			//1b 的信息长度字节
-			var originalLen = tool.hex2dec(varRecvData.substr(win.getIndexByDevIndex(11), 2));
+			var originalLen = tool.hex2dec(varRecvData.substr(8, 2));
 
 			var support = $scope.calculateSupportList[$scope.pagingIndex][$scope.calculateIndex];
 
 			wrapOriginalValue4GetShowValue(
 				{
 					index: support.index,
-					original: varRecvData.substr(win.getIndexByDevIndex(12), originalLen * 2),
+					original: varRecvData.substr(10, originalLen * 2),
 					pos: ""                 //两字节pos计算位置
 				}
 			);
 			FunGetNextOriginal();
 		};
 
-		win.devInterActive.Fun710989 = function (varRecvData) {
+		win.devService.Fun710989 = function (varRecvData) {
 
 			// 如果全部为89,则给出提示，否则不做处理;
 			$scope.devResponse8x._89[$scope.calculateIndex] = true;
@@ -485,25 +485,25 @@
 			FunGetNextOriginal();
 		};
 
-		win.devInterActive.Fun71091C = function (varRecvData) {
+		win.devService.Fun71091C = function (varRecvData) {
 			//未停止数据流状态之前退出数据流，会有后续设备指令续传，但是在退出之后， $scope.calculateSupportList已经被置空；
 			if (!$scope.calculateSupportList.length) return;
 
 			//2b 的信息长度字节
-			var originalLen = tool.hex2dec(varRecvData.substr(win.getIndexByDevIndex(12), 4));
+			var originalLen = tool.hex2dec(varRecvData.substr(10, 4));
 			var support = $scope.calculateSupportList[$scope.pagingIndex][$scope.calculateIndex];
 
 			wrapOriginalValue4GetShowValue({
 				index: support.index,
 				original: varRecvData.substr(win.getIndexByDevIndex(12 + 2), originalLen * 2),
-				pos: varRecvData.substr(win.getIndexByDevIndex(10), 4)         //两字节pos计算位置
+				pos: varRecvData.substr(6, 4)         //两字节pos计算位置
 
 			});//两字节pos计算位置
 			FunGetNextOriginal();
 
 		};
 
-		win.devInterActive.Fun71099C = function (varRecvData) {
+		win.devService.Fun71099C = function (varRecvData) {
 
 			// 如果全部为9C,则给出提示，否则不做处理;
 			$scope.devResponse8x._9C[$scope.calculateIndex] = true;
@@ -511,7 +511,7 @@
 			FunGetNextOriginal();
 		};
 
-		win.devInterActive.Fun710913 = function (varRecvData) {
+		win.devService.Fun710913 = function (varRecvData) {
 			handle710913Pakid(varRecvData);
 		};
 
@@ -521,22 +521,22 @@
 			//未停止数据流状态之前退出数据流，会有后续设备指令续传，但是在退出之后， $scope.calculateSupportList已经被置空；
 			if (!$scope.calculateSupportList.length) return;
 			//2b 的信息长度字节
-			var originalLen = tool.hex2dec(varRecvData.substr(win.getIndexByDevIndex(10), 4));
+			var originalLen = tool.hex2dec(varRecvData.substr(6, 4));
 			var support = $scope.calculateSupportList[$scope.pagingIndex][$scope.calculateIndex];
 
 			//selectedGroupIndex, index, pid, original, pos,appid,diagid,fomula,fomulaname
 			//todo 分页处理获取计算数据
 			wrapOriginalValue4GetShowValue({
 				index: support.index,
-				original: varRecvData.substr(win.getIndexByDevIndex(12), originalLen * 2),
-				pos: varRecvData.substr(win.getIndexByDevIndex(12 + originalLen + countPakidFor710913), 4)         //两字节pos计算位置
+				original: varRecvData.substr(10, originalLen * 2),
+				pos: varRecvData.substr((5 + originalLen + countPakidFor710913)*2, 4)         //两字节pos计算位置
 			});
 
 			countPakidFor710913 += 2;
 			FunGetNextOriginal(varRecvData);
 		}
 
-		win.devInterActive.Fun710993 = function (varRecvData) {
+		win.devService.Fun710993 = function (varRecvData) {
 			// 如果全部为93,则给出提示，否则不做处理;
 			$scope.devResponse8x._93[$scope.calculateIndex] = true;
 			checkDevResponse();

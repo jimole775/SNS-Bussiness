@@ -8,9 +8,9 @@
     var gNavDirName_Array = [];
     var selectedFileName = "";
     var gCurDir_String = "";
-    var validateFileCallBack = "VALIDATE";  //验证编程文件回调ID
 
     //验证编程文件
+    //todo 现在文件上传验证的工作已经取消
     win.serverRequestCallback.validateFile = function (responseObject, params) {
         tool.loading(0);
         try {
@@ -26,14 +26,14 @@
                         faValue = inputChecked.value;
 
                         //PC应答：0x7105+40+[01(确定)+01(读取)/02(加载)]/02(取消)
-                        win.sendDataToDev("71054001" + faValue);
+                        win.devService.sendDataToDev("71054001" + faValue);
                     }
                     if (type == "SVT") {
                         inputChecked = tool.getCheckedElement("svt");
                         svtValue = inputChecked.value;
 
                         //PC应答：0x7105+41+[01(确定)+01(扫描)/02(快速)/03(加载)]/02(取消)
-                        win.sendDataToDev("71054001" + svtValue);
+                        win.devService.sendDataToDev("71054001" + svtValue);
                     }
                     $("#fileList").html("");	//清空文件列表
 
@@ -75,7 +75,7 @@
             }
 
             var code = input_checked.value;
-            win.sendDataToDev("71051F01" + code);
+            win.devService.sendDataToDev("71051F01" + code);
 
         }
         else {
@@ -86,6 +86,7 @@
         }
     };
 
+    //todo 现在文件上传验证的工作已经取消
     win.serverRequestCallback.uploadFile = function (varJson) {
         tool.loading(0);
         if (varJson.CodeType == 'OK') {
@@ -117,6 +118,7 @@
                 }
             }
         );
+
         if (varJson.CodeType == 'OK') {
             var originDir = varJson.CodeData.curdir;    //缓存当前目录
             var curDir = originDir.replace(/\./, "·");  //替换 .符号 为 中文符号· 避免以此文本为id号时，无法获取，最后发送dir串 给APP时再转换回来
@@ -131,7 +133,10 @@
 
             var isTableExist = TagCoverChecking(nav_curDirName);    //隐藏所有table,并判断当前文件夹的table是否已经存在
 
-            if (isTableExist) $("#table_" + nav_curDirName).show(); //如果table已经存在，就直接显示
+            if (isTableExist){
+                $("#table_" + nav_curDirName).show();
+                tool.layout("fileSelect",1);
+            }//如果table已经存在，就直接显示
             else {  //如果不存在，就刷新界面；
                 handleNavElement(nav_curDirName);
                 handleTableElement(nav_curDirName, sortedList, fileList);
@@ -147,7 +152,7 @@
         tool.alert(
             "点击确定之后读取文件" + fileName,
             function () {
-                selectEnd("01", fileName);
+                selectEnd(fileName);
             },
             function () {
             }
@@ -268,26 +273,32 @@
             gCurDirIndex_int = gNavDirName_Array.length - 1;
 
             //todo 获取当前的class为href-text的下标，然后把后面的数组元素都删除掉
-            removeElement(curNavIndex);
+            resetNavList(curNavIndex);
 
             gCurDir_String = gCurDirPrev_String + gNavDirName_Array.join("/") + "/" + curDir;
             win.appService.sendDataToApp(3029, '{"curdir":"' + gCurDir_String.replace(/·/, "\.") + '", "ope":0}', win.serverRequestCallback.requestDir);
         }
     };
 
-    function removeElement(delIndex) {
+    function resetNavList(delIndex) {
         var el_arr = $("#navDir").find("span"), len = el_arr.length;
-        while (len--)
-            if (len > (delIndex + 1)) el_arr[len].remove(); //循环删除比当前下标大的元素
+        while (len--) {
+            if (len > (delIndex + 1)) el_arr[len].remove(); //循环删除比当前下标的元素
+        }
     }
 
     win.RMTClickEvent.bindFileSelectTableButton = function () {
+        //如果翻页下标小于等于0，就执行退出操作
         if (gCurDirIndex_int <= 0) {
             gCurDirIndex_int--;
             gNavDirName_Array.length = 0;
             gCurDir_String = "";
-            removeElement(-1);
-            selectEnd("02");
+            resetNavList(-1);  //重置nav列表
+            tool.layout("fileSelect", 0);
+            tool.bottomBtn(0);
+
+            var callback = $("#callback_sp").text();   //如果有特殊行为，就绑定一个全局函数，这里直接调用
+            if(callback)win[callback]();    //进入文件系统之前，会把消极选择的回调帮到 #callback_sp 标签上
         }
         else {
             gCurDirIndex_int--;
@@ -297,22 +308,19 @@
     };
 
     //选择文件确定/返回
-    function selectEnd(option, fileName) {
+    function selectEnd(fileName) {
 
         var type = $("#fileSelectType").text(); //请求选择文件时，需要手动绑定选择文件的类型，默认为SVT文件
         var lastBoxId = $("#lastBoxId").text(); //绑定上一个盒子的ID号，在这里从新获取，以便文件选择结束的时候返回
         var behavior = $("#fileBehavior").text();   //确定上传到服务器还是写入到DEV
-
-        // {"fileName":"文件路径","businessId":"当前的业务ID","processId":"流程号"}
         var procedureInfo = JSON.parse($("#procedureInfo").text());   //跳转到文件选择页面之前绑定的信息，发给APP使用
 
-        if (option == "01") {
+        selectedFileName = fileName.replace(/·/, "\.");
+        var url = gCurDir_String + "/" + selectedFileName;  //把文件名发给APP，然后上传到服务器，回调里响应设备
 
-            selectedFileName = fileName.replace(/·/, "\.");
-            var url = gCurDir_String + "/" + selectedFileName;  //把文件名发给APP，然后上传到服务器，回调里响应设备
-
-            //上传到服务器使用APP端口3032
-            if (behavior === "toServer") {
+        //上传到服务器使用APP端口3032
+        switch(behavior){
+            case "toServer":{
                 tool.loading({text: "正在上传文件"});
 
                 //添加延迟，防止APP回馈信息过快，导致loading层隐藏事件快于显示事件
@@ -323,10 +331,11 @@
                         "3032"
                     );
                 }, 500);
-            } else if(behavior === "toDev") {
+            } break;
+            case "toDev":{
                 //写入到DEV使用APP端口3109
                 tool.loading({text: "正在写入文件"});
-                procedureInfo.fileName = url;
+                procedureInfo.fileName = url;   // {"fileName":"文件路径","businessId":"当前的业务ID","processId":"流程号"}
 
                 //添加延迟，防止APP回馈信息过快，导致loading层隐藏事件快于显示事件
                 setTimeout(function () {
@@ -336,20 +345,17 @@
                         "3109"
                     );
                 }, 500);
-            }else{
-                tool.alert("未定义文件处理模式！",function(){
-                    global.disconnectOBD();
-                })
-            }
-        }else{
-            setTimeout(function () {
-                tool.layout(lastBoxId, 1);
-            }, 105);
-            $("#fileList").html("");    //返回后清空
+            } break;
+            default :
+                tool.alert("未定义文件处理模式！", function () {
+                    win.appService.sendDataToApp(3999,"","");
+                });
+                break;
         }
-
+        
+        resetNavList(-1);  //重置nav列表
         tool.layout("fileSelect", 0);
-        tool.layout(lastBoxId, 1);
+        if(lastBoxId)tool.layout(lastBoxId, 1);
         tool.bottomBtn(0);
     }
 })();

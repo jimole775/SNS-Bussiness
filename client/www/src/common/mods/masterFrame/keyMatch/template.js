@@ -17,7 +17,7 @@
 		'   <div class="scroll-table-body">',
 		'       <div ng-repeat="(parentIndex,curPageData) in pagesData">',
 		'           <button class="item-button animation" style="height:8rem" ng-repeat="(curIndex,item) in curPageData | orderBy:\'index\'" ng-show="item.show">',
-		'               <span class="item-description item-description-layout-table" ng-click="handleSelect(parentIndex,item)">',
+		'               <span class="item-description item-description-layout-table" ng-class="{\'full-width\':!item.picture}" ng-click="handleSelect(parentIndex,item)">',
 		'                   <em class="item-description-layout-cell extend-font-size">{{ item.name }}</em>',
 		'               </span>',
 		'               <span class="item-value-layout-table" ng-if="item.picture" ng-click="handleHelp(item.picture)">',

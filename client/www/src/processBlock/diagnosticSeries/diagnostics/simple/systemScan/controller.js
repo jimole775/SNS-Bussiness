@@ -287,7 +287,7 @@
 			safeApply(function () {});
 			setTimeout(function () {
 				tool.layoutTable();
-				win.sendDataToDev("310901" + getCurSystemNodeAddress());
+				win.devService.sendDataToDev("310901" + getCurSystemNodeAddress());
 			}, 450);
 		}
 
@@ -343,24 +343,24 @@
 			safeApply(function () { });
 		}
 
-		win.devInterActive.Fun710901_simp = function (varRecvData) {
+		win.devService.Fun710901_simp = function (varRecvData) {
 			webViewListIndex++;
 
 			//正在清除故障码
 			if ($scope.bDoClear) {
-				win.sendDataToDev('310907');
+				win.devService.sendDataToDev('310907');
 				return;
 			}
 
 			var curSystem = getCurrentSystem();
 			if (curSystem['N']['dbfilename'] == '0' || curSystem['N']['dbfilename'] == '') {
-				var byte46 = varRecvData.substr(win.getIndexByDevIndex(46), 2);
+				var byte46 = varRecvData.substr(78, 2);
 				var fileName;
 				if (byte46 == '00' || byte46 == '') {//当为 0 时无意义，不为0时与 03 - 06 代表数据表路径+名称 ASCII码
-					curSystem['N']['dbfilename'] = varRecvData.substr(win.getIndexByDevIndex(10), 4 * 2);
+					curSystem['N']['dbfilename'] = varRecvData.substr(6, 4 * 2);
 				}
 				else {
-					fileName = tool.hex2a(varRecvData.substr(win.getIndexByDevIndex(46)));
+					fileName = tool.hex2a(varRecvData.substr(78));
 					curSystem['N']['dbfilename'] = varRecvData.substr(6, 4 * 2) + "/" + fileName;
 				}
 			}
@@ -377,16 +377,16 @@
 			Fun310905();
 		};
 
-		win.devInterActive.Fun710981_simp = function (varRecvData) {
+		win.devService.Fun710981_simp = function (varRecvData) {
 			setCurSystemState(0);
 			Fun310902();
 		};
 
 		function Fun310902() {
-			win.sendDataToDev('310902');
+			win.devService.sendDataToDev('310902');
 		}
 
-		win.devInterActive.Fun710902_simp = function () {
+		win.devService.Fun710902_simp = function () {
 			if ($scope.scanState == SystemScanState['pausing']) {
 
 			}
@@ -395,21 +395,21 @@
 
 		//读取历史故障码
 		function Fun310905() {
-			win.sendDataToDev('310905');
+			win.devService.sendDataToDev('310905');
 		}
 
 		//读取当前故障码
 		function Fun310906() {
-			win.sendDataToDev('310906');
+			win.devService.sendDataToDev('310906');
 		}
 
 		//读取带状态故障码
 		function Fun310914() {
-			win.sendDataToDev('310914');
+			win.devService.sendDataToDev('310914');
 		}
 
 		var cacheOriginalDataOfDTC = [];
-		win.devInterActive.Fun710905_simp = function (varRecvData) {
+		win.devService.Fun710905_simp = function (varRecvData) {
 			var getDtcLen = tool.hex2dec(varRecvData.substr(6, 2));
 			if (!getDtcLen) {
 				getSystemByIndex($scope.originalSystemListIndex).devReturnNull.push(true);
@@ -425,14 +425,14 @@
 			Fun310906();	//读取当前故障码
 		};
 
-		win.devInterActive.Fun710985_simp = function (varRecvData) {
+		win.devService.Fun710985_simp = function (varRecvData) {
 
 			//读取当前故障码
 			getSystemByIndex($scope.originalSystemListIndex).devReturnNull.push(true);
 			Fun310906();
 		};
 
-		win.devInterActive.Fun710906_simp = function (varRecvData) {
+		win.devService.Fun710906_simp = function (varRecvData) {
 			var getDtcLen = tool.hex2dec(varRecvData.substr(6, 2));
 			if (!getDtcLen) {
 				getSystemByIndex($scope.originalSystemListIndex).devReturnNull.push(true);
@@ -451,14 +451,14 @@
 			Fun310914();
 		};
 
-		win.devInterActive.Fun710986_simp = function (varRecvData) {
+		win.devService.Fun710986_simp = function (varRecvData) {
 
 			//读取带状态故障码
 			getSystemByIndex($scope.originalSystemListIndex).devReturnNull.push(true);
 			Fun310914();
 		};
 
-		win.devInterActive.Fun710914_simp = function (varRecvData) {
+		win.devService.Fun710914_simp = function (varRecvData) {
 
 			var getDtcLen = tool.hex2dec(varRecvData.substr(6, 2));
 			if (!getDtcLen) {
@@ -479,20 +479,20 @@
 			Fun310902();
 		};
 
-		win.devInterActive.Fun710994_simp = function (varRecvData) {
+		win.devService.Fun710994_simp = function (varRecvData) {
 			getSystemByIndex($scope.originalSystemListIndex).devReturnNull.push(true);
 			countDTCNull($scope.originalSystemListIndex);
 			cacheDtcPid();
 			Fun310902();
 		};
 
-		win.devInterActive.Fun710907_simp = function (varRecvData) {
+		win.devService.Fun710907_simp = function (varRecvData) {
 			getCurrentSystem().updataDtcClearState('clearSucceed');
 			$scope.DTCTotal.shift();
 			scanProcessMonitor();
 		};
 
-		win.devInterActive.Fun710987_simp = function (varRecvData) {
+		win.devService.Fun710987_simp = function (varRecvData) {
 			getCurrentSystem().updataDtcClearState('clearFailure');
 			scanProcessMonitor();
 		};
@@ -515,7 +515,7 @@
 				var originalIndex = cacheOriginalDataOfDTC[i].original;
 				var dtcType = cacheOriginalDataOfDTC[i].dtcType;
 
-				var count = tool.hex2dec(varRecvData.substr(win.getIndexByDevIndex(10), 2));
+				var count = tool.hex2dec(varRecvData.substr(6, 2));
 
 				//带状态故障码每8字节代表一个故障码
 				var size = (dtcType == dtcWithState ? 2 : 1);
@@ -528,7 +528,7 @@
 				};
 
 				for (var j = 0; j < count; j++) {
-					dtcPidList[j] = varRecvData.substr(win.getIndexByDevIndex(11) + 8 * size * j, 8 * size);
+					dtcPidList[j] = varRecvData.substr(8 + 8 * size * j, 8 * size);
 				}
 
 				//实例化每条故障，并存进PID数据

@@ -134,7 +134,7 @@
 			if (tool.loading.status.display) {
 				tool.alert("数据解析出现错误，请点击确定退出程序",
 				           function () {
-					           win.sendDataToDev("3109FF");
+					           win.devService.sendDataToDev("3109FF");
 				           })
 			}
 

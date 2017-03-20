@@ -10,7 +10,7 @@
 	win.badRequest = {};    //初始化远程协助回调对象；
 	win.RMTClickEvent = win.RMTClickEvent || {};    //初始化远程协助点击对象；
 
-	win.devInterActive = {};    //初始化设备交互指令对象；
+	win.devService = {};    //初始化设备交互指令对象；
 	win.moduleEntry = {};   //初始化模块入口对象；
 
 	//数组去重方案

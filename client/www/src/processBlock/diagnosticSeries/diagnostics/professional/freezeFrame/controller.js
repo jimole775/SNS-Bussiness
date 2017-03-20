@@ -43,12 +43,12 @@
 		//①TCP获取车辆导致冻结帧的故障码索引
 		function Fun31090A() {
 			//tool.processBar('正在获取故障码索引', true);
-			win.sendDataToDev("31090A");
+			win.devService.sendDataToDev("31090A");
 		}
 
 
-		win.devInterActive.Fun71090A = function (varRecvData) {
-			var codeCount = tool.hex2dec(varRecvData.substr(win.getIndexByDevIndex(10), 2));
+		win.devService.Fun71090A = function (varRecvData) {
+			var codeCount = tool.hex2dec(varRecvData.substr(6, 2));
 
 			if (codeCount <= 0) {
 
@@ -70,7 +70,7 @@
 					pids: []
 				};
 				for (var i = 0; i < codeCount; i++)
-					dataPack.pids[i] = varRecvData.substr(win.getIndexByDevIndex(11) + 8 * i, 8);
+					dataPack.pids[i] = varRecvData.substr(8 + 8 * i, 8);
 
 				//tool.processBar('正在获取故障码信息', true);
 				getFreezeFrameDtc(dataPack);
@@ -119,7 +119,7 @@
 		};
 
 
-		win.devInterActive.Fun71098A = function (varRecvData) {
+		win.devService.Fun71098A = function (varRecvData) {
 			tool.alert('设备数据读取失败',
 			           function () {
 				           releaseButtonEvent();
@@ -151,7 +151,7 @@
 			//TCP获取车辆冻结帧数据支持项 被支持时
 			else if (YhSupportService._0x0B.value) {
 
-				win.sendDataToDev("31090B" + curDtc.pid);
+				win.devService.sendDataToDev("31090B" + curDtc.pid);
 			}
 			else {
 				//当 以上二条指令都 不被支持时 列出 系统ECU表 内的所有 动态数据记录的 NAME 描述在界面 信息描述 上， DW 描述在界面 单位 上
@@ -202,11 +202,11 @@
 			for (var i in $scope.pakids)
 				if ($scope.pakids.hasOwnProperty(i)) sendData += $scope.pakids[i].pakid;
 
-			win.sendDataToDev(sendData);
+			win.devService.sendDataToDev(sendData);
 		}
 
-		win.devInterActive.Fun71091A = function (varRecvData) {
-			var count = tool.hex2dec(varRecvData.substr(win.getIndexByDevIndex(10), 4));
+		win.devService.Fun71091A = function (varRecvData) {
+			var count = tool.hex2dec(varRecvData.substr(6, 4));
 
 			var dataPack = {
 				dbfilename: global.businessInfo.dbFilename,
@@ -215,7 +215,7 @@
 			};
 
 			for (var i = 0; i < count; i++)
-				dataPack.pakids[i] = varRecvData.substr(win.getIndexByDevIndex(12) + i * 8, 8);
+				dataPack.pakids[i] = varRecvData.substr(10 + i * 8, 8);
 
 
 			getFreezeFrameSupport(dataPack);
@@ -250,7 +250,7 @@
 			tool.layoutTable();
 		};
 
-		win.devInterActive.Fun71099A = function (varRecvData) {
+		win.devService.Fun71099A = function (varRecvData) {
 			tool.alert('设备数据读取失败',
 			           function () {
 				           releaseButtonEvent();
@@ -260,9 +260,9 @@
 		};
 
 
-		win.devInterActive.Fun71090B = function (varRecvData) {
+		win.devService.Fun71090B = function (varRecvData) {
 
-			var count = tool.hex2dec(varRecvData.substr(win.getIndexByDevIndex(10), 4));
+			var count = tool.hex2dec(varRecvData.substr(6, 4));
 
 			var dataPack = {
 				dbfilename: global.businessInfo.dbFilename,
@@ -271,12 +271,12 @@
 			};
 
 			for (var i = 0; i < count; i++)
-				dataPack.pids[i] = varRecvData.substr(win.getIndexByDevIndex(12) + i * 8, 8);
+				dataPack.pids[i] = varRecvData.substr(10 + i * 8, 8);
 
 			getFreezeFrameSupport(dataPack);
 		};
 
-		win.devInterActive.Fun71098B = function (varRecvData) {
+		win.devService.Fun71098B = function (varRecvData) {
 
 			tool.alert('设备数据读取失败',
 			           function () {
@@ -326,7 +326,7 @@
 					sendData += supportItem.pid;//4个字节代表一个信息PID
 				});
 
-				win.sendDataToDev(sendData);
+				win.devService.sendDataToDev(sendData);
 
 			}
 			else {
@@ -356,11 +356,11 @@
 				}
 			}
 
-			win.sendDataToDev(sendData);
+			win.devService.sendDataToDev(sendData);
 		}
 
 
-		win.devInterActive.Fun71091B = function (varRecvData) {
+		win.devService.Fun71091B = function (varRecvData) {
 
 			var dataPack = {
 				dbfilename: global.businessInfo.dbFilename,
@@ -371,17 +371,17 @@
 
 			//所有原始值总长度
 			var totalOriginalDataLen =
-				tool.hex2dec(varRecvData.substr(win.getIndexByDevIndex(10), 4));
+				tool.hex2dec(varRecvData.substr(6, 4));
 
 			var totalOriginalData =
-				varRecvData.substr(win.getIndexByDevIndex(12), totalOriginalDataLen * 2);
+				varRecvData.substr(10, totalOriginalDataLen * 2);
 
 			//计算位置个数
 			var posDataCount =
-				parseInt(varRecvData.substr(win.getIndexByDevIndex(12) + totalOriginalDataLen * 2).length / 4);
+				parseInt(varRecvData.substr(10 + totalOriginalDataLen * 2).length / 4);
 
 			var totalPosData =
-				varRecvData.substr(win.getIndexByDevIndex(12) + totalOriginalDataLen * 2, posDataCount * 4);
+				varRecvData.substr(10 + totalOriginalDataLen * 2, posDataCount * 4);
 
 			var currentSupports = $scope.curSupports || [];
 
@@ -489,7 +489,7 @@
 
 		};
 
-		win.devInterActive.Fun71099B = function (varRecvData) {
+		win.devService.Fun71099B = function (varRecvData) {
 			//一次性获取所有用户选定的块数据原始值和计算位置
 			tool.alert('设备数据读取失败',
 			           function () {
@@ -499,10 +499,19 @@
 			);
 		};
 
-		win.devInterActive.Fun71090C = function (varRecvData) {
+		/**
+		 *硬件指令：A5 5A 00 07 C0 00 00 31 09 01 00 00 00 00 00 01 00 02
+		 *转成：                         31 09 01 00 00 00 00 00 01 00
+		 *通过硬件文档中指令的索引下标，找到对应我们的下标
+		 *
+		 * */
+		function getIndexByDevIndex(index) {
+			return index <= 7 ? 0 : (index - 7) * 2;            //我们这里都是以字符来操作，2个字符对应一个字节
+		}
+		win.devService.Fun71090C = function (varRecvData) {
 
 			//计算PID长度;
-			var count = tool.hex2dec(varRecvData.substr(win.getIndexByDevIndex(10), 2));
+			var count = tool.hex2dec(varRecvData.substr(6, 2));
 			pidsCount = count;
 			var dataPack = {
 				dbfilename: global.businessInfo.dbFilename,
@@ -537,7 +546,8 @@
 			}
 		};
 
-		win.devInterActive.Fun71098C = function (varRecvData) {
+
+		win.devService.Fun71098C = function (varRecvData) {
 			//依次获取每条动态数据流的原始值。
 			tool.alert('设备数据读取失败',
 			           function () {

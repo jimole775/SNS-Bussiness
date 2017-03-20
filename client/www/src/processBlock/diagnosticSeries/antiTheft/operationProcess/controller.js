@@ -30,7 +30,7 @@
 
         var cmdLen_int;
 
-        var stepCount = 0;  //【A】--指令流程号，操作一次加一；
+        //var stepCount = 0;  //【A】--指令流程号，操作一次加一；
         var requestType = "01"; //默认为1,
                                 // 请求类型参考菜单的supid处理类型,因为前端已经补全了所有supid,所以请求类型只有01和03
 
@@ -51,24 +51,24 @@
             //supid:state       //把supid和选项的状态绑定，服务器获取完数据之后再筛选，把选项状态反应到视图模板
         };
         win.moduleEntry.antiTheftProcess = function () {
-            stepCount = 0;  //每次重新进入流程，就重置流程号
+            //stepCount = 0;  //每次重新进入流程，就重置流程号
             tool.bottomBtn(0);  //当前流程模块全部都是弹框显示，无底部按钮需求，在此隐藏
             var firstContactDev = "0000";
-            win.sendDataToDev("310960" + firstContactDev);
+            win.devService.sendDataToDev("310960" + firstContactDev);
         };
 
-        win.devInterActive.Fun710960 = function (varRecvData) {
+        win.devService.Fun710960 = function (varRecvData) {
 
             //根据设备回复的流程号来记录，因为APP在处理文件的时候，自行和设备交互，如果在JS端自加，流程号会有断层
-            stepCount = parseInt(varRecvData.substr(6,2)) + 1;
+            //stepCount = parseInt(varRecvData.substr(6,2)) + 1;
 
             handleVarRecvData(varRecvData);
         };
 
-        win.devInterActive.Fun7109D0 = function (varRecvData) {
+        win.devService.Fun7109D0 = function (varRecvData) {
             //todo 设备响应失败
             tool.alert("CCDP设备响应失败", function () {
-                win.sendDataToDev("310902");
+                closeBusiness();
             });
         };
 
@@ -88,7 +88,7 @@
                 requestType = "01"; //请求类型为01时，代表datapack会打包所有的supid
                 switch ($scope.BombBoxType) {
                     case "00":
-                        global.disconnectOBD();
+                        closeBusiness();
                         return;
                         break;
                     case "01":  //提示框
@@ -428,9 +428,9 @@
                         }
                     }
                         break;
-                    default :   //如果是未知弹框类型，就退到主界面
+                    default :   //如果是未知弹框类型，就退出业务
                         tool.alert("未知响应类型！", function () {
-                            global.disconnectOBD();
+                            closeBusiness();
                         });
                         return;
                         break;
@@ -461,7 +461,7 @@
             } catch (e) {
                 tool.alert("程序执行失败，点击确定退出", function () {
                     console.log(e.message);
-                    global.disconnectOBD();
+                    closeBusiness();
                 });
             }
         }
@@ -478,9 +478,6 @@
             var processType = varRecvData.substr(14, 2);
             switch (processType) {
                 case "00":
-                    //tool.alert("数据传输完成!", function () {
-                    //    win.sendDataToDev("310960" + tool.toHex(stepCount++,2) + "01" +  "00");
-                    //});
                     break;
                 case "01":
 
@@ -494,13 +491,23 @@
                     //var procedureInfo = $("#procedureInfo").html();   //跳转到文件选择页面之前绑定的信息，发给APP使用
 
                     $("#fileSelectType").html("dev");
-                    $("#lastBoxId").html("carType");
+                    $("#lastBoxId").html("");
                     $("#fileBehavior").html("toDev");
+                    $("#callback_sp").html("global.userCancelSelectFile");
                     $("#procedureInfo").html(
-                        JSON.stringify({"fileName":"文件路径","businessId":parseInt(60,16),"processId":parseInt(stepCount,16)})
+                        //processId为流程号，用0代替
+                        JSON.stringify({"fileName":"文件路径","businessId":parseInt(60,16),"processId":parseInt(0,16)})
                     );
                     // {"fileName":"文件名","businessId":"当前的业务ID","processId":"流程号"}
                     win.appService.sendDataToApp(3029, JSON.stringify({"ope": 0}), win.serverRequestCallback.requestDir);
+
+                    // 如果用户取消文件选择，就执行下面的函数，这个行为只在防盗匹配生效，
+                    // 如果在其他业务下，可能就需要其他行为了
+                    win.global.userCancelSelectFile = function(){
+
+                        //如果用户取消选择文件，就下发 “3109600001FE” 给DEV，流程号无所谓
+                        win.devService.sendDataToDev("3109600001FE");
+                    };
                     break;
                 case "03":
                     //sendFileToDevFromServer();
@@ -517,7 +524,7 @@
                     break;
                 case "FF":
                     tool.alert("数据解析出错!", function () {
-                        win.sendDataToDev("310902");
+                        win.devService.sendDataToDev("3109600001FF");//流程号无所谓
                     });
                     break;
             }
@@ -546,7 +553,7 @@
                 },
                 dataPack,
                 win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.bindingATViewFromServer, [supids]),
-                    [FunGetsupidDataFromServer, global.disconnectOBD])
+                    [FunGetsupidDataFromServer, closeBusiness])
             );
 
             dataPack.supids.length = 0;
@@ -558,7 +565,7 @@
                 if (!responseObject.items.length) {
                     tool.alert('服务器无任何数据',
                         function () {
-                            global.disconnectOBD();
+                            closeBusiness();
                         }
                     );
                     return;
@@ -643,7 +650,7 @@
                          *                    menuItemCheckedIndex :菜单的选项的下标
                          ****************************************************************/
                         if (!$scope.buttons_arr.length) {
-                            win.devInterActive.Fun31096x({
+                            win.devService.Fun31096x({
                                 menuItemCheckedIndex: "",
                                 menuItemLen: "",
                                 radioCheckedIndex: "",
@@ -799,7 +806,7 @@
                         break;
                     default :
                         tool.alert("未知的响应类型！", function () {
-                            global.disconnectOBD();
+                            closeBusiness();
                         });
                         break;
                 }
@@ -809,7 +816,7 @@
                 console.log(e);
                 tool.alert('服务器数据解析出错，业务无法继续！',
                     function () {
-                        global.disconnectOBD();
+                        closeBusiness();
                     }
                 );
             }
@@ -837,7 +844,7 @@
             //所以，按正常流程，点击之后马上加载遮罩
             //而且，为了防止设备数据返回过快，未弹出遮罩，数据已经返回，造成数据发送成功，遮罩依然存在的BUG
 
-            win.devInterActive.Fun31096x({
+            win.devService.Fun31096x({
                 menuItemCheckedIndex: "",
                 menuItemLen: "",
                 radioCheckedIndex: "",
@@ -857,7 +864,7 @@
             var menuItemCheckedIndex =
                 index === "00" ? "00" : "0" + index;
 
-            win.devInterActive.Fun31096x({
+            win.devService.Fun31096x({
                 menuItemCheckedIndex: menuItemCheckedIndex,
                 menuItemLen: menuItemLen,
                 radioCheckedIndex: "",
@@ -906,7 +913,7 @@
             //所以，按正常流程，点击之后马上加载遮罩
             //而且，为了防止设备数据返回过快，未弹出遮罩，数据已经返回，造成数据发送成功，遮罩依然存在的BUG
 
-            win.devInterActive.Fun31096x({
+            win.devService.Fun31096x({
                 menuItemCheckedIndex: "",
                 menuItemLen: menuItemLen,
                 radioCheckedIndex: radioCheckedIndex,
@@ -922,7 +929,7 @@
          *                   menuItemLen :菜单的选项的总长度
          *                   menuItemCheckedIndex :菜单的选项的下标
          ****************************************************************/
-        win.devInterActive.Fun31096x = function (sendData) {
+        win.devService.Fun31096x = function (sendData) {
 
             var buttonWitchWasCheckedIndex_hex = sendData.buttonIndex;  //如果没有按钮就填入00
 
@@ -949,16 +956,20 @@
              ****************************************************************/
             var finalCmd =
                 "310960" +
-                tool.toHex(stepCount, 2) +    //流程号
+                "00" +    //流程号
                 tool.toHex(cmdCodeLen_int / 2, 2) + //后缀指令长度
                 buttonWitchWasCheckedIndex_hex +    //选择的按钮下标
                 (inputValue2Asc_asc ? inputValue2Asc_asc + "00" : "") + //输入值,如果有输入值,则在后面加上"00",不算进指令长度
                 (($scope.BombBoxType == "06") ? "" : menuItemLen_hex) +   //菜单选项的数量
                 (($scope.BombBoxType == "06") ? "" : menuItemCheckedIndexIndex_hex) +   //菜单选项被点击的下标
-                (($scope.BombBoxType == "06") ? "" : radioCheckedIndex);
+                (($scope.BombBoxType == "06") ? "" : radioCheckedIndex);    //radio的下标
 
-            win.sendDataToDev(finalCmd);
+            win.devService.sendDataToDev(finalCmd);
         };
+
+        function closeBusiness(){
+            win.appService.sendDataToApp(3999,"","");
+        }
 
     }]).config(function () {
 

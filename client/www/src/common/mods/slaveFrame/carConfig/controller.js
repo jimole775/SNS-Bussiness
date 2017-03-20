@@ -18,11 +18,11 @@
 
 		win.moduleEntry.carConfig = function (address,prevFormId) {               //入口
 			reset();
-			win.sendDataToDev('310971' + address);
+			win.devService.sendDataToDev('310971' + address);
 			tool.loading({text: "正在与车辆建立连接..."});
 		};
 
-		win.devInterActive.Fun710971 = function (varRecvData) {
+		win.devService.Fun710971 = function (varRecvData) {
 			showView = true;
 			document.getElementById("Title").innerText = "配置列表";
 			//tool.processBar('连接完毕');
@@ -39,14 +39,14 @@
 				});
 			}
 			else {
-				win.global.businessInfo.mkey = $scope.varmkey = tool.hex2a(varRecvData.substr(win.getIndexByDevIndex(10)));
+				win.global.businessInfo.mkey = $scope.varmkey = tool.hex2a(varRecvData.substr(6));
 				if ($scope.pagesOptionChosenRecord.length <= 0) requestData();
 			}
 
 		};
 
 
-		win.devInterActive.Fun7109F1 = function (varRecvData) {
+		win.devService.Fun7109F1 = function (varRecvData) {
 			//tool.processBar('车辆连接失败！');
 			tool.alert('尝试与车辆连接失败！<br>请确认：<br>1.OBD16接口已经连接稳定。<br>2.汽车点火已经处于ON状态且引擎未打开。',
 			           function () { Fun7109F1Cancel() }
@@ -291,7 +291,7 @@
 
 		//连接失败，退出到 车型选择界面
 		function Fun7109F1Cancel() {
-			win.sendDataToDev("310902");	//真正退出要从车型选择菜单退
+			win.devService.sendDataToDev("310902");	//真正退出要从车型选择菜单退
 			win.moduleEntry.carLogo("back");
 		}
 

@@ -65,7 +65,7 @@
         function FunReadNextDTC() {
 
             if (readDTCCommand.length > 0)
-                win.sendDataToDev(readDTCCommand.pop());
+                win.devService.sendDataToDev(readDTCCommand.pop());
             else {
 
                 var supStateLen = devSupportState.length;       //支持的状态码；
@@ -107,32 +107,32 @@
             }
         }
 
-        win.devInterActive.Fun710905_pro = function (varRecvData) {
+        win.devService.Fun710905_pro = function (varRecvData) {
             FunReadNextDTC();
             FunSendDTCPid2Server(dtcHistory, varRecvData);
         };
 
-        win.devInterActive.Fun710985_pro = function (varRecvData) {
+        win.devService.Fun710985_pro = function (varRecvData) {
             devReturn8x.push("85");
             FunReadNextDTC();
         };
 
-        win.devInterActive.Fun710906_pro = function (varRecvData) {
+        win.devService.Fun710906_pro = function (varRecvData) {
             FunReadNextDTC();
             FunSendDTCPid2Server(dtcCurrent, varRecvData);
         };
 
-        win.devInterActive.Fun710986_pro = function (varRecvData) {
+        win.devService.Fun710986_pro = function (varRecvData) {
             devReturn8x.push("86");
             FunReadNextDTC();
         };
 
-        win.devInterActive.Fun710914_pro = function (varRecvData) {
+        win.devService.Fun710914_pro = function (varRecvData) {
             FunReadNextDTC();
             FunSendDTCPid2Server(dtcState, varRecvData);
         };
 
-        win.devInterActive.Fun710994_pro = function (varRecvData) {
+        win.devService.Fun710994_pro = function (varRecvData) {
             devReturn8x.push("94");
             FunReadNextDTC();
         };
@@ -141,8 +141,8 @@
         var requestTimes = 0;
         //发送故障码pid到服务器运算
         function FunSendDTCPid2Server(varType, varRecvData) {
-            var cmdNum = tool.hex2dec(varRecvData.substr(win.getIndexByDevIndex(9), 2));
-            var count = tool.hex2dec(varRecvData.substr(win.getIndexByDevIndex(10), 2));
+            var cmdNum = tool.hex2dec(varRecvData.substr(4, 2));
+            var count = tool.hex2dec(varRecvData.substr(6, 2));
 
             if (count <= 0) {
                 devReturn0x00.push(cmdNum);
@@ -159,7 +159,7 @@
 
             for (var i = 0; i < count; i++)
                 //带状态故障码类型为8字节，其他为4字节
-                DataPack.pids[i] = varRecvData.substr(win.getIndexByDevIndex(11) + 8 * i * DataPack.type, 8 * DataPack.type);
+                DataPack.pids[i] = varRecvData.substr(8 + 8 * i * DataPack.type, 8 * DataPack.type);
             win.server.request(
                 global.businessInfo.serverType,
                 {
@@ -260,16 +260,16 @@
             showView = true;
             tool.loading({text: '故障码清除中...'});
             //tool.processBar('正在清除故障码', true);
-            win.sendDataToDev("310907");
+            win.devService.sendDataToDev("310907");
         };
 
-        win.devInterActive.Fun710907_pro = function () {
+        win.devService.Fun710907_pro = function () {
             //tool.processBar('清除故障完成');
             tool.loading(0);
             tool.alert('清除故障完成',function () { DTCBack(); });
         };
 
-        win.devInterActive.Fun710987_pro = function () {
+        win.devService.Fun710987_pro = function () {
             tool.loading(0);
             tool.alert('清除故障失败',function () { DTCBack(); });
             //tool.processBar('清除故障失败');

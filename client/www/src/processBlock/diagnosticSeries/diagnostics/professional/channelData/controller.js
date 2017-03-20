@@ -26,7 +26,7 @@
 			cacheChannel = tool.toHex(value, 8);
 			//tool.processBar('正在初始化数据', true);
 
-			win.sendDataToDev('31091D' + cacheChannel);
+			win.devService.sendDataToDev('31091D' + cacheChannel);
 			document.getElementById("Title").innerText = "TCP大众通道数据读值";
 			bindBottomBtn();
 			tool.layout("channeldata", 1);
@@ -36,7 +36,7 @@
 			});
 		};
 
-		win.devInterActive.Fun71099D = function () {
+		win.devService.Fun71099D = function () {
 			var i = $scope.channelDataList.length;
 			if (i) {
 
@@ -48,7 +48,7 @@
 				//关联“开始”，按钮，如果文本显示为暂停，就继续循环发送；
 				if ($scope.stateText === "暂停")
 					setTimeout(function () {
-						win.sendDataToDev('31091D' + cacheChannel);
+						win.devService.sendDataToDev('31091D' + cacheChannel);
 					}, 105);
 
 			}
@@ -63,8 +63,8 @@
 			}
 		};
 
-		win.devInterActive.Fun71091D = function (varRecvData) {
-			var count = tool.hex2dec(varRecvData.substr(win.getIndexByDevIndex(10), 2));
+		win.devService.Fun71091D = function (varRecvData) {
+			var count = tool.hex2dec(varRecvData.substr(6, 2));
 			var DataPack =
 			{
 				dbfilename: global.businessInfo.dbFilename,
@@ -77,9 +77,9 @@
 				for (var i = 0; i < gPidLen; i++)
 					DataPack.pids[i] =
 					{
-						originalX: varRecvData.substr(win.getIndexByDevIndex(11) + count * 8 + i * 2, 2),
-						originalY: varRecvData.substr(win.getIndexByDevIndex(11) + count * 8 + i * 2 + count * 2, 2),
-						pid: varRecvData.substr(win.getIndexByDevIndex(11) + i * 8, 8)
+						originalX: varRecvData.substr(8 + count * 8 + i * 2, 2),
+						originalY: varRecvData.substr(8 + count * 8 + i * 2 + count * 2, 2),
+						pid: varRecvData.substr(8 + i * 8, 8)
 					};
 
 				DataPack.pids.unDuplicate("pid");
@@ -87,12 +87,12 @@
 
 				//通知服务器之后马上请求下一条设备数据，如果等回调回来的时候再请求，会导致连续2次请求设备数据，设备反应不过来，会返回失败指令
 				setTimeout(function () {
-					if ($scope.stateText == "暂停")win.sendDataToDev('31091D' + cacheChannel);
+					if ($scope.stateText == "暂停")win.devService.sendDataToDev('31091D' + cacheChannel);
 				}, 105);
 			}
 			else {
 				for (var j = 0; j < count; j++)
-					DataPack.pids[j] = varRecvData.substr(win.getIndexByDevIndex(11) + j * 8, 8);
+					DataPack.pids[j] = varRecvData.substr(8 + j * 8, 8);
 
 				gPidLen = DataPack.pids.length;
 				DataPack.pids.unDuplicate();
@@ -275,7 +275,7 @@
 				showView = true;
 				$scope.stateText = '暂停';
 				$scope.isBtnBackEnable = false;
-				win.sendDataToDev('31091D' + cacheChannel);
+				win.devService.sendDataToDev('31091D' + cacheChannel);
 			});
 		}
 

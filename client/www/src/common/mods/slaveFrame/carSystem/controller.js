@@ -38,7 +38,7 @@
 			else {
 				reset();
 				tool.loading({text: "正在获取系统列表信息..."});
-				win.sendDataToDev("310970" + address);
+				win.devService.sendDataToDev("310970" + address);
 			}
 		};
 
@@ -119,9 +119,9 @@
 			tool.loading(0);
 		};
 
-		win.devInterActive.Fun710970 = function (varRecvData) {
+		win.devService.Fun710970 = function (varRecvData) {
 
-			var count = tool.hex2dec(varRecvData.substr(win.getIndexByDevIndex(10), 2));
+			var count = tool.hex2dec(varRecvData.substr(6, 2));
 
 			var DataPack = {
 				parents: [],    //服务器解析名为 parents；
@@ -129,13 +129,13 @@
 			};
 
 			for (var i = 0; i < count; i++) {
-				DataPack.systemid[i] = varRecvData.substr(win.getIndexByDevIndex(11) + 8 * i, 8);
+				DataPack.systemid[i] = varRecvData.substr(8 + 8 * i, 8);
 			}
 
 			requestData(DataPack);
 		};
 
-		win.devInterActive.Fun7109F0 = function (varRecvData) {
+		win.devService.Fun7109F0 = function (varRecvData) {
 			tool.loading(0);
 
 			//tool.processBar('车辆连接失败！');
@@ -192,7 +192,7 @@
 			//如果车型支持 '模式三' ,就跳到 '模式三' 界面,
 			//只有在 '模式三' 界面退出时,才真正退到 车型选择界面
 			if (win.global.businessInfo.connectMode == 3) {
-				win.devInterActive.Fun710971();
+				win.devService.Fun710971();
 			}
 			else {
 				win.moduleEntry.carType(-1);

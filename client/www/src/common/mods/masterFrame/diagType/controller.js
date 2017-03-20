@@ -46,7 +46,7 @@
 
 		function moduleExit(){
 			tool.layout(thisBoxId,0);
-			win.sendDataToDev("3109FF");    //通知设备复位
+			win.devService.sendDataToDev("3109FF");    //通知设备复位
 			win.moduleEntry.carLogo(-1);
 		}
 

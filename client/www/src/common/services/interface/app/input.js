@@ -33,7 +33,7 @@ $ (document).ready (function () {
 		//如果callbackId匹配到相应的callbackId字串，就是JS主动请求信息，直接调用回调就OK
 		//否则，都是APP主动推送信息
 		//不过需要注意的是，不能在远程机器上运行这个代码
-		if(callbackId.match(/callbackId/) && global.businessInfo.ID != 2){
+		if(callbackId.match(/callbackId/) && global.RMTID.role != 2){
 			win.appService.getCallbackById(callbackId)(recvData);
 			return;
 		}
@@ -83,7 +83,7 @@ $ (document).ready (function () {
 	};
 
 	interActiveState.end.quit = function () {
-		win.sendDataToDev ("3109FF");
+		win.devService.sendDataToDev ("3109FF");
 	};
 	interActiveState.end.close = function () {
 		win.appService.sendDataToApp (3999, "", "");
@@ -118,8 +118,6 @@ $ (document).ready (function () {
 			})());
 
 			document.getElementById("ShowMessage").style.display = "block";
-			//document.getElementById("bottomButton").style.width = "0";
-			//document.getElementById("footer").style.width = "100%";
 			tool.bottomBtn(0);
 		}
 
@@ -135,12 +133,13 @@ $ (document).ready (function () {
 			tool.log (recvData);
 		}
 	};
+
 	interActiveState.process.statusMsg = function (recvData) {
 		tool.processBar (recvData);
 	};
 
 	interActiveState.process.startBusiness = function () {
-		win.sendDataToDev ("C09B");
+		win.devService.sendDataToDev ("C09B");
 	};
 
 

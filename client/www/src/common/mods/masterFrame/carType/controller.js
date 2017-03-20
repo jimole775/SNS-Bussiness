@@ -436,7 +436,7 @@
 					win.global.businessInfo.operationMenuCache = [$scope.pagesData[$scope.pagesData.length - 1], "carType"];
 				}
 
-				//发送3027登入服务器,下一个入口在src/common/services/interActivePorts/devInterActive.js
+				//发送3027登入服务器,下一个入口在src/common/services/interActivePorts/devService.js
 				win.appService.sendDataToApp(win.CONSTANT.JS_TO_APP.REQUEST_LOGIN_SERVER, global.businessInfo.link, "3027");
 			}
 
@@ -454,7 +454,7 @@
 			else {
 				win.global.businessInfo.operationMenuCache = [nodeAddress.replace(/\./g, ""), "carType"];
 
-				//发送3027登入服务器,下一个入口在src/common/services/interActivePorts/devInterActive.js
+				//发送3027登入服务器,下一个入口在src/common/services/interActivePorts/devService.js
 				win.appService.sendDataToApp(win.CONSTANT.JS_TO_APP.REQUEST_LOGIN_SERVER, global.businessInfo.link, "3027");
 			}
 		}

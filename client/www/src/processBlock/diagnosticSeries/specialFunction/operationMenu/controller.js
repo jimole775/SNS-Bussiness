@@ -20,7 +20,7 @@
          */
         win.moduleEntry.operationList = function (address, prevFormId) {
             showView = true;
-            win.sendDataToDev("310901" + address);
+            win.devService.sendDataToDev("310901" + address);
             win.tool.loading({pos: "body", text: "正在获取服务列表..."});
         };
 
@@ -49,23 +49,23 @@
 
 
         //连接ECU  DEV应答：0x7109+0x01（成功）/0x11(失败)+数据表文件名称(4B)+支持的服务代号(30 B)
-        win.devInterActive.Fun710901 = function (varRecvData) {
+        win.devService.Fun710901 = function (varRecvData) {
 
             //如果在服务器的car.xml里面读取到的dbfilename的值为0或者空，就需要在 710901 里面从新读取，否则就直接使用car.xml的dbfilename
             if (global.businessInfo.dbFilenamePrev == '0' || global.businessInfo.dbFilenamePrev.trim() == '') {
-                var byte46 = varRecvData.substr(win.getIndexByDevIndex(46), 2);
+                var byte46 = varRecvData.substr(78, 2);
                 var fileName,path;
 
                 //46位的值为00时，只要获取path路路径给服务器就行
                 if (byte46 == '00') {
-                    path = varRecvData.substr(win.getIndexByDevIndex(10), 4 * 2);
+                    path = varRecvData.substr(6, 4 * 2);
                     win.global.businessInfo.dbFilename = path;
                 }
 
                 //如果46位的值不为00，需要获取path路径和文件名给服务器
                 else {
                     path = varRecvData.substr(6, 4 * 2);
-                    fileName = tool.hex2a(varRecvData.substr(win.getIndexByDevIndex(46)));
+                    fileName = tool.hex2a(varRecvData.substr(78));
                     win.global.businessInfo.dbFilename = path + "/" + fileName;
                 }
             }else{
@@ -135,7 +135,7 @@
                             });
                             return result;
                         }) ();
-                    win.sendDataToDev("310962" + tool.toHex(responseObject.items.length, 2) + supidstr + "00");
+                    win.devService.sendDataToDev("310962" + tool.toHex(responseObject.items.length, 2) + supidstr + "00");
                 }else{
                     //如果不支持62，就直接列出所有返回的服务项
                     //特殊功能服务列表文本会出现\\n换行符，需要转切成数组形式，通过ng-repeat绑定
@@ -158,7 +158,7 @@
         };
 
         //获取服务列表的支持情况
-        win.devInterActive.Fun710962 = function (varRecvData) {
+        win.devService.Fun710962 = function (varRecvData) {
             var pidLen = tool.hex2dec(varRecvData.substr(6,2));
             var pidstack = varRecvData.substr(8);
             var i = 0;
@@ -181,7 +181,7 @@
             serviceListRequest(DataPack);
         };
 
-        win.devInterActive.Fun7109D2 = function (varRecvData) {
+        win.devService.Fun7109D2 = function (varRecvData) {
             //tool.processBar("设备数据读取失败");
             tool.alert("设备数据读取失败", function () {
                 win.SendJsDataToDev("710902");
@@ -222,7 +222,7 @@
         };
 
 
-        win.devInterActive.Fun710981 = function (varRecvData) {
+        win.devService.Fun710981 = function (varRecvData) {
             //tool.processBar("获取服务列表失败");
 
             tool.alert('CCDP设备尝试与车辆连接失败！<br>请确认：<br>1.OBD16接口已经连接稳定。<br>2.汽车点火已经处于ON状态且引擎未打开。',
@@ -234,7 +234,7 @@
         };
 
         //退到前一个菜单
-        win.devInterActive.Fun710902 = function () {
+        win.devService.Fun710902 = function () {
             tool.layout("ShowOperate", 0);
             win.tool.loading(0);
             setTimeout(function(){
@@ -242,7 +242,7 @@
             },500);
         };
 
-        win.devInterActive.Fun710982 = function () {
+        win.devService.Fun710982 = function () {
             //断开连接异常，就直接强制退出业务；
             tool.alert("断开OBD系统失败，请直接重启设备",function(){
                 win.appService.sendDataToApp(3999,"","");
@@ -251,7 +251,7 @@
 
         win.global.disconnectOBD = function() {
             win.tool.loading({text:"正在断开OBD系统..."});
-            win.sendDataToDev("310902");    //断开OBD连接
+            win.devService.sendDataToDev("310902");    //断开OBD连接
         }
 
     }]);

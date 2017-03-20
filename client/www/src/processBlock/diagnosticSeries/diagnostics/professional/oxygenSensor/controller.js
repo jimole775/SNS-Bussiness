@@ -42,11 +42,11 @@
 		//①CCDP获取氧传感器分组
 		function Fun310917() {
 			//tool.processBar("正在获取分组信息", true);
-			win.sendDataToDev("310917");
+			win.devService.sendDataToDev("310917");
 		}
 
-		win.devInterActive.Fun710917 = function (varRecvData) {
-			var count = tool.hex2dec(varRecvData.substr(win.getIndexByDevIndex(10), 4));
+		win.devService.Fun710917 = function (varRecvData) {
+			var count = tool.hex2dec(varRecvData.substr(6, 4));
 			if (!count) {
 				tool.alert('无任何传感器组支持',
 				           function () {
@@ -63,13 +63,13 @@
 			};
 
 			for (var i = 0; i < count; i++)
-				DataPack.pids[i] = varRecvData.substr(win.getIndexByDevIndex(12) + i * 8, 8);
+				DataPack.pids[i] = varRecvData.substr(10 + i * 8, 8);
 
 			getGroupFromServer(DataPack);
 
 		};
 
-		win.devInterActive.Fun710997 = function (varRecvData) {
+		win.devService.Fun710997 = function (varRecvData) {
 			tool.alert('设备数据读取失败',
 			           function () {
 				           oxygenIsBtnDisable();
@@ -119,7 +119,7 @@
 			//tool.processBar("正在获取支持项", true);
 			if (showView)tool.loading({pos: "body", text: "获取数据..."});
 			if (YhSupportService._0x18.value)
-				win.sendDataToDev("310918" + $scope.curGroupItem.pid);
+				win.devService.sendDataToDev("310918" + $scope.curGroupItem.pid);
 			else
 				FunGetOxygenSensorSupportFromServer();
 
@@ -134,9 +134,9 @@
 			};
 
 			if (varRecvData) {
-				var count = tool.hex2dec(varRecvData.substr(win.getIndexByDevIndex(10), 4));
+				var count = tool.hex2dec(varRecvData.substr(6, 4));
 				for (var i = 0; i < count; i++) {
-					DataPack.pids[i] = varRecvData.substr(win.getIndexByDevIndex(12) + i * 8, 8);
+					DataPack.pids[i] = varRecvData.substr(10 + i * 8, 8);
 				}
 			}
 			getSupportsFromServer(DataPack);
@@ -179,11 +179,11 @@
 		};
 
 
-		win.devInterActive.Fun710918 = function (varRecvData) {
+		win.devService.Fun710918 = function (varRecvData) {
 			FunGetOxygenSensorSupportFromServer(varRecvData);
 		};
 
-		win.devInterActive.Fun710998 = function (varRecvData) {
+		win.devService.Fun710998 = function (varRecvData) {
 			tool.alert('设备数据读取失败',
 			           function () {
 				           oxygenIsBtnDisable();
@@ -197,15 +197,15 @@
 			//tool.processBar("正在计算信息值", true);
 
 			//310919 + 氧传感器组pid + 数据pid
-			win.sendDataToDev("310919" + $scope.curGroupItem.pid + $scope.curSupports[$scope.curSupportsIndex].pid);
+			win.devService.sendDataToDev("310919" + $scope.curGroupItem.pid + $scope.curSupports[$scope.curSupportsIndex].pid);
 		}
 
-		win.devInterActive.Fun710919 = function (varRecvData) {
+		win.devService.Fun710919 = function (varRecvData) {
 
 			var supportItem = $scope.curSupports[$scope.curSupportsIndex];
-			supportItem.originalCurr = varRecvData.substr(win.getIndexByDevIndex(12), 2);
-			supportItem.originalMin = varRecvData.substr(win.getIndexByDevIndex(13), 2);
-			supportItem.originalMax = varRecvData.substr(win.getIndexByDevIndex(14), 2);
+			supportItem.originalCurr = varRecvData.substr(10, 2);
+			supportItem.originalMin = varRecvData.substr(12, 2);
+			supportItem.originalMax = varRecvData.substr(14, 2);
 
 			//循环读取氧传感器分组数据原始值
 			$scope.curSupportsIndex++;
@@ -220,7 +220,7 @@
 			}
 		};
 
-		win.devInterActive.Fun710999 = function (varRecvData) {
+		win.devService.Fun710999 = function (varRecvData) {
 
 			//循环读取氧传感器分组数据原始值
 			$scope.curSupportsIndex++;

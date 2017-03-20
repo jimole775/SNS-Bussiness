@@ -9,7 +9,7 @@ document.body.innerHTML += [
     '<div id="fileSelect" class="data-box">',
     '   <header class="scroll-table-header">',
     '       <h1 class="box-title" style="text-indent: 0"><span id="fileSelectType">FA/SVT</span>文件选择</h1>',
-    '       <p style="display:none"><em id="lastBoxId"></em><em id="fileBehavior"></em><em id="procedureInfo"></em></p>',
+    '       <p style="display:none"><em id="lastBoxId"></em><em id="fileBehavior"></em><em id="procedureInfo"></em><em id="callback_sp"></p>',
     '       <p class="box-p" id="navDir">',
     '           <span>文件目录:</span>',
     '       </p>',
