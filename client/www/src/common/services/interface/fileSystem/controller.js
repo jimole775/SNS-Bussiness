@@ -8,7 +8,7 @@
     var gNavDirName_Array = [];
     var selectedFileName = "";
     var gCurDir_String = "";
-    var validateFileCallBack = "VALIDATE";			//验证编程文件回调ID
+    var validateFileCallBack = "VALIDATE";  //验证编程文件回调ID
 
     //验证编程文件
     win.serverRequestCallback.validateFile = function (responseObject, params) {
@@ -118,21 +118,21 @@
             }
         );
         if (varJson.CodeType == 'OK') {
-            var originDir = varJson.CodeData.curdir;	                    //缓存当前目录
-            var curDir = originDir.replace(/\./, "·");	                    //替换 .符号 为 中文符号· 避免以此文本为id号时，无法获取，最后发送dir串 给APP时再转换回来
-            var fileList = varJson.CodeData.files;                          //fileList里面也会有 .符号，在创建标签的时候再进行处理
+            var originDir = varJson.CodeData.curdir;    //缓存当前目录
+            var curDir = originDir.replace(/\./, "·");  //替换 .符号 为 中文符号· 避免以此文本为id号时，无法获取，最后发送dir串 给APP时再转换回来
+            var fileList = varJson.CodeData.files;  //fileList里面也会有 .符号，在创建标签的时候再进行处理
             var sortedList = [], i;
             for (i = 0; i < fileList.length; i++) sortedList.push(fileList[i].file);
 
-            var nav_curDirName = (function () {                             //从当前url中截取最后的文件夹名字；
+            var nav_curDirName = (function () { //从当前url中截取最后的文件夹名字；
                 var url = curDir.split("/");
                 return url[url.length - 1];
             })();
 
-            var isTableExist = TagCoverChecking(nav_curDirName);           //隐藏所有table,并判断当前文件夹的table是否已经存在
+            var isTableExist = TagCoverChecking(nav_curDirName);    //隐藏所有table,并判断当前文件夹的table是否已经存在
 
-            if (isTableExist) $("#table_" + nav_curDirName).show();       //如果table已经存在，就直接显示
-            else {                                                          //如果不存在，就刷新界面；
+            if (isTableExist) $("#table_" + nav_curDirName).show(); //如果table已经存在，就直接显示
+            else {  //如果不存在，就刷新界面；
                 handleNavElement(nav_curDirName);
                 handleTableElement(nav_curDirName, sortedList, fileList);
             }
@@ -157,12 +157,12 @@
 
     function TagCoverChecking(nav_curDirName) {
         var isTableExist = false;
-        var file_tables = $("#fileList").find("table");                                 //遍历所有table,如果有的话，首先隐藏所有table,顺便获取当前的已经存在的table的ID号；
+        var file_tables = $("#fileList").find("table"); //遍历所有table,如果有的话，首先隐藏所有table,顺便获取当前的已经存在的table的ID号；
         var len = file_tables.length;
 
         while (len--) {
             file_tables[len].style.display = "none";
-            if (file_tables[file_tables.length - 1].id === "table_" + nav_curDirName)    //判断是否已经存在了table,以ID号为判断标准
+            if (file_tables[file_tables.length - 1].id === "table_" + nav_curDirName)   //判断是否已经存在了table,以ID号为判断标准
                 isTableExist = true;
         }
         return isTableExist;
@@ -170,27 +170,27 @@
 
 
     function handleNavElement(nav_curDirName) {
-        gNavDirName_Array.push(nav_curDirName);                                            //把导航的所有文件夹的名字存起来；
-        gCurDirIndex_int++;                                                                 //存一次，当前导航条的下标就+1；
+        gNavDirName_Array.push(nav_curDirName); //把导航的所有文件夹的名字存起来；
+        gCurDirIndex_int++; //存一次，当前导航条的下标就+1；
 
-        $("#navDir").find("em").removeClass("href-text").addClass("disable-text");      //首先刷新导航条字体颜色为灰色；
-        var navStrHtml =                                                                    //创建拼接字串；
+        $("#navDir").find("em").removeClass("href-text").addClass("disable-text");  //首先刷新导航条字体颜色为灰色；
+        var navStrHtml =    //创建拼接字串；
             '<span id="nav_' + nav_curDirName + '">' +
             '   <i class="auxiliary-mark">/&nbsp;</i>' +
             '   <em class="href-text" ' +
             '       onclick="RMTClickEvent.navDirController(\'' + nav_curDirName + '\')">' +
-            nav_curDirName.replace(/·/, "\.") + '&nbsp;' +                           //显示的时候还是使用英文.符号；
+            nav_curDirName.replace(/·/, "\.") + '&nbsp;' +  //显示的时候还是使用英文.符号；
             '   </em>' +
             '</span>';
 
-        $("#navDir").append(navStrHtml);                                                  //往navDir 后面塞；
+        $("#navDir").append(navStrHtml);    //往navDir 后面塞；
     }
 
     function handleTableElement(nav_curDirName, sortedList, fileList) {
         var i, fileProsHtml = "", filesHtml = "";
         for (i = 0; i < fileList.length; i++) {
-            var fileUrl = /\.dev/ig.test(sortedList[i]) ? "images/DevFile.png" : "images/NormFile.png";    //区分dev文件和其他类型文件
-            var queryID = sortedList[i].replace(/\./, "·");                          //由于HTML元素的ID名无法识别点符号“.”，所以全部转换成中文点符号"·",在转发URL给APP之前，再替换回来;
+            var fileUrl = /\.dev/ig.test(sortedList[i]) ? "images/DevFile.png" : "images/NormFile.png"; //区分dev文件和其他类型文件
+            var queryID = sortedList[i].replace(/\./, "·"); //由于HTML元素的ID名无法识别点符号“.”，所以全部转换成中文点符号"·",在转发URL给APP之前，再替换回来;
 
             if (fileList[i].isdir)
                 fileProsHtml +=
@@ -237,13 +237,13 @@
         var len = file_tables.length;
         while (len--) file_tables[len].style.display = "none";
 
-        gCurDirIndex_int = navName_Array.index(curNavName);         //返回键和导航条事件共用一个方法,但是导航条获取
+        gCurDirIndex_int = navName_Array.index(curNavName); //返回键和导航条事件共用一个方法,但是导航条获取
         $("#table_" + navID).show();
     }
 
     //打开下一级文件夹
     win.RMTClickEvent.nextLevel = function (curDir) {
-        $("#img_" + curDir).attr("src", "images/FilePro_open.png");     //点击过后,就把 "闭合的" 文件夹图片替换成 "打开的" 文件夹图片
+        $("#img_" + curDir).attr("src", "images/FilePro_open.png"); //点击过后,就把 "闭合的" 文件夹图片替换成 "打开的" 文件夹图片
         var reg = new RegExp(curDir, "g");
 
         //如果打开的新目录已经存在，就执行导航事件，直接读取缓存，不用再次从APP获取；
@@ -278,7 +278,7 @@
     function removeElement(delIndex) {
         var el_arr = $("#navDir").find("span"), len = el_arr.length;
         while (len--)
-            if (len > (delIndex + 1)) el_arr[len].remove();                       //循环删除比当前下标大的元素
+            if (len > (delIndex + 1)) el_arr[len].remove(); //循环删除比当前下标大的元素
     }
 
     win.RMTClickEvent.bindFileSelectTableButton = function () {
@@ -309,7 +309,7 @@
         if (option == "01") {
 
             selectedFileName = fileName.replace(/·/, "\.");
-            var url = gCurDir_String + "/" + selectedFileName;                      //把文件名发给APP，然后上传到服务器，回调里响应设备
+            var url = gCurDir_String + "/" + selectedFileName;  //把文件名发给APP，然后上传到服务器，回调里响应设备
 
             //上传到服务器使用APP端口3032
             if (behavior === "toServer") {
@@ -318,8 +318,8 @@
                 //添加延迟，防止APP回馈信息过快，导致loading层隐藏事件快于显示事件
                 setTimeout(function () {
                     win.appService.sendDataToApp(
-                        3032,                                                           //数据源，FFFF(客户端软件日志),0000(预留),0001(日志文件),0002(防盗数据文件),
-                        '{"file":"' + url + '", "type":"0006"}',                        // 0003(EEPROM文件),0004(FLASH文件),0005(设码数据文件),0006(编程文件)
+                        3032,   //数据源，FFFF(客户端软件日志),0000(预留),0001(日志文件),0002(防盗数据文件),
+                        '{"file":"' + url + '", "type":"0006"}',    // 0003(EEPROM文件),0004(FLASH文件),0005(设码数据文件),0006(编程文件)
                         "3032"
                     );
                 }, 500);
@@ -345,7 +345,7 @@
             setTimeout(function () {
                 tool.layout(lastBoxId, 1);
             }, 105);
-            $("#fileList").html("");	//返回后清空
+            $("#fileList").html("");    //返回后清空
         }
 
         tool.layout("fileSelect", 0);
