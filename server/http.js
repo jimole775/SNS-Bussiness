@@ -43,7 +43,7 @@ CreateHttp.prototype.writeHead = function(req, res){
 	}
 
 	res.writeHead(200, {
-		'Cache-Control':"max-age=" + 1800,
+		//'Cache-Control':"max-age=" + 1800,
 		"Content-Type": resType
 	});
 };

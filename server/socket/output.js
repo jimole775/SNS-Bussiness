@@ -36,8 +36,8 @@
             if (item.asker.uid == data.uid || item.helper.uid == data.uid) {
                 asker = item.asker.session;
                 helper = item.helper.session;
-                that.send(asker, 4, {disconnect: true});
-                that.send(helper, 4, {disconnect: true});
+                that.send(asker, 0x05, {disconnect: true});
+                that.send(helper, 0x05, {disconnect: true});
                 chanelMap.splice(index, 1);   //删除远程会话通道
             }
         });
@@ -47,45 +47,49 @@
     //两个用户的对接
     WebSocket.prototype.openChanel = function (data) {
         var that = this;
-        var asker = that.tool.getSession(data.uid, clients);
-        var helper = that.tool.getSession(data.items.helper, clients);
+        var asker = that.tool.getSession(data.items.askerUid, clients);
+        var helper = that.tool.getSession(data.items.helperUid, clients);
 
         //存储远程对话通道
         chanelMap.push({
-            asker: {uid: data.uid, session: asker},
-            helper: {uid: data.items.helper, session: helper}
+            asker: {uid: data.items.askerUid, session: asker},
+            helper: {uid: data.items.helperUid, session: helper}
         });
 
-        that.send(asker, 2, {remoteRole: 1});
-        that.send(helper, 2, {remoteRole: 2});
+        that.send(asker, 0x02, {remoteRole: 1});
+        that.send(helper, 0x02, {remoteRole: 2});
     };
 
-    //远程链接询问
+    //远程链接询问，把询问信息推给协助者
     WebSocket.prototype.remoteConnectAsk = function (data, socket) {
         var helper = this.tool.getSession(data.items.helperUid, clients);
         this.send(
             helper,
-            1,
+            0x01,
             {
+                asker:data.items.askerUid,
                 helper: data.items.helperUid,
                 RMTResponse: data.items.RMTResponse
             }
         );
     };
 
-    //远程链接应答
+    //远程链接,把应答消息推给询问者
     WebSocket.prototype.remoteConnectAnswer = function (data, socket) {
 
+        //积极应答，就直接开通协助通道
         if (data.items.RMTResponse) {
             this.openChanel(data);
         }
+
+        //消极应答，直接发03通知询问方
         else {
             var asker = this.tool.getSession(data.uid, clients);
             this.send(
                 asker,
-                2,
+                0x03,
                 {
-                    RMTResponse: data.items.RMTResponse
+
                 }
             );
         }
@@ -96,10 +100,10 @@
         var that = this;
         var map = that.tool.getChanelSession(chanelMap,data.uid);
         if (data.items.remoteRole == 1) {
-            that.send(map.helper, 3, data.items);
+            that.send(map.helper, 0x04, data.items);
         }
         else if (data.items.remoteRole == 2) {
-            that.send(map.asker, 3, data.items);
+            that.send(map.asker, 0x04, data.items);
         }
     };
 
@@ -123,7 +127,7 @@
         });
 
         clients.forEach(function (item, index) {
-            that.send(item.session, 0, {userList: namesMap.join(",")});
+            that.send(item.session, 0x00, {userList: namesMap.join(",")});
         });
     };
 
@@ -141,7 +145,7 @@
 
             //向所有的用户推送用户名
             clients.forEach(function (item, index) {
-                that.send(item.session, 0, {userList: namesMap.join(",")});
+                that.send(item.session, 0x00, {userList: namesMap.join(",")});
             });
 
         }
