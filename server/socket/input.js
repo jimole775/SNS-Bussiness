@@ -56,10 +56,10 @@
                         that.distributeUid(data, socket);
                         break;
                     case 1:   //协助通道的询问
-                        that.handleRMTRequest(data, socket);
+                        that.remoteConnectAsk(data, socket);
                         break;
                     case 2:   //协助通道的应答
-                        that.handleRMTResponse(data, socket);
+                        that.remoteConnectAnswer(data, socket);
                         break;
                     case 3:   //远程协助交互通道
                         that.RMTInterActive(data);
@@ -80,7 +80,6 @@
                 break;
         }
     };
-
 
     var crypto = require('crypto');
     //单个用户的握手实例;

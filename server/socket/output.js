@@ -60,6 +60,38 @@
         that.send(helper, 2, {remoteRole: 2});
     };
 
+    //远程链接询问
+    WebSocket.prototype.remoteConnectAsk = function (data, socket) {
+        var helper = this.tool.getSession(data.items.helperUid, clients);
+        this.send(
+            helper,
+            1,
+            {
+                helper: data.items.helperUid,
+                RMTResponse: data.items.RMTResponse
+            }
+        );
+    };
+
+    //远程链接应答
+    WebSocket.prototype.remoteConnectAnswer = function (data, socket) {
+
+        if (data.items.RMTResponse) {
+            this.openChanel(data);
+        }
+        else {
+            var asker = this.tool.getSession(data.uid, clients);
+            this.send(
+                asker,
+                2,
+                {
+                    RMTResponse: data.items.RMTResponse
+                }
+            );
+        }
+    };
+
+    //开始远程交互
     WebSocket.prototype.RMTInterActive = function (data) {
         var that = this;
         var map = that.tool.getChanelSession(chanelMap,data.uid);
@@ -71,11 +103,13 @@
         }
     };
 
+    //用户关闭socket链接
     WebSocket.prototype.close = function (data) {
         this.refreshUserList(data);
         this.disconnectChanel(data);
     };
 
+    //刷新好友列表
     WebSocket.prototype.refreshUserList = function (data) {
         var that = this;
         //删除断线的用户，重新推送到客户端
@@ -93,6 +127,7 @@
         });
     };
 
+    //绑定用户信息
     WebSocket.prototype.distributeUid = function (data, socket) {
 
         if (!namesMap.join(",").match(new RegExp(data.uid, "g"))) {
@@ -112,34 +147,7 @@
         }
     };
 
-    WebSocket.prototype.handleRMTRequest = function (data, socket) {
-        var helper = this.tool.getSession(data.items.helperUid, clients);
-        this.send(
-            helper,
-            1,
-            {
-                helper: data.items.helperUid,
-                RMTResponse: data.items.RMTResponse
-            }
-        );
-    };
 
-    WebSocket.prototype.handleRMTResponse = function (data, socket) {
-
-        if (data.items.RMTResponse) {
-            this.openChanel(data);
-        }
-        else {
-            var asker = this.tool.getSession(data.uid, clients);
-            this.send(
-                asker,
-                2,
-                {
-                    RMTResponse: data.items.RMTResponse
-                }
-            );
-        }
-    };
     module.exports = WebSocket;
 
 })();

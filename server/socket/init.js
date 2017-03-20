@@ -94,9 +94,6 @@ WebSocket.prototype.init = function () {
         socket.on('timeout', function (sock) {
             console.log("timeout", sock);
         });
-        //socket.on('drain',function(sock){
-        //	console.log("drain��",sock);
-        //});
         socket.on('data', function (e) {
             var frame = that.tool.decodeDataFrame(e);
             //
