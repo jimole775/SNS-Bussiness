@@ -12,7 +12,7 @@
 		'               <span class="item-description item-description-layout-table" ng-click="eventHandle(item)">',
 		'                   <em class="item-description-layout-cell extend-font-size">{{ item.name }}</em>',
 		'               </span>',
-						//下拉显示描述文本
+						//涓嬫媺鏄剧ず鎻忚堪鏂囨湰
 		'               <span class="item-value-layout-table" ng-click="descHandle()">',
 		'                   <span class="item-value-layout-cell">',
 		'                       <i class="arrow-down arrow-layout-middle animation"></i>',

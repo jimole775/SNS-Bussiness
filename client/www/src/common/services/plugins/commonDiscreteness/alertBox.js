@@ -101,7 +101,6 @@
 	 */
 	CommonTool.prototype.popBox = function (boxID) {
 		this.loading(0);
-		//if (global && typeof global.extendButton === "function")global.extendButton ();
 
 		var that = this;
 		var objBox = $("#" + boxID);
@@ -131,27 +130,22 @@
 
 		$.fn.calcAlertBoxHeight = function () {
 
-			var title = objBox.children(":first");                        //3层盒子的第一个盒子
-			var contentBox = title.next();                                //3层盒子的第二个盒子
-			var bottomBtn = objBox.find(".bottom-bar-button-box");        //3层盒子的第三个盒子
+			var title = objBox.children(":first");	//3层盒子的第一个盒子
+			var contentBox = title.next();	//3层盒子的第二个盒子
+			var bottomBtn = objBox.find(".bottom-bar-button-box");	//3层盒子的第三个盒子
 
-			var _p = $(contentBox).find("p");
-			if (!_p.length) _p = $(contentBox).find("li");                           //如果没有P元素，直接获取li元素，以解决第二层盒子是ul元素
-
-			var _pHeightsAmount = (function () {
-				var len = _p.length;
-				var result = 0;
-				while (len--) {
-					result += that.realHeight($(_p[len]));
-				}
-
-				return result;               //计算第一个的高度，整个盒子的高度以整个为基准，
+			var titleHeight = title[0].clientHeight;
+			var bottomHeight = bottomBtn[0].clientHeight;
+			var contentHeight = (function(){	//循环content内部的子层，计算高度
+				var result = null;
+				var ary = contentBox[0].children;
+				Array.prototype.forEach.call(ary,function(item){
+					result += item.clientHeight;
+				});
+				return result;
 			})();
 
-			var titleHeight = that.realHeight(title);
-			var bottomHeight = that.realHeight(bottomBtn);
-
-			if ((titleHeight + bottomHeight + _pHeightsAmount) >= maxHeight) {                //如果盒子高度大于屏幕高度的80%，就重新设定样式
+			if ((titleHeight + bottomHeight + contentHeight) >= maxHeight) {	//如果盒子高度大于屏幕高度的80%，就重新设定样式
 
 				objBox.css({
 					"height": maxHeight

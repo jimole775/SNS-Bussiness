@@ -154,8 +154,7 @@
 	'<p class="box-p">版本信息：</p>'+
 	
 	'<p class="box-p warn-text">编程存在一定风险可能会导致模块损坏（异常）或者车辆无法启动，是否继续编程？</p>'+
-	
-	'<p class="box-p" id="programTip"></p>'+
+
 	'</div>'+
 	'<div class="scroll-table-body">'+
 	'<table class="list-table click-list" id="moduleInfosSelect">'+
@@ -292,8 +291,7 @@
 	'<p class="box-p">输入格式：xxxx_xxxxxxxx_xxx_xxx_xxx</p>'+
 	
 	'<p class="box-p"><label><input type="text" id="moduleInput" maxLength="25" style="width:80%;"/></label></p>'+
-	
-	'<div id="moduleInputTip"></div>'+
+
 	'</div>'+
 	'<div class="bottom-bar-button-box">'+
 	'<button type="button" class="bottom-bar-button bottom-bar-button2" onClick="RMTClickEvent.addModule(\'01\');">确定</button>'+

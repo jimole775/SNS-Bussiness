@@ -53,7 +53,7 @@
 
             //当 读取版本信息支持项 被支持时
             if (YhSupportService._0x03.value)
-                win.sendDataToDev("310903");
+                win.devService.sendDataToDev("310903");
             else {
                 var DataPack = {
                     dbfilename: global.businessInfo.dbFilename,
@@ -68,8 +68,8 @@
         }
 
 
-        win.devInterActive.Fun710903 = function (varRecvData) {
-            var count = tool.hex2dec(varRecvData.substr(win.getIndexByDevIndex(10), 4));
+        win.devService.Fun710903 = function (varRecvData) {
+            var count = tool.hex2dec(varRecvData.substr(6, 4));
 
             if (count <= 0) {
                 tool.alert('无任何支持项信息',
@@ -93,14 +93,14 @@
             for (var i = 0; i < count; i++)
                 DataPack.pids.push({
                     original: '',
-                    pid: varRecvData.substr(win.getIndexByDevIndex(12) + 8 * i, 8)
+                    pid: varRecvData.substr(10 + 8 * i, 8)
                 });
 
             getVersionInfoSurpports(DataPack);
 
         };
 
-        win.devInterActive.Fun710983 = function (varRecvData) {
+        win.devService.Fun710983 = function (varRecvData) {
             tool.alert('设备数据读取失败',function () {
                 //tool.processBar("");
             });
@@ -155,7 +155,7 @@
 
         function Fun310904() {
             if ($scope.curIndex > gPIDs.length - 1) return;
-            win.sendDataToDev('31090401' + gPIDs[$scope.curIndex].pid);
+            win.devService.sendDataToDev('31090401' + gPIDs[$scope.curIndex].pid);
         }
 
         var gDataPack = {                                   //定义gDataPack全局变量，以解决定义在内部时，dbfilename和pub为空的问题
@@ -168,7 +168,7 @@
         /**
          * 使用指令 310904 +　系统ECU表　的　PID　字段　依次获取每条版本信息的 原始值，并将这些 原始值 依次发送到服务器计算　
          * */
-        win.devInterActive.Fun710904 = function (varRecvData) {
+        win.devService.Fun710904 = function (varRecvData) {
             gDataPack.dbfilename = global.businessInfo.dbFilename;
             gDataPack.pub = global.businessInfo.pubFilename;
 
@@ -188,7 +188,7 @@
             Fun310904();
         };
 
-        win.devInterActive.Fun710984 = function () {
+        win.devService.Fun710984 = function () {
             tool.alert('设备数据读取失败',function () {
                 //tool.processBar("");
             });

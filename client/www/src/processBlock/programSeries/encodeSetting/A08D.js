@@ -57,12 +57,12 @@
                 tool.inputStyleModify("database_A08D","radio");
             } catch (e) {
                 tool.alert('解析数据库版本列表异常',function(){
-                    win.sendDataToDev('71054202');
+                    win.devService.sendDataToDev('71054202');
                 });
             }
         //} else {
         //    tool.alert(varJson.CODEDATA,function(){
-        //        win.sendDataToDev('71054202');
+        //        win.devService.sendDataToDev('71054202');
         //    });
         //}
     };
@@ -127,14 +127,14 @@
             } catch (e) {
                 //tool.log('解析车型列表异常:' + recvData);
                 tool.alert('解析车型列表异常',function(){
-                    win.sendDataToDev('71054202');
+                    win.devService.sendDataToDev('71054202');
                     tool.layout("database_A08D", 0);
                 });
             }
         //} else {
         //    tool.log(varJson.CODEDATA);
         //    tool.alert(varJson.CODEDATA,function(){
-        //        win.sendDataToDev('71054202');
+        //        win.devService.sendDataToDev('71054202');
         //        tool.layout("database_A08D", 0);
         //    });
         //}
@@ -211,14 +211,14 @@
             } catch (e) {
                 tool.log('解析模块列表异常:' + recvData);
                 tool.alert('解析模块列表异常',function(){
-                    win.sendDataToDev('71052C03');
+                    win.devService.sendDataToDev('71052C03');
                 });
 
             }
         //} else {
         //    tool.log('解析模块列表异常:' + varJson.CODEDATA);
         //    tool.alert(varJson.CODEDATA,function(){
-        //        win.sendDataToDev('71052C03');
+        //        win.devService.sendDataToDev('71052C03');
         //    });
         //}
     };
@@ -250,24 +250,24 @@
                     command += tool.formateStrWithLen(tool.asc2hex(name), 32) + size + md5;
                 }
 
-                win.sendDataToDev(command);
+                win.devService.sendDataToDev(command);
 
             } catch (e) {
                 tool.log('解析模块列表异常:' + recvData);
                 tool.alert('解析文件信息异常',function(){
-                    win.sendDataToDev('6106' + gFileType + '02');
+                    win.devService.sendDataToDev('6106' + gFileType + '02');
                 });
             }
         //} else {
         //    tool.log('解析模块列表异常:' + varJson.CODEDATA);
         //    tool.alert(varJson.CODEDATA,function(){
-        //        win.sendDataToDev('6106' + gFileType + '02');
+        //        win.devService.sendDataToDev('6106' + gFileType + '02');
         //    });
         //}
     };
 
     //OBDII程序执行 业务操作执行成功（失败）
-    win.devInterActive.Fun1201 = function (recvData) {
+    win.devService.Fun1201 = function (recvData) {
         try {
             //OBDII程序执行成功	0x1201+00 (成功)
             //OBDII程序执行失败	0x1201+ 01(OBD失败)+错误码(6B)
@@ -279,21 +279,21 @@
                 case '00':
                 {
                     strShowMsg = '业务操作执行成功';
-                    win.sendDataToDev('1101');
+                    win.devService.sendDataToDev('1101');
                 }
                     break;
                 case '01':
                 {
                     strTmp = recvData.substr(6, 6);
                     strShowMsg = '业务操作执行失败，错误码:' + strTmp;
-                    win.sendDataToDev('1101');
+                    win.devService.sendDataToDev('1101');
                 }
                     break;
                 case '02':
                 {
                     strTmp = recvData.substr(6, 6);
                     strShowMsg = '业务操作执行失败，错误码:' + strTmp;
-                    win.sendDataToDev('1101');
+                    win.devService.sendDataToDev('1101');
                 }
                     break;
             }
@@ -304,7 +304,7 @@
         }
     };
 
-    win.devInterActive.Fun3105 = function (recvData) {
+    win.devService.Fun3105 = function (recvData) {
         try {
             var strCommand = recvData.substr(4, 2);
             var strShowMsg = '错误的指令信息:' + recvData;
@@ -360,13 +360,13 @@
         var val = input_checked.value;
         tool.layout('fun310519', 0);
         var command = '71051901' + val;
-        win.sendDataToDev(command);
+        win.devService.sendDataToDev(command);
     }
 
     //选择车辆接口 取消
     function Fun310519Cancel(recvData) {
         tool.layout('fun310519', 0);
-        win.sendDataToDev('71051902');
+        win.devService.sendDataToDev('71051902');
     }
 
     //设码信息选择
@@ -408,7 +408,7 @@
     function database_A08DReturn() {
 
         tool.layout('database_A08D', 0);
-        win.sendDataToDev("71054202");
+        win.devService.sendDataToDev("71054202");
 
     }
 
@@ -425,7 +425,7 @@
         tool.log("底盘：" + carType);
 
         tool.layout("carType_A08D", 0);
-        win.sendDataToDev("71054201");
+        win.devService.sendDataToDev("71054201");
     }
 
     //选择车型 返回
@@ -433,7 +433,7 @@
         tool.layout("carType_A08D", 0);
 
         tool.layout('database_A08D', 1);
-        //sendDataToDev("71054202");
+        //devService.sendDataToDev("71054202");
     }
 
     //读取模块信息
@@ -482,15 +482,15 @@
         tool.log("模块：" + module_A08D);
 
         tool.layout("module_A08D", 0);
-        win.sendDataToDev(data);
+        win.devService.sendDataToDev(data);
     }
 
     function module_A08DCancel() {
         tool.layout("module_A08D", 0);
-        win.sendDataToDev("71052C03");
+        win.devService.sendDataToDev("71052C03");
     }
 
-    win.devInterActive.Fun2106 = function (recvData) {
+    win.devService.Fun2106 = function (recvData) {
         gFileType = recvData.substr(4, 2 * 2);
         if (setCodeT == "01") {
             $("#fileSelectType").html("设码");  //些值判断时有用
@@ -525,15 +525,15 @@
         win.server.request(44,4,{DataPack:data},win.serverRequestCallback.getFile_A08D)
     };
 
-    win.devInterActive.Fun2105 = function (recvData) {
+    win.devService.Fun2105 = function (recvData) {
         var count = recvData.substr(4, 2);
         tool.loading({text:"正在设码..."});
         //tool.processBar("正在设码...");
-        win.sendDataToDev("610501" + count);
+        win.devService.sendDataToDev("610501" + count);
     };
 
     //安全卡进行检查
-    win.devInterActive.Fun3106 = function (recvData) {
+    win.devService.Fun3106 = function (recvData) {
         try {
             var strCommand = recvData.substr(4, 2);
             var strShowMsg = '错误的指令信息:' + strCommand;
@@ -541,7 +541,7 @@
             switch (strCommand) {
                 case '14': //0x3106 + 14(安全卡检查)+01(成功)
                 {
-                    win.devInterActive.Fun310614(recvData);
+                    win.devService.Fun310614(recvData);
                 }
                     break;
                 case '11': //三、车辆接口检测：0x3106+0x11(OBD连接状态)+ 0x01(连接失败)/0x02(连接断开)/0x03(OBDII-KWP连接成功)/0x04(KWP CAN Bus 100Kbps连接成功)

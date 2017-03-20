@@ -130,7 +130,6 @@
             this.openChanel(data);
         }
         else {
-
             var asker = this.tool.getSession(data.uid, clients);
             this.send(
                 asker,
@@ -139,7 +138,6 @@
                     RMTResponse: data.items.RMTResponse
                 }
             );
-
         }
     };
     module.exports = WebSocket;

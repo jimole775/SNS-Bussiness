@@ -140,14 +140,14 @@
                 console.log('解析数据库版本列表异常:' + recvData);
                 tool.log('解析数据库版本列表异常:' + recvData);
                 tool.alert("解析数据库版本列表异常",function(){
-                    win.sendDataToDev("71054202");
+                    win.devService.sendDataToDev("71054202");
                 });
             }
         //} else {
         //    console.log(varJson.CODEDATA);
         //    tool.log(varJson.CODEDATA);
         //    tool.alert(varJson.CODEDATA,function(){
-        //        win.sendDataToDev("71054202");
+        //        win.devService.sendDataToDev("71054202");
         //    });
         //}
     };
@@ -215,14 +215,14 @@
                 //tool.log('解析模块列表异常:' + e.message);
                 //TODO PC应答：0x7105+41+[01(确定)+01(读取)/02(加载)]/02(取消)
                 tool.alert('解析模块列表异常',function(){
-                    win.sendDataToDev("71054102");
+                    win.devService.sendDataToDev("71054102");
                 })
             }
         //} else {
         //    console.log('获取模块列表异常:' + varJson.CODEDATA);
         //    tool.log('获取模块列表异常:' + varJson.CODEDATA);
         //    tool.alert(varJson.CODEDATA,function(){
-        //        win.sendDataToDev("71054102");
+        //        win.devService.sendDataToDev("71054102");
         //    })
         //}
     };
@@ -304,7 +304,7 @@
         //} else {
         //    tool.log('获取模块版本列表异常:' + varJson.CODEDATA);
         //    tool.alert(varJson.CODEDATA,function(){
-        //        win.sendDataToDev("71053602");
+        //        win.devService.sendDataToDev("71053602");
         //    });
         //}
     };
@@ -345,7 +345,7 @@
                 //if (varData == "[]") {
                 //    tool.log("查找不到对应的编程文件");
                 //    tool.processBar("查找不到对应的编程文件");
-                    //win.sendDataToDev("6106" + gFileType + "02");
+                    //win.devService.sendDataToDev("6106" + gFileType + "02");
                     //return;
                 //}
                 //var jsonData = JSON.parse(varData);
@@ -360,11 +360,11 @@
                     //console.log(fileName+"   "+jsonData[i].fileSize+"   "+jsonData[i].MD5);
                 }
                 var command = "6106" + gFileType + "01" + tool.toHex(recvData.length, 4) + files;
-                win.sendDataToDev(command);
+                win.devService.sendDataToDev(command);
             } catch (e) {
                 //tool.log('解析编程文件信息异常:' + "[" + e.message + "]" + varJson.CODEDATA);
                 tool.alert("解析编程文件信息异常",function(){
-                    win.sendDataToDev("6106" + gFileType + "02");
+                    win.devService.sendDataToDev("6106" + gFileType + "02");
                 });
             } finally {
 
@@ -374,7 +374,7 @@
         //    tool.log("获取编程文件失败");
         //    //tool.processBar("获取编程文件失败");
         //    tool.alert(varJson.CODEDATA,function(){
-        //        win.sendDataToDev("6106" + gFileType + "02");
+        //        win.devService.sendDataToDev("6106" + gFileType + "02");
         //    });
         //}
     };
@@ -390,12 +390,12 @@
                 var command = "6703" + gIndexId + "01" + keys;
                 //test
                 //tool.log(command);
-                win.sendDataToDev(command);
+                win.devService.sendDataToDev(command);
             } catch (e) {
                 //console.log('解析密钥信息异常:' + "[" + e.message + "]" + recvData);
                 //tool.log('解析密钥信息异常:' + "[" + e.message + "]" + recvData);
                 tool.alert("解析密钥信息异常",function(){
-                    win.sendDataToDev("6703" + gIndexId + "02");
+                    win.devService.sendDataToDev("6703" + gIndexId + "02");
                 });
             } finally {
             }
@@ -404,7 +404,7 @@
         //    tool.log('获取密钥信息失败:' + recvData);
         //    tool.processBar("获取密钥信息失败");
             //tool.alert(varJson.CODEDATA,function(){
-            //    win.sendDataToDev("6703" + gIndexId + "02");
+            //    win.devService.sendDataToDev("6703" + gIndexId + "02");
             //});
         //}
     };
@@ -472,14 +472,14 @@
             } catch (e) {
                 //tool.log('解析设码文件信息异常:' + "[" + e.message + "]");
                 tool.alert("解析设码文件信息异常",function(){
-                    win.sendDataToDev("71053A02");
+                    win.devService.sendDataToDev("71053A02");
                 });
             }
         //} else {
         //    tool.log('获取设码文件信息失败:' + recvData);
         //    console.log('获取设码文件信息失败:' + recvData);
         //    tool.alert(varJson.CODEDATA,function(){
-        //        win.sendDataToDev("71053A02");
+        //        win.devService.sendDataToDev("71053A02");
         //    });
         //}
     };
@@ -499,13 +499,13 @@
                     command += tool.ascToHexByLen(file[i].fileName, 32).substr(0, 64) +
                     tool.toHex(file[i].fileSize, 8) + file[i].MD5;
                 }
-                win.sendDataToDev(command);
+                win.devService.sendDataToDev(command);
             } catch (e) {
                 //tool.log('编辑设码文件信息异常:' + "[" + e.message + "]" + recvData);
                 //console.log('编辑设码文件信息异常:' + "[" + e.message + "]" + recvData);
-                //win.sendDataToDev("71053A02");
+                //win.devService.sendDataToDev("71053A02");
                     tool.alert("编辑设码文件信息异常",function(){
-                        win.sendDataToDev("71053A02");
+                        win.devService.sendDataToDev("71053A02");
                     });
             } finally {
             }
@@ -513,12 +513,12 @@
         //    tool.log('编辑设码文件信息失败:' + recvData);
         //    console.log('获取设码文件信息失败:' + recvData);
         //    tool.alert(varJson.CODEDATA,function(){
-        //        win.sendDataToDev("71053A02");
+        //        win.devService.sendDataToDev("71053A02");
         //    });
         //}
     };
 
-    win.devInterActive.Fun3105 = function (recvData) {
+    win.devService.Fun3105 = function (recvData) {
         var strCommand = recvData.substr(4, 2);
         //tool.processBar("");
         tool.loading(0);
@@ -600,7 +600,7 @@
 
     function fun710542(option) {
         tool.layout("database", 0);
-        win.sendDataToDev("710542" + option);
+        win.devService.sendDataToDev("710542" + option);
     }
 
     //获取FA文件	0x3105+0x40(获取FA文件)	PC应答：0x7105+40+[01(确定)+01(读取)/02(加载)]/02(取消)
@@ -613,7 +613,7 @@
             if (method == "01") {
                 tool.log("从汽车读取FA文件");
                 //tool.processBar("从汽车读取FA文件");
-                win.sendDataToDev("7105400101");
+                win.devService.sendDataToDev("7105400101");
                 tool.layout("faSelect", 0);
                 tool.loading({text: "正在上传FA文件..."});
             }
@@ -632,7 +632,7 @@
         }
         if (option == "02") {
             tool.loading({text: "操作完成，正在退出业务..."});
-            win.sendDataToDev("71054002");
+            win.devService.sendDataToDev("71054002");
         }
     }
 
@@ -649,13 +649,13 @@
                 case "01":
                     tool.log("从VCM读取SVT文件");
                     //tool.processBar("从VCM读取SVT文件");
-                    win.sendDataToDev("7105410101");
+                    win.devService.sendDataToDev("7105410101");
                     tool.loading({text: "正在读取SVT文件..."});
                     break;
                 case "02":
                     tool.log("从ECU读取SVT文件");
                     //tool.processBar("从ECU读取SVT文件");
-                    win.sendDataToDev("7105410102");
+                    win.devService.sendDataToDev("7105410102");
                     tool.loading({text: "正在读取SVT文件..."});
                     break;
                 case "03":
@@ -675,7 +675,7 @@
         }
         if (option == "02") {
             tool.loading({text: "操作完成，正在退出业务..."});
-            win.sendDataToDev("71054102");
+            win.devService.sendDataToDev("71054102");
         }
     }
 
@@ -723,7 +723,7 @@
                 var moduleInfos = gmoduleInfosMap[address];
                 var nSGBMID = versionToSGBMID(moduleInfos);
                 var command = "71052C01" + address + tool.toHex(moduleInfos.length, 4) + nSGBMID;
-                win.sendDataToDev(command);
+                win.devService.sendDataToDev(command);
             }
         } catch (e) {
             console.log(e.message);
@@ -731,7 +731,7 @@
         if (option == "02") {
             tool.layout("module", 0);
             tool.log("用户取消操作");
-            win.sendDataToDev("71052C02");
+            win.devService.sendDataToDev("71052C02");
         }
     }
 
@@ -776,7 +776,7 @@
         if(!count || !nSGBMIDs){
             tool.alert("所选模块设码功能未被支持，点击确定之后退出",
                 function(){
-                    win.sendDataToDev("71053902");
+                    win.devService.sendDataToDev("71053902");
                 });
 
             return;
@@ -810,7 +810,7 @@
     //是否继续编程
     function fun710539(option) {
         tool.layout("moduleVersionConfirm", 0);
-        win.sendDataToDev("710539" + option);
+        win.devService.sendDataToDev("710539" + option);
     }
 
     //选择设码方式 0x3105+0x1F	PC应答：0x7105+1F+[01(确定)+方式代码(1B)]/02(取消)
@@ -823,10 +823,8 @@
             var code = inputChecked.value;
             //var code = $("input[name='codeRadio']:checked").val();
             if (code == undefined || code == null) {
-                tool.warnTip("codeTypeTip", "*请选择设码方式");
+                tool.warnTip("#codeRadio01", "*请选择设码方式");
                 return;
-            } else {
-                tool.warnTip("codeTypeTip", "");
             }
             var t = {
                 "01": "原车设码",
@@ -847,11 +845,11 @@
                 return;
             }
             tool.layout("codeType", 0);
-            win.sendDataToDev("71051F01" + code);
+            win.devService.sendDataToDev("71051F01" + code);
         }
         if (option == "02") {
             tool.layout("codeType", 0);
-            win.sendDataToDev("71051F02");
+            win.devService.sendDataToDev("71051F02");
         }
     }
 
@@ -871,7 +869,7 @@
             if(!count || !nSGBMIDs){
                 tool.alert("所选模块设码功能未被支持，点击确定之后退出",
                     function(){
-                        win.sendDataToDev("71053602");
+                        win.devService.sendDataToDev("71053602");
                     });
 
                 return;
@@ -934,21 +932,20 @@
             }
 
             if (!count) {
-                tool.warnTip("programTip", "*请选择要编程的模块");
+                tool.warnTip(checkboxs, "*请选择要编程的模块");
                 tool.layoutTable();
                 return;
             }
 
             tool.layout("moduleSelect", 0);
-            tool.warnTip("programTip", "");
             tool.layoutTable();
 
             tool.loading({text: "数据交互中..."});
             var command = "71053601" + tool.toHex(count, 4) + nSGBMIDs;
-            win.sendDataToDev(command);
+            win.devService.sendDataToDev(command);
         }
         if (option == "02") {
-            win.sendDataToDev("71053602");
+            win.devService.sendDataToDev("71053602");
             tool.loading({text: "操作完成，正在退出业务..."});
         }
     };
@@ -1088,7 +1085,7 @@
                 var key = keyDetails + "," + $("#functionEditTitle").html();
                 gEditDatas[key] = $("#funInput").val();
                 gEditDataId[key] = '"start":"' + $("#start").html() + '","end":"' + $("#end").html() + '","mask":"' + $("#mask").html() + '"';
-                tool.warnTip("funInputTip", "");
+
                 //修改选项跟着改变
                 var selectIndex = $('#funSelect option').index($('#funSelect option:selected')); //$('#funSelect').prop('selectedIndex');//$('#funSelect').find('option:selected').selectedIndex;
                 if (gDetails[keyDetails][selectIndex].check != "true") {
@@ -1100,7 +1097,7 @@
                 }
                 gDetails[keyDetails][selectIndex].check = "true";
             } else {
-                tool.warnTip("funInputTip", "请输入范围内的值");
+                tool.warnTip("#funInput", "请输入范围内的值");
                 return;
             }
 
@@ -1160,7 +1157,7 @@
         if (option == "cancel") {
             tool.layout("functionList", 0);
             tool.log("用户取消编辑");
-            win.sendDataToDev("71053A02");
+            win.devService.sendDataToDev("71053A02");
             return;
         }
 
@@ -1208,7 +1205,7 @@
     var fileNames6106 = {};
     //编程文件信息  0x2106+文件类型(2B)+设码方式(1B)+SGBMID数n(2B)+n*SGBMID(8B)
     //PC应答：0x6106+文件类型(2B)+{01(成功)+文件数量n(2B)+文件信息n*[名称(32B)+大小(4B)+MD5值(16B)]}/02(失败)
-    win.devInterActive.Fun2106 = function (recvData) {
+    win.devService.Fun2106 = function (recvData) {
 
         var inputChecked = tool.getCheckedElement("codeRadio");
 
@@ -1253,7 +1250,7 @@
                 count++;
             }
             command = "6106" + gFileType + "01" + tool.toHex(count, 4) + command;
-            win.sendDataToDev(command);
+            win.devService.sendDataToDev(command);
             return;
         }
 
@@ -1264,7 +1261,7 @@
     };
 
     //获取密钥 0x2703+索引ID(4B)	PC应答：0x6703+索引ID(4B)+{01(成功)+密钥数n(1B)+n*密钥信息[密钥类型(1B)+密钥位数m(2B)+密钥校验(2B)+密钥数据(nB)]}/02(失败)
-    win.devInterActive.Fun2703 = function (recvData) {
+    win.devService.Fun2703 = function (recvData) {
         gIndexId = recvData.substr(4, 8);
 
         var inputChecked = tool.getCheckedElement("dbOption");
@@ -1279,7 +1276,7 @@
     };
 
     //设码文件下载到手机端  0x2105+文件数量n(1B)+n*[文件名称(32B)+文件大小(4B)+MD5值(16B)]	PC应答：0x6105+[01(成功)+文件数量n(1B)]/02(失败)
-    win.devInterActive.Fun2105 = function (recvData) {
+    win.devService.Fun2105 = function (recvData) {
         //循环需要下载的文件名，分别发送指令给APP进行下载，每下载一个提示一次，全部下载后响应设备；
         var count = recvData.substr(4, 2);
         //如果是恢复设码，则直接响应
@@ -1289,7 +1286,7 @@
         var code = inputChecked.value;
 
         if (code == "04") {
-            win.sendDataToDev("610501" + count);
+            win.devService.sendDataToDev("610501" + count);
             return;
         }
         gdownloadFilesNumHex = count; //数量放入缓存，16进制
@@ -1327,12 +1324,12 @@
         }
 
         if (filesNum == 0 && gdownloadFilesNumHex != '0x00') {
-            win.sendDataToDev('610501' + gdownloadFilesNumHex);
+            win.devService.sendDataToDev('610501' + gdownloadFilesNumHex);
         }
 
         //下载出现失败
         if (filesNum == -1) {
-            win.sendDataToDev('610502');
+            win.devService.sendDataToDev('610502');
         }
     }
 
@@ -1352,26 +1349,26 @@
     };
 
     //OBD响应
-    win.devInterActive.Fun3106 = function (recvData) {
+    win.devService.Fun3106 = function (recvData) {
         var strCommand = recvData.substr(4, 2);
         switch (strCommand) {
             case '14':
-                win.devInterActive.Fun310614(recvData); //安全卡检查
+                win.devService.Fun310614(recvData); //安全卡检查
                 break;
             case '11':
-                win.devInterActive.Fun310611(recvData); //车辆通信结果
+                win.devService.Fun310611(recvData); //车辆通信结果
                 break;
             case '17':
-                win.devInterActive.Fun310617(recvData); //校验设码文件
+                win.devService.Fun310617(recvData); //校验设码文件
                 break;
             case '25':
-                win.devInterActive.Fun310625(recvData); //计算签名结果
+                win.devService.Fun310625(recvData); //计算签名结果
                 break;
             case '0D':
-                win.devInterActive.Fun31060D(recvData); //文件编程结果
+                win.devService.Fun31060D(recvData); //文件编程结果
                 break;
             case '0F':
-                win.devInterActive.Fun31060F(recvData); //模块编程结果
+                win.devService.Fun31060F(recvData); //模块编程结果
                 break;
         }
     };
@@ -1385,7 +1382,7 @@
     //        0x06	TP2.0连接成功
     //        0x07	UDP/TCP总线连接成功
     //        其它	未定义提示
-    win.devInterActive.Fun310611 = function (recvData) {
+    win.devService.Fun310611 = function (recvData) {
         var tipsMap = {
             "01": "诊断设备与汽车通信失败",
             "02": "诊断设备与汽车通信断开",
@@ -1403,7 +1400,7 @@
     };
 
     //文件校验结果 0x3106+0x17(文件校验)+03(CAFD文件)+文件名ASCII(32B)+0x01(成功)/0x02(失败)	PC不需要应答
-    win.devInterActive.Fun310617 = function (recvData) {
+    win.devService.Fun310617 = function (recvData) {
         var type = recvData.substr(6, 2);
         var fileName = tool.hex2a(recvData.substr(8, 32 * 2));
         var strCommand = recvData.substr(70, 2);
@@ -1417,7 +1414,7 @@
     };
 
     //计算签名结果
-    win.devInterActive.Fun310625 = function (recvData) {
+    win.devService.Fun310625 = function (recvData) {
         //            tool.progressBar(5);
         var flag = recvData.substr(6, 2);
         if (flag == '01') {
@@ -1433,7 +1430,7 @@
     };
 
     //编程结果 0x3106+0x0D(编程校验)+0x01(BTLD程序)/0x02(SWFL程序)/0x03(CAFD程序)+01(成功)/02(失败)
-    win.devInterActive.Fun31060D = function (recvData) {
+    win.devService.Fun31060D = function (recvData) {
         var type = recvData.substr(6, 2); //8
         var strCommand = recvData.substr(72, 2) + '';
         switch (strCommand) {
@@ -1447,7 +1444,7 @@
     };
 
     //编程模块结果  0x3106+0x0F(编程ECU)+模块索引ID[4B]+地址(1B)+0x01(成功)/0x02(失败)	PC不需要应答
-    win.devInterActive.Fun31060F = function (recvData) {
+    win.devService.Fun31060F = function (recvData) {
         try {
             var strCommand = recvData.substr(16, 2) + '';
             var address = recvData.substr(14, 2);
@@ -1470,7 +1467,7 @@
         }
     };
 
-    win.devInterActive.Fun3108 = function (recvData) {
+    win.devService.Fun3108 = function (recvData) {
         var flag = recvData.substr(4, 2);
         switch (flag) {
             case '01':

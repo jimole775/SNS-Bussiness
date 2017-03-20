@@ -33,7 +33,7 @@ $ (document).ready (function () {
 		//如果callbackId匹配到相应的callbackId字串，就是JS主动请求信息，直接调用回调就OK
 		//否则，都是APP主动推送信息
 		//不过需要注意的是，不能在远程机器上运行这个代码
-		if(callbackId.match(/callbackId/) && global.businessInfo.ID != 2){
+		if(callbackId.match(/callbackId/) && global.RMTID.role != 2){
 			win.appService.getCallbackById(callbackId)(recvData);
 			return;
 		}
@@ -83,7 +83,7 @@ $ (document).ready (function () {
 	};
 
 	interActiveState.end.quit = function () {
-		win.sendDataToDev ("3109FF");
+		win.devService.sendDataToDev ("3109FF");
 	};
 	interActiveState.end.close = function () {
 		win.appService.sendDataToApp (3999, "", "");
@@ -118,8 +118,7 @@ $ (document).ready (function () {
 			})());
 
 			document.getElementById("ShowMessage").style.display = "block";
-			document.getElementById("bottomButton").style.width = "0";
-			document.getElementById("footer").style.width = "100%";
+			tool.bottomBtn(0);
 		}
 
 		if (/主程序版本/g.test (recvData)) {                                         //截取主程序版本信息；
@@ -134,12 +133,13 @@ $ (document).ready (function () {
 			tool.log (recvData);
 		}
 	};
+
 	interActiveState.process.statusMsg = function (recvData) {
 		tool.processBar (recvData);
 	};
 
 	interActiveState.process.startBusiness = function () {
-		win.sendDataToDev ("C09B");
+		win.devService.sendDataToDev ("C09B");
 	};
 
 
@@ -187,9 +187,9 @@ $ (document).ready (function () {
 		else docEl.style.fontSize = '50%';
 
 		//根据项目需求，头部和脚部高度需要和APP首页相同
-		$(".title")[0].style.height = json.screenInfo.headHeight + "px";
-		$("#footer")[0].style.height = json.screenInfo.footHeight + "px";
-		$("#bottomButton")[0].style.height = json.screenInfo.footHeight + "px";
+		document.getElementById("headBar").style.height = json.screenInfo.headHeight + "px";
+		document.getElementById("footer").style.height = json.screenInfo.footHeight + "px";
+		document.getElementById("bottomButton").style.height = json.screenInfo.footHeight + "px";
 
 		setTimeout(function(){
 			tool.layoutTable(); //重新计算页面的布局,会导致页面重绘

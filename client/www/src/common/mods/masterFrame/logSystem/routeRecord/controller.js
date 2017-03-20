@@ -17,7 +17,7 @@
             bottom:footerHeight,
             display:'block'
         });
-        tool.layoutBottomBtn(recordModelId);
+        //tool.layoutBottomBtn(recordModelId);
     }
 
     App.controller('carDescriptionRecordCtrl', ['$scope', 'angularFactory',function ($scope,angularFactory) {

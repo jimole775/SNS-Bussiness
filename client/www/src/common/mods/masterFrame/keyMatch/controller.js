@@ -319,14 +319,15 @@
 					"cartype": global.businessInfo.carType
 				},
 				DataPack,
-				win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.keyMatch,[pagesOptionChosenRecord]),
-				[requestData,backToPrvLevel])
+				win.server.addRetryFn(
+					win.server.addCallbackParam(win.serverRequestCallback.keyMatch,[pagesOptionChosenRecord]),
+					[requestData,backToPrvLevel]
+				)
 			);
 		}
 
 		/**
 		 * 请求服务器回调方法
-		 * @param status ;服务器数据状态,在RequestService.js进行了封装 --status.ok="true":正常 status.ok="false":数据丢失
 		 * @param responseObject ;JSON数据
 		 * @param params ;用于内部运算的参数，通过 server.RequestService.utilAddParams() 方法传入, 远程协助时通过APP传入
 		 * */
@@ -421,7 +422,7 @@
 			showView = false;
 			reset();
 			tool.layout(thisBoxId, 0);
-			win.sendDataToDev("3109FF");    //通知设备复位
+			win.devService.sendDataToDev("3109FF");    //通知设备复位
 			win.moduleEntry.carLogo(-1);
 		}
 
@@ -474,15 +475,15 @@
 			link: function (scope) {
 
 				var pswitems = [];
-				var host = "http://192.168.1.37:8091/";
-				var path = "CCDPWebServer/CCDP_Web/zh-cn/carimage/";
+				//var host = "http://192.168.1.37:8091/";
+				//var path = "CCDPWebServer/CCDP_Web/zh-cn/carimage/";
 				scope.$watch("helpPopData", function () {
 					if (scope.helpPopData.length) {
 						scope.helpPopData = (function () {
 							scope.helpPopData.forEach(function (item, index) {
 								item.index = index;
 								item.name = item.name.split("\\n");
-								item.src = item.fomulaname ? host + path + item.fomulaname : "";
+								item.src = item.fomulaname ? "images/carType/img/" + item.fomulaname : "";
 								pswitems.push({
 									src: item.src,
 									w: 600,

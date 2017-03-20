@@ -145,7 +145,7 @@
 		//}
 		//else {
 		//	tool.alert(varJson.CODEDATA, function () {
-		//		win.sendDataToDev("71054202");
+		//		win.devService.sendDataToDev("71054202");
 		//	});
 		//}
 	};
@@ -446,7 +446,7 @@
 
 				var command = '71053601' + address + tool.asc2hex(programOption) + tool.asc2hex(frameNum);
 				win.tool.loading({text: "正在获取编程模块信息..."});
-				win.sendDataToDev(command);
+				win.devService.sendDataToDev(command);
 
 
 			} catch (e) {
@@ -489,11 +489,11 @@
 				command += tool.formateStrWithLen(tool.asc2hex(name), 32) + size + md5;
 			}
 
-			win.sendDataToDev(command);
+			win.devService.sendDataToDev(command);
 		//}
 		//else {
 		//	tool.alert(varJson.CODEDATA, function () {
-		//		win.sendDataToDev('6106' + gFileType + '02');
+		//		win.devService.sendDataToDev('6106' + gFileType + '02');
 		//	});
 		//}
 	};
@@ -513,7 +513,7 @@
 			//PC应答：0x6703+[01(成功)+密钥长度m(2B)+密钥数据ASCII(mB)]/02(失败)
 			var command = '670301' + len + tool.asc2hex(key);
 
-			win.sendDataToDev(command);
+			win.devService.sendDataToDev(command);
 
 			//tool.processBar('正在检查模块的UIF信息');
 
@@ -521,7 +521,7 @@
 		//else {
 		//	var module = getModule();
 		//	tool.alert('当前数据库查找' + module + '模块密钥数据失败，' + varJson.CODEDATA, function () {
-		//		win.sendDataToDev('67030102');
+		//		win.devService.sendDataToDev('67030102');
 		//	});
 		//}
 	};
@@ -540,7 +540,7 @@
 				var jsonData = recvData;
 
 				if (jsonData.length <= 0) {
-					tool.warnTip("tipPartNum", "输入的零件号不存在，请检查输入是否正确");
+					tool.warnTip("#inputPartNum_A061", "输入的零件号不存在，请检查输入是否正确");
 					tool.popShow("partNum_A061", 1);		//查不到则返回
 					return;
 				}
@@ -835,7 +835,7 @@
 	};
 
 	//请求下载 0x2108+文件名ASCII(32B)+文件大小(4B)+MD5值(16B)+加密类型(2B)+文件类型(2B)	PC应答：成功-0x6108
-	win.devInterActive.Fun2108 = function (recvData) {
+	win.devService.Fun2108 = function (recvData) {
 
 		//var fileName = tool.hex2a( recvData.substr(4, 32 * 2) );
 		var fileName = recvData.substr(4, 32 * 2);
@@ -849,7 +849,7 @@
 
 
 	//流程执行结果  0x1201+[00(成功)]/[01(OBD错误)+错误代码(6B)]/[02(设备错误)+错误代码(4B)]
-	win.devInterActive.Fun1201 = function (recvData) {
+	win.devService.Fun1201 = function (recvData) {
 
 		var strCommand = recvData.substr(4, 2);
 		var strShowMsg = '错误的指令信息:' + recvData;
@@ -874,7 +874,7 @@
 
 	//编程文件信息     0x2106+文件类型(2B)+ECU地址HEX(1B)+硬件版本1 ASCII(7B)+硬件版本2 ASCII(7B)+引导版本ASCII(6B)
 	//	 PC应答：0x6106+文件类型(2B)+{01(成功)+文件数量n(1B)+文件信息n*[名称(32B)+大小(4B)+MD5值(16B)] }/02(失败)
-	win.devInterActive.Fun2106 = function (recvData) {
+	win.devService.Fun2106 = function (recvData) {
 
 		gFileType = recvData.substr(4, 2 * 2);	//文件类型(2B)
 
@@ -965,12 +965,12 @@
 
 			command = '6106' + gFileType + '01' + tool.toHex(count, 2) + command;
 
-			win.sendDataToDev(command);
+			win.devService.sendDataToDev(command);
 		}
 	};
 
 	//编程密钥信息
-	win.devInterActive.Fun2703 = function (recvData) {
+	win.devService.Fun2703 = function (recvData) {
 		//var varSendData = "{'subURL':'" + global.businessInfo.serverDst + "','data':[{'ServerType':'15'},{'DataType':'8'},{'DataPack':''}]}";
 		//var varSendData = JSON.stringify({subURL: global.businessInfo.serverDst ,data:[{ServerType:"15"},{DataType:"8"},{DataPack:""}]});
 		//win.external.RequestDataFromServer(3021, varSendData, getKeyCallBack);
@@ -980,7 +980,7 @@
 
 	//编程文件下载到手机端
 	//0x2105+文件数量n(1B)+n*[文件名称(32B)+文件大小(4B)+MD5值(16B)]
-	win.devInterActive.Fun2105 = function (recvData) {
+	win.devService.Fun2105 = function (recvData) {
 
 		//循环需要下载的文件名，分别发送指令给APP进行下载，每下载一个提示一次，全部下载后响应设备；提示需要APP提供新的响应，目前还未定
 		var count = recvData.substr(4, 2);
@@ -1034,17 +1034,17 @@
 		if (filesNum == 0 && gdownloadFilesNumHex != '0x00') {
 
 			//tool.log('下载完成：610501'+gdownloadFilesNumHex);
-			win.sendDataToDev('610501' + gdownloadFilesNumHex);
+			win.devService.sendDataToDev('610501' + gdownloadFilesNumHex);
 		}
 		//下载出现失败
 		if (filesNum == -1) {
-			win.sendDataToDev('610502');
+			win.devService.sendDataToDev('610502');
 		}
 	}
 
 
 	//OBD编程相关
-	win.devInterActive.Fun3105 = function (recvData) {
+	win.devService.Fun3105 = function (recvData) {
 		//命令协议
 		var strCommand = recvData.substr(4, 2);
 		var strShowMsg = '错误的指令信息:' + strCommand;
@@ -1134,7 +1134,7 @@
 
 		tool.layout('scanModuleConfirm_A061', 0);
 
-		win.sendDataToDev("71052903");
+		win.devService.sendDataToDev("71052903");
 	}
 
 	//请求编程确认  PC应答：0x7105+37+01(重新扫描)/02(下一步)
@@ -1157,13 +1157,13 @@
 
 		//重置列表
 		$("#carModuleInfoList").html('<tr><td class="t-center">编号</td><td class="t-center">模块名称</td><td class="t-center">地址</td></tr>');
-		win.sendDataToDev("71053701");
+		win.devService.sendDataToDev("71053701");
 	}
 
 	function Fun31053702(recvData) {
 		//tool.processBar("");
 		tool.layout('carModuleList_A061', 0);
-		win.sendDataToDev("71053702");
+		win.devService.sendDataToDev("71053702");
 	}
 
 
@@ -1228,12 +1228,12 @@
 		tool.layout('ECUSelect_A061', 0);
 		var command = '71053602';
 		tool.log('用户选择退出');
-		win.sendDataToDev(command);
+		win.devService.sendDataToDev(command);
 	}
 
 	//获取编程模块失败 PC应答：0x7105+36+02(失败)
 	function Fun310536Fail() {
-		win.sendDataToDev("71053602");
+		win.devService.sendDataToDev("71053602");
 	}
 
 	//选择数据库版本 下一步，获取车型列表
@@ -1306,11 +1306,11 @@
 			var msg = "";
 			if (gScanType == "01") {
 				msg = "执行全车模块完全扫描";
-				win.sendDataToDev("71052901");
+				win.devService.sendDataToDev("71052901");
 			}
 			if (gScanType == "02") {
 				msg = "执行全车模块快速扫描";
-				win.sendDataToDev("71052902");
+				win.devService.sendDataToDev("71052902");
 			}
 			tool.log(msg);
 			win.tool.loading({text: "正在查阅车辆模块信息..."});
@@ -1603,14 +1603,14 @@
 		var inputCheck = tool.getCheckedElement("radio310519");
 
 		var command = '71051901' + inputCheck.value;
-		win.sendDataToDev(command);
+		win.devService.sendDataToDev(command);
 	}
 
 	//选择车辆接口 取消
 	function Fun310519Cancel(recvData) {
 		win.tool.loading({pos: "body", text: "正在退出业务..."});
 		tool.layout('fun310519', 0);
-		win.sendDataToDev('71051902');
+		win.devService.sendDataToDev('71051902');
 	}
 
 	//模块信息显示  0x3105+0x39+车架号ASCII(17B)+硬件版本1 ASCII(7B)+硬件版本2
@@ -1659,14 +1659,14 @@
 		tool.log("开始" + getModule() + "模块编程流程");
 		win.tool.loading({text: "开始" + getModule() + "模块编程流程"});
 
-		win.sendDataToDev('71053901');
+		win.devService.sendDataToDev('71053901');
 	}
 
 	//模块信息显示 取消
 	function fun310539Cancel() {
 		win.tool.loading({pos: "body", text: "正在退出业务..."});
 		tool.layout('moduleInfo_A061', 0);
-		win.sendDataToDev('71053902');
+		win.devService.sendDataToDev('71053902');
 	}
 
 
@@ -1676,11 +1676,8 @@
 		var data = $("#inputPartNum_A061").val();
 
 		if (data == null || data == undefined || data.length != 7) {
-			tool.warnTip("tipPartNum", "请输入7位零件号!");
+			tool.warnTip("#inputPartNum_A061", "请输入7位零件号!");
 			return;
-		}
-		else {
-			tool.warnTip("tipPartNum", "");
 		}
 		data = getBse64Encode(data);   //编码
 
@@ -1744,7 +1741,7 @@
 
 
 	//OBD编程相关
-	win.devInterActive.Fun3106 = function (recvData) {
+	win.devService.Fun3106 = function (recvData) {
 
 		//命令协议
 		var strCommand = recvData.substr(4, 2);
@@ -1752,19 +1749,19 @@
 
 		switch (strCommand) {
 			case '14':
-				win.devInterActive.Fun310614(recvData); 	//设备检查结果
+				win.devService.Fun310614(recvData); 	//设备检查结果
 				break;
 			case '11':
-				win.devInterActive.Fun310611(recvData); 	//车辆通信结果
+				win.devService.Fun310611(recvData); 	//车辆通信结果
 				break;
 			case '0F':
-				win.devInterActive.Fun31060F(recvData); 	//模块编程结果
+				win.devService.Fun31060F(recvData); 	//模块编程结果
 				break;
 			case '17':
-				win.devInterActive.Fun310617(recvData); 	//文件校验结果
+				win.devService.Fun310617(recvData); 	//文件校验结果
 				break;
 			case '0D':
-				win.devInterActive.Fun31060D(recvData); 		//编程引导结果
+				win.devService.Fun31060D(recvData); 		//编程引导结果
 				break;
 			default:
 				tool.log(strShowMsg);
@@ -1772,7 +1769,7 @@
 	};
 
 	//0x3106+0x11(OBD通信状态)+0x01/0x03/0x04/0x05
-	win.devInterActive.Fun310611 = function (recvData) {
+	win.devService.Fun310611 = function (recvData) {
 		var strCommand = recvData.substr(6, 2);
 		switch (strCommand) {
 			case '01':
@@ -1795,7 +1792,7 @@
 	};
 
 	//编程模块结果	0x3106+0x0F(编程ECU)+0x01(成功)/0x02(失败)
-	win.devInterActive.Fun31060F = function (recvData) {
+	win.devService.Fun31060F = function (recvData) {
 
 		var strCommand = recvData.substr(6, 2);
 		var module = getModule() || "";
@@ -1815,7 +1812,7 @@
 	};
 
 	//文件校验结果  0x3106+0x17(文件校验)+0x01(引导程序)+0x01(成功)/0x02(失败)
-	win.devInterActive.Fun310617 = function (recvData) {
+	win.devService.Fun310617 = function (recvData) {
 		var type = recvData.substr(6, 2) + '';
 		var strCommand = recvData.substr(8, 2);
 
@@ -1835,7 +1832,7 @@
 
 	//编程引导结果  0x3106+0x0D(编程校验)+0x01(引导程序)+01(成功)/02(失败)
 	//	0x3106+0x0D(编程校验)+0x02(应用程序)+01(成功)/02(失败)
-	win.devInterActive.Fun31060D = function (recvData) {
+	win.devService.Fun31060D = function (recvData) {
 		var type = recvData.substr(6, 2) + '';
 
 		var strCommand = recvData.substr(8, 2);
@@ -1853,7 +1850,7 @@
 
 
 	//硬件响应
-	win.devInterActive.Fun3108 = function (recvData) {
+	win.devService.Fun3108 = function (recvData) {
 
 		var strCommand = recvData.substr(4, 2);
 		var strShowMsg = '错误的指令信息:' + strCommand;
@@ -1895,7 +1892,7 @@
 			$('#stopButton_A061').addClass("event-disable  button-disable");
 			$('#rescanButton_A061').removeClass("event-disable  button-disable");
 			$('#nextStepButton_A061').removeClass("event-disable  button-disable");
-			win.sendDataToDev("71080802");
+			win.devService.sendDataToDev("71080802");
 			return;
 		}
 
@@ -1997,7 +1994,7 @@
 	//PC应答：0x7108+08+01(继续)/02(停止)
 	function Fun31080801() {
 		//TODO 移到回调函数中
-		win.sendDataToDev("71080801");
+		win.devService.sendDataToDev("71080801");
 	}
 
 	function Fun31080802() {

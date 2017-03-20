@@ -25,7 +25,7 @@
 			cacheChannel = tool.toHex(value, 8);
 			document.getElementById("Title").innerText = "TCP大众基本调整";
 			//tool.processBar('正在初始化数据...');
-			win.sendDataToDev('310920' + cacheChannel);
+			win.devService.sendDataToDev('310920' + cacheChannel);
 			bindBottomBtn();
 			tool.layout("baseadjuster", 1);
 			safeApply(function () {
@@ -34,9 +34,9 @@
 			});
 		};
 
-		win.devInterActive.Fun710920 = function (varRecvData) {
+		win.devService.Fun710920 = function (varRecvData) {
 			var count =
-				tool.hex2dec(varRecvData.substr(win.getIndexByDevIndex(10), 2));
+				tool.hex2dec(varRecvData.substr(6, 2));
 
 			//获取到的数据项为0，就显示调整结束
 			if (!count) {
@@ -56,9 +56,9 @@
 			if (getOrignal) {
 				for (var i = 0; i < gPidLen; i++)
 					DataPack.pids[i] = {
-						originalX: varRecvData.substr(win.getIndexByDevIndex(11) + count * 8 + i * 2, 2),
-						originalY: varRecvData.substr(win.getIndexByDevIndex(11) + count * 8 + i * 2 + count * 2, 2),
-						pid: varRecvData.substr(win.getIndexByDevIndex(11) + i * 8, 8)
+						originalX: varRecvData.substr(8 + count * 8 + i * 2, 2),
+						originalY: varRecvData.substr(8 + count * 8 + i * 2 + count * 2, 2),
+						pid: varRecvData.substr(8 + i * 8, 8)
 					};
 
 				DataPack.pids.unDuplicate("pid");
@@ -66,7 +66,7 @@
 			}
 			else {
 				for (var j = 0; j < count; j++)
-					DataPack.pids[j] = varRecvData.substr(win.getIndexByDevIndex(11) + j * 8, 8);
+					DataPack.pids[j] = varRecvData.substr(8 + j * 8, 8);
 
 				gPidLen = DataPack.pids.length;
 				DataPack.pids.unDuplicate();
@@ -74,7 +74,7 @@
 			}
 		};
 
-		win.devInterActive.Fun7109A0 = function (varRecvData) {
+		win.devService.Fun7109A0 = function (varRecvData) {
 
 			var i = $scope.baseAdjuseterDataList.length;
 			if (i)
@@ -189,7 +189,7 @@
 				}
 			}
 			safeApply(function () {});
-			if (!finished && $scope.stateText == "暂停") win.sendDataToDev('310920' + cacheChannel);
+			if (!finished && $scope.stateText == "暂停") win.devService.sendDataToDev('310920' + cacheChannel);
 
 		};
 
@@ -239,7 +239,7 @@
 			showView = true;
 			$scope.isBtnBackEnable = false;
 			$scope.stateText = '暂停';
-			win.sendDataToDev('310920' + cacheChannel);
+			win.devService.sendDataToDev('310920' + cacheChannel);
 			safeApply(function () {});
 		}
 
@@ -250,7 +250,7 @@
 			});
 			win.tool.loading(0);
 			tool.layout("baseadjuster", 0);
-			win.sendDataToDev("310923");
+			win.devService.sendDataToDev("310923");
 			win.moduleEntry.showOperationMenu();
 		}
 

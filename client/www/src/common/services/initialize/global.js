@@ -10,27 +10,11 @@
 	win.badRequest = {};    //初始化远程协助回调对象；
 	win.RMTClickEvent = win.RMTClickEvent || {};    //初始化远程协助点击对象；
 
-	win.devInterActive = {};    //初始化设备交互指令对象；
+	win.devService = {};    //初始化设备交互指令对象；
 	win.moduleEntry = {};   //初始化模块入口对象；
 
 	//数组去重方案
 	Array.prototype.unDuplicate = function (condition) {
-		//var len = this.length;
-		//var i = 0;
-		//var j = len;
-		//while (i < len) {
-		//	j = len - i - 1;
-		//	while (j > i) {
-		//		var perv = condition ? this[i][condition] : this[i];
-		//		var next = condition ? this[j][condition] : this[j];
-		//		if (perv === next) {
-		//			this.splice(j, 1);
-		//		}
-		//		j--;
-		//	}
-		//	i++;
-		//}
-
 		var result = [];
 		var len = this.length;
 		result.push(this[0]);
@@ -96,13 +80,13 @@
 	win.global.businessInfo.serverType = '102'; //诊断模式; 100,101：自动诊断， 102：半自动，103：手动诊断
 	win.global.businessInfo.carType = '';   //车型类型,例：nissan、audi
 	win.global.businessInfo.carName_cn = '';    //车辆类型的中文形式（仅用于页面显示）；
-	win.global.businessInfo.link = '';
-	win.global.businessInfo.diagType = '';
-	win.global.businessInfo.serverHost = 'http://112.124.26.243:8090';   //服务器统一请求地址(默认),业务开始之后,会从APP端口重新获取
+	win.global.businessInfo.link = '';  //需要拼接一个完整的URL信息给APP底层；
+	win.global.businessInfo.diagType = '';  //诊断类型，只有【车辆诊断】项目使用到
+	win.global.businessInfo.serverHost = 'http://112.124.26.243:8090';   //从APP获取服务器IP，
 	win.global.businessInfo.serverDst = 'CCDP2Server.aspx';   //服务器数据地址(默认)
 	win.global.businessInfo.procedureType = '车辆诊断'; //业务类型：（'保养灯归零'、'BMW编程'、'BMW设码'、'标致调用控制单元功能'、'标致全车故障检测'、'特殊功能'）
-	//业务类型通过APP输出的URL获取，在appInterActive.js模块 AppInitEnd方法
-	win.global.businessInfo.mkey = "";
+													   //业务类型通过APP输出的URL获取，在appInterActive.js模块 AppInitEnd方法
+	win.global.businessInfo.mkey = '';
 	win.global.businessInfo.dbFilename = '';    //缓存表名来源，作为服务接口参数
 	win.global.businessInfo.dbFilenamePrev = '';    //优先获取cartxt文件的表名，如果此值为0或者空，再从310901里面重新获取
 	win.global.businessInfo.pubFilename = '';   //专业诊断专用

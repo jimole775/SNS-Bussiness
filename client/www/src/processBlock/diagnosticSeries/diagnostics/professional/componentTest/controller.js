@@ -139,7 +139,7 @@
 				// 发送该指令获取当前哪些版本信息被支持，
 				// 将返回的动态数据信息索引号，用匹配算法计算计算 系统ECU表 内的 TYPE 字段为 5 的记录 的 SUPID 字段和返回数据是否匹配，
 				// ****（此操作由服务器完成，JS端只需要将获取到的pid发送给服务器，然后将返回的数据遍历 绑定就可以）；
-				win.sendDataToDev("31090F");
+				win.devService.sendDataToDev("31090F");
 			}
 			else {
 				//检查分组状态
@@ -151,14 +151,14 @@
 			}
 		}
 
-		win.devInterActive.Fun71090F = function (recvData) {
+		win.devService.Fun71090F = function (recvData) {
 			//检查分组状态
 			var curGroupName = ($scope.curGroupName === "无分组列表" || !$scope.curGroupName || $scope.curGroupName === "请选择") ? "" : $scope.curGroupName;
 
 			requestData(packingDataPack(recvData.substr(10), curGroupName), gRequestType);
 		};
 
-		win.devInterActive.Fun71098F = function (recvData) {
+		win.devService.Fun71098F = function (recvData) {
 			tool.alert("设备未支持当前项", function () {});
 		};
 
@@ -266,7 +266,7 @@
 				case 2:
 				case 4:
 					$scope.popBoxType.value = true;
-					win.sendDataToDev("31092A" + gCurPID);
+					win.devService.sendDataToDev("31092A" + gCurPID);
 					break;
 			}
 
@@ -286,11 +286,11 @@
 		};
 
 		//获取输入框的初始值
-		win.devInterActive.Fun71092A = function (recvData) {
+		win.devService.Fun71092A = function (recvData) {
 			handlePopBoxValueType(tool.decodeASC(recvData.substr(10), 16));
 		};
 
-		win.devInterActive.Fun7109CA = function () {
+		win.devService.Fun7109CA = function () {
 			handlePopBoxValueType();
 		};
 
@@ -383,13 +383,13 @@
 				case 1:
 				{
 					$scope.popBoxType.checked = true;
-					win.sendDataToDev("310916" + gCurPID + fomulaname_checked_item_cmd);
+					win.devService.sendDataToDev("310916" + gCurPID + fomulaname_checked_item_cmd);
 					break;
 				}
 				case 2:
 				{
 					$scope.popBoxType.value = true;
-					win.sendDataToDev("310910" + gCurPID + totalLen + fomulaname_value_asc + "20" + fomulaname_checked_item_cmd);
+					win.devService.sendDataToDev("310910" + gCurPID + totalLen + fomulaname_value_asc + "20" + fomulaname_checked_item_cmd);
 					break;
 				}
 				case 3:
@@ -400,7 +400,7 @@
 							gLoop = null;
 							return
 						}
-						win.sendDataToDev("310916" + gCurPID + fomulaname_checked_item_cmd);
+						win.devService.sendDataToDev("310916" + gCurPID + fomulaname_checked_item_cmd);
 						win.RMTClickEvent.exeComponentTest(gCurPID, diagid, fomulaname_Ary);
 					}, 500);
 					break;
@@ -413,7 +413,7 @@
 							gLoop = null;
 							return
 						}
-						win.sendDataToDev("310910" + gCurPID + totalLen + fomulaname_value_asc + "20" + fomulaname_checked_item_cmd);
+						win.devService.sendDataToDev("310910" + gCurPID + totalLen + fomulaname_value_asc + "20" + fomulaname_checked_item_cmd);
 						win.RMTClickEvent.exeComponentTest(gCurPID, diagid, fomulaname_Ary);
 					}, 500);
 					break;
@@ -421,7 +421,7 @@
 				case 5:
 				{
 					$scope.popBoxType.checked = true;
-					win.sendDataToDev("310929" + gCurPID + diagid + tool.toHex(fomulaname_checked_item_cmd.length / 2, 4) + fomulaname_checked_item_cmd);
+					win.devService.sendDataToDev("310929" + gCurPID + diagid + tool.toHex(fomulaname_checked_item_cmd.length / 2, 4) + fomulaname_checked_item_cmd);
 					break;
 				}
 				case 6:
@@ -432,7 +432,7 @@
 							gLoop = null;
 							return
 						}
-						win.sendDataToDev("310929" + gCurPID + diagid + tool.toHex(fomulaname_checked_item_cmd.length / 2, 4) + fomulaname_checked_item_cmd);
+						win.devService.sendDataToDev("310929" + gCurPID + diagid + tool.toHex(fomulaname_checked_item_cmd.length / 2, 4) + fomulaname_checked_item_cmd);
 						win.RMTClickEvent.exeComponentTest(gCurPID, diagid, fomulaname_Ary);
 					}, 500);
 					break;
@@ -478,13 +478,13 @@
 						case 3:
 						case 4:
 						{
-							win.sendDataToDev("310922" + gCurPID);
+							win.devService.sendDataToDev("310922" + gCurPID);
 							break;
 						}
 						case 5:
 						case 6:
 						{
-							win.sendDataToDev("310922" + gCurPID + leastParamLen + leastParam);
+							win.devService.sendDataToDev("310922" + gCurPID + leastParamLen + leastParam);
 							break;
 						}
 					}
@@ -540,40 +540,40 @@
 
 		}
 
-		win.devInterActive.Fun710922 = function (recvData) {
+		win.devService.Fun710922 = function (recvData) {
 			//退出之后无需任何动作
 		};
 
-		win.devInterActive.Fun7109C2 = function (recvData) {
+		win.devService.Fun7109C2 = function (recvData) {
 			tool.alert("退出元件测试失败！", function () {});
 		};
 
-		win.devInterActive.Fun710910 = function (recvData) {
+		win.devService.Fun710910 = function (recvData) {
 
 			bindSate();
 		};
 
-		win.devInterActive.Fun710990 = function (recvData) {
+		win.devService.Fun710990 = function (recvData) {
 
 			bindSate("元件测试失败！");
 		};
 
-		win.devInterActive.Fun710929 = function (recvData) {
+		win.devService.Fun710929 = function (recvData) {
 
 			bindSate();
 		};
 
-		win.devInterActive.Fun7109C9 = function (recvData) {
+		win.devService.Fun7109C9 = function (recvData) {
 
 
 			bindSate("元件测试失败！");
 		};
 
-		win.devInterActive.Fun710916 = function (recvData) {
+		win.devService.Fun710916 = function (recvData) {
 			bindSate();
 		};
 
-		win.devInterActive.Fun710996 = function (recvData) {
+		win.devService.Fun710996 = function (recvData) {
 
 			bindSate("元件测试失败！");
 		};

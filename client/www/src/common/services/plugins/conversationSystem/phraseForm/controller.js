@@ -50,14 +50,11 @@
 			$scope.charSate.contentsTyped = item;
 			$scope.$emit ("charSate");
 
-
 			//广播出去之后，需要重置一下
 			$scope.charSate.contentsTyped = "";
 		};
 
 	}]);
-
-	//App.config();
 
 }) ();
 

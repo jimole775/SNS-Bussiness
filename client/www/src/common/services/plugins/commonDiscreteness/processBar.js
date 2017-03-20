@@ -5,17 +5,17 @@
 	var jinDuTpl = [
 		'<section class="bottom" id="footer">',
 		'    <div class="cur-text">',
-		'       <!--×´Ì¬ĞÅÏ¢ÏÔÊ¾-->',
+		'       <!--çŠ¶æ€ä¿¡æ¯æ˜¾ç¤º-->',
 		'       <p class="status" id="ShowStatusMessage"></p>',
 		'    </div>',
 		'</section>'
 	].join('');
 	document.write(jinDuTpl);
 
-	//Ç¶ÈëÎÄ±¾
+	//åµŒå…¥æ–‡æœ¬
 	CommonTool.prototype.processBar = function (message, active, boxid) {
 
-		if (typeof active === "string") {                 //´¦ÀíÖ»ÓĞÁ½¸ö²ÎÊıÊ±µÄÇé¿ö
+		if (typeof active === "string") {                 //å¤„ç†åªæœ‰ä¸¤ä¸ªå‚æ•°æ—¶çš„æƒ…å†µ
 			boxid = active;
 			active = null;
 		}
@@ -26,7 +26,7 @@
 		var box = document.getElementById (id);
 		var isDucBoxid = false;
 
-		if (!message) {                                   //Èç¹ûÊÖ¶¯ÖÃ¿ÕÎÄ±¾£¬¾ÍÁ¬¶¨Ê±Æ÷Ò²¸Éµô£»
+		if (!message) {                                   //å¦‚æœæ‰‹åŠ¨ç½®ç©ºæ–‡æœ¬ï¼Œå°±è¿å®šæ—¶å™¨ä¹Ÿå¹²æ‰ï¼›
 			clearInterval (tool.timer);
 			box.innerText = "";
 			tool.timer = null;
@@ -45,10 +45,10 @@
 		tool.statuBarBoxids.push (boxid);
 
 
-		//Ò»°ãÓĞÒÔÏÂÇé¿öĞèÒª×¢Òâ£º
-		// 1£¬statuBar·½·¨»áÔÚ¶à´¦µØ·½Ê¹ÓÃ£¬Èç¹ûÒÔactiveµÄÕæ¼ÙÀ´´¦Àí¶¨Ê±Æ÷£¬±ØĞëÒªÌí¼ÓÒ»¸öÌõ¼ş£¬¾ÍÊÇ±ØĞë´¦ÔÚÏàÍ¬µÄºĞ×ÓÖĞµÄÊ±ºòÔÙ´¦Àí£»
-		//      Èç¹ûÖ±½ÓÅĞ¶Ï£¬»áµ¼ÖÂÖ»ÓĞ×îºóÒ»¸öÊ¹ÓÃstatuBar·½·¨µÄµØ·½ÉúĞ§£»
-		// 2£¬Ïëµ½ÔÙËµ...
+		//ä¸€èˆ¬æœ‰ä»¥ä¸‹æƒ…å†µéœ€è¦æ³¨æ„ï¼š
+		// 1ï¼ŒstatuBaræ–¹æ³•ä¼šåœ¨å¤šå¤„åœ°æ–¹ä½¿ç”¨ï¼Œå¦‚æœä»¥activeçš„çœŸå‡æ¥å¤„ç†å®šæ—¶å™¨ï¼Œå¿…é¡»è¦æ·»åŠ ä¸€ä¸ªæ¡ä»¶ï¼Œå°±æ˜¯å¿…é¡»å¤„åœ¨ç›¸åŒçš„ç›’å­ä¸­çš„æ—¶å€™å†å¤„ç†ï¼›
+		//      å¦‚æœç›´æ¥åˆ¤æ–­ï¼Œä¼šå¯¼è‡´åªæœ‰æœ€åä¸€ä¸ªä½¿ç”¨statuBaræ–¹æ³•çš„åœ°æ–¹ç”Ÿæ•ˆï¼›
+		// 2ï¼Œæƒ³åˆ°å†è¯´...
 		if(isDucBoxid && !active){
 			clearInterval (tool.timer);
 		}
@@ -56,7 +56,7 @@
 		box.innerText = message;
 		logCount = 0;
 		if (active) {
-			clearInterval (tool.timer);                 //±ÜÃâ³öÏÖÁ½¸ö¶¨Ê±Æ÷£»
+			clearInterval (tool.timer);                 //é¿å…å‡ºç°ä¸¤ä¸ªå®šæ—¶å™¨ï¼›
 			tool.timer = setInterval (function () {
 				var mod = logCount % 4;
 				var suffixMessage = '';

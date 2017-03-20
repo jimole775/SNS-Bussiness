@@ -45,50 +45,50 @@
 			preCmd = "3109" + cmdType;
 			stepCount = 0;
 			var suffix = "00";
-			win.sendDataToDev(preCmd + tool.toHex(stepCount++, 2) + suffix);
+			win.devService.sendDataToDev(preCmd + tool.toHex(stepCount++, 2) + suffix);
 		};
 
-		win.devInterActive.Fun710951 = function (varRecvData) {
+		win.devService.Fun710951 = function (varRecvData) {
 			handleVarRecvData(varRecvData);
 		};
 
-		win.devInterActive.Fun710952 = function (varRecvData) {
+		win.devService.Fun710952 = function (varRecvData) {
 			handleVarRecvData(varRecvData);
 		};
 
-		win.devInterActive.Fun710953 = function (varRecvData) {
+		win.devService.Fun710953 = function (varRecvData) {
 			handleVarRecvData(varRecvData);
 		};
 
-		win.devInterActive.Fun710950 = function (varRecvData) {
+		win.devService.Fun710950 = function (varRecvData) {
 			handleVarRecvData(varRecvData);
 		};
 
-		win.devInterActive.Fun7109D0 = function (varRecvData) {
+		win.devService.Fun7109D0 = function (varRecvData) {
 			//todo 设备响应失败
 			tool.alert("CCDP设备响应失败", function () {
-				win.sendDataToDev("310902");
+				win.devService.sendDataToDev("310902");
 			});
 		};
 
-		win.devInterActive.Fun7109D1 = function (varRecvData) {
+		win.devService.Fun7109D1 = function (varRecvData) {
 			//todo 设备响应失败
 			tool.alert("CCDP设备响应失败", function () {
-				win.sendDataToDev("310902");
+				win.devService.sendDataToDev("310902");
 			});
 		};
 
-		win.devInterActive.Fun7109D2 = function (varRecvData) {
+		win.devService.Fun7109D2 = function (varRecvData) {
 			//todo 设备响应失败
 			tool.alert("CCDP设备响应失败", function () {
-				win.sendDataToDev("310902");
+				win.devService.sendDataToDev("310902");
 			});
 		};
 
-		win.devInterActive.Fun7109D3 = function (varRecvData) {
+		win.devService.Fun7109D3 = function (varRecvData) {
 			//todo 设备响应失败
 			tool.alert("CCDP设备响应失败", function () {
-				win.sendDataToDev("310902");
+				win.devService.sendDataToDev("310902");
 			});
 		};
 
@@ -223,7 +223,7 @@
 				}
 					break;
 				default :                                                                   //如果是未知弹框类型，就退到主界面
-					win.sendDataToDev("310902");
+					win.devService.sendDataToDev("310902");
 					return;
 					break;
 			}
@@ -359,7 +359,7 @@
 					 *                    menuItemWitchWasChecked :菜单的选项的下标
 					 * */
 					if (!$scope.buttons_arr.length) {
-						win.devInterActive.Fun31095x({
+						win.devService.Fun31095x({
 							menuItemWitchWasChecked: "",
 							menuItemLen: "",
 							inputValue: "",
@@ -448,7 +448,7 @@
 			//所以，按正常流程，点击之后马上加载遮罩
 			//而且，为了防止设备数据返回过快，未弹出遮罩，数据已经返回，造成数据发送成功，遮罩依然存在的BUG
 
-			win.devInterActive.Fun31095x({
+			win.devService.Fun31095x({
 				menuItemWitchWasChecked: "",
 				menuItemLen: "",
 				inputValue: inputValue,
@@ -470,7 +470,7 @@
 			var menuItemWitchWasChecked =
 				index === "00" ? "00" : "0" + index;
 
-			win.devInterActive.Fun31095x({
+			win.devService.Fun31095x({
 				menuItemWitchWasChecked: menuItemWitchWasChecked,
 				menuItemLen: menuItemLen,
 				inputValue: "",
@@ -492,7 +492,7 @@
 		 *                   menuItemWitchWasChecked :菜单的选项的下标
 		 *
 		 * */
-		win.devInterActive.Fun31095x = function (sendData) {
+		win.devService.Fun31095x = function (sendData) {
 
 			var buttonWitchWasCheckedIndex_hex = sendData.buttonIndex;     //如果没有按钮就填入00
 
@@ -524,7 +524,7 @@
 				menuItemLen_hex +                                           //菜单选项的数量
 				menuItemWitchWasCheckedIndex_hex;                           //菜单选项被点击的下标
 
-			win.sendDataToDev(finalCmd);
+			win.devService.sendDataToDev(finalCmd);
 		};
 
 	}]).config(function () {

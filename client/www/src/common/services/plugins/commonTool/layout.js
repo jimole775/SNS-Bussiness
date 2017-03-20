@@ -11,7 +11,7 @@
 	 *
 	 *@params flag:init  重置克隆的元素
 	 * */
-	CommonTool.prototype.layout = function (boxId, flag, btn1Param, btn2Param, btn3Param) {
+	CommonTool.prototype.layout = function (boxId, flag) {
 		var that = this;
 		var box = $("#" + boxId);
 		var $curContentBody = $(box.find(".scroll-table-body"));
@@ -21,7 +21,6 @@
 
 		if (flag == 1) {
 			that.showTable(box);
-			that.layoutBottomBtn(1, btn1Param, btn2Param, btn3Param);
 
 			//打开页面【后】，探索当前页有没有存储有滚动条记录
 			var curScrollTop = parseFloat(sessionStorage.getItem(boxId));
@@ -67,8 +66,6 @@
 
 	CommonTool.prototype.hideTable = function (box) {
 
-		//var diagnoseFooter = $("#bottomButton");
-		//var curFooter = box.find(".scroll-table-footer");
 		box.hide();
 
 	};
@@ -154,69 +151,4 @@
 		}
 	};
 
-	/**
-	 * 底部按钮实例
-	 *@params flag 0，标示隐藏底部按钮；1标示显示按钮，并且根据后续参数个数实例化相应的按钮
-	 *@params btn1Param 第一个按钮的参数 [text,disableState,callback]
-	 *@params btn2Param 第二个按钮的参数 [text,disableState,callback]
-	 *@params btn3Param 第三个按钮的参数 [text,disableState,callback]
-	 * */
-	CommonTool.prototype.layoutBottomBtn = function (flag, btn1Param, btn2Param, btn3Param) {
-		var jinduBar = $("#footer");
-		var boxFooter = $("#bottomButton");
-		var that = this;
-		if (flag) {
-			boxFooter.height(jinduBar.height());
-			jinduBar.width("0%");
-			boxFooter.width("100%");
-		}
-		else {
-			jinduBar.width("100%");
-			boxFooter.width("0%");
-		}
-
-		if (btn1Param || btn2Param || btn3Param) {
-			/**
-			 * 因为参数的个数不固定，所以先在这里过滤掉 undefined 的参数
-			 * 使得在被that.bindBottomBtn调用的时候就可以判断参数个数了
-			 * */
-			var _args = [btn1Param, btn2Param, btn3Param];
-			var result = [];
-			_args.forEach(function (item) {
-				if (item)result.push(item);
-			});
-
-			that.bindBottomBtn.apply(that, result);
-		}
-
-	};
-
-	//参数个数不固定
-	CommonTool.prototype.bindBottomBtn = function () {
-
-		Array.prototype.forEach.call(arguments, function (item, index) {
-
-			//在这里调整每个参数的位置
-			item.forEach(function (_item) {
-
-				//如果元素个数小于3，就代表第二个参数是callback(text和callback是必选参数)
-				if (_item.length < 3) {
-					_item[2] = _item[1];
-					_item[1] = undefined;
-				}
-			});
-		});
-
-		this.bottomBtn({
-			btn1Text: arguments[0][0],
-			btn1Disable: arguments[0][1],
-			btn1Callback: arguments[0][2],
-			btn2Text: arguments[1] ? arguments[1][0] : undefined,
-			btn2Disable: arguments[1] ? arguments[1][1] : undefined,
-			btn2Callback: arguments[1] ? arguments[1][2] : undefined,
-			btn3Text: arguments[2] ? arguments[2][0] : undefined,
-			btn3Disable: arguments[2] ? arguments[2][1] : undefined,
-			btn3Callback: arguments[2] ? arguments[2][2] : undefined
-		});
-	}
 })();

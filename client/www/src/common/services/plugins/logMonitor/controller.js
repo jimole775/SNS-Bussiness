@@ -49,7 +49,7 @@
             })
         })
     })({
-        "发送数据给DEV": "sendDataToDev()",
+        "发送数据给DEV": "devService.sendDataToDev()",
         "发送数据给APP": "win.appService.sendDataToApp()",
         "关闭加载遮罩": "tool.loading(0)",
         "开启加载遮罩": "tool.loading()"
