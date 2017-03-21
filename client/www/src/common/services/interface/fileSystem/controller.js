@@ -297,8 +297,11 @@
             tool.layout("fileSelect", 0);
             tool.bottomBtn(0);
 
-            var callback = $("#callback_sp").text();   //如果有特殊行为，就绑定一个全局函数，这里直接调用
-            if(callback)win[callback]();    //进入文件系统之前，会把消极选择的回调帮到 #callback_sp 标签上
+            var callbackName = $("#callback_sp").text();   //如果有特殊行为，就绑定一个全局函数，这里直接调用
+            if(callbackName){
+                func = eval(callbackName) ||function(){};
+                func();    //进入文件系统之前，会把消极选择的回调帮到 #callback_sp 标签上
+            }
         }
         else {
             gCurDirIndex_int--;

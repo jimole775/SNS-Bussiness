@@ -776,7 +776,7 @@
 	function loopTrigger() {
 		cacheChangeItemByFlagOfParameter = {};
 		tool.layout('functionSet', 0);
-		$("#moduleList").html(strHtml);
+		//$("#moduleList").html(strHtml);
 		tool.bottomBtn({
 			btn1Text: "退出",
 			btn1Callback: function () {
@@ -788,7 +788,7 @@
 
 	//给tool.alert绑定回调使用的方法
 	function quitBusiness() {
-		win.sendDataToApp(3999,"","");
+		win.appService.sendDataToApp(3999,"","");
 	}
 
 	//当菜单页点击确定按钮后，

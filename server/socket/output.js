@@ -7,7 +7,7 @@
     var clients = [];
     var namesMap = [];
 
-    //ËùÓĞÒÔ´´½¨Á¬½ÓµÄÓÃ»§ÒÔ{asker:session,assiant:session}µÄ·½Ê½´æ´¢
+    //æ‰€æœ‰ä»¥åˆ›å»ºè¿æ¥çš„ç”¨æˆ·ä»¥{asker:session,assiant:session}çš„æ–¹å¼å­˜å‚¨
     var chanelMap = [];
     WebSocket.prototype.send = function (socket, status, data) {
         var that = this;
@@ -28,7 +28,7 @@
     };
 
     WebSocket.prototype.disconnectChanel = function (data) {
-        //Èç¹ûÊÇĞ­ÖúÕßµÄ¶Ï¿ªÑ¶ºÅ,
+        //å¦‚æœæ˜¯ååŠ©è€…çš„æ–­å¼€è®¯å·,
         var that = this;
         var asker = null;
         var helper = null;
@@ -38,19 +38,19 @@
                 helper = item.helper.session;
                 that.send(asker, 4, {disconnect: true});
                 that.send(helper, 4, {disconnect: true});
-                chanelMap.splice(index, 1);   //É¾³ıÔ¶³Ì»á»°Í¨µÀ
+                chanelMap.splice(index, 1);   //åˆ é™¤è¿œç¨‹ä¼šè¯é€šé“
             }
         });
 
     };
 
-    //Á½¸öÓÃ»§µÄ¶Ô½Ó
+    //ä¸¤ä¸ªç”¨æˆ·çš„å¯¹æ¥
     WebSocket.prototype.openChanel = function (data) {
         var that = this;
         var asker = that.tool.getSession(data.uid, clients);
         var helper = that.tool.getSession(data.items.helper, clients);
 
-        //´æ´¢Ô¶³Ì¶Ô»°Í¨µÀ
+        //å­˜å‚¨è¿œç¨‹å¯¹è¯é€šé“
         chanelMap.push({
             asker: {uid: data.uid, session: asker},
             helper: {uid: data.items.helper, session: helper}
@@ -78,11 +78,11 @@
 
     WebSocket.prototype.refreshUserList = function (data) {
         var that = this;
-        //É¾³ı¶ÏÏßµÄÓÃ»§£¬ÖØĞÂÍÆËÍµ½¿Í»§¶Ë
+        //åˆ é™¤æ–­çº¿çš„ç”¨æˆ·ï¼Œé‡æ–°æ¨é€åˆ°å®¢æˆ·ç«¯
         clients.forEach(function (item, index) {
             if (item.uid === data.uid) {
                 clients[index].session.destroy();
-                console.log("É¾³ı¶ÔÏó£º", clients[index]);
+                console.log("åˆ é™¤å¯¹è±¡ï¼š", clients[index]);
                 clients.splice(index, 1);
                 namesMap.splice(index, 1);
             }
@@ -104,7 +104,7 @@
             });
             namesMap.push(data.uid);
 
-            //ÏòËùÓĞµÄÓÃ»§ÍÆËÍÓÃ»§Ãû
+            //å‘æ‰€æœ‰çš„ç”¨æˆ·æ¨é€ç”¨æˆ·å
             clients.forEach(function (item, index) {
                 that.send(item.session, 0, {userList: namesMap.join(",")});
             });

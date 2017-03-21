@@ -68,7 +68,7 @@
         win.devService.Fun7109D0 = function (varRecvData) {
             //todo 设备响应失败
             tool.alert("CCDP设备响应失败", function () {
-                closeBusiness();
+                errorQuit();
             });
         };
 
@@ -88,7 +88,7 @@
                 requestType = "01"; //请求类型为01时，代表datapack会打包所有的supid
                 switch ($scope.BombBoxType) {
                     case "00":
-                        closeBusiness();
+                        normalQuit();
                         return;
                         break;
                     case "01":  //提示框
@@ -430,7 +430,7 @@
                         break;
                     default :   //如果是未知弹框类型，就退出业务
                         tool.alert("未知响应类型！", function () {
-                            closeBusiness();
+                            errorQuit();
                         });
                         return;
                         break;
@@ -461,7 +461,7 @@
             } catch (e) {
                 tool.alert("程序执行失败，点击确定退出", function () {
                     console.log(e.message);
-                    closeBusiness();
+                    errorQuit();
                 });
             }
         }
@@ -503,11 +503,13 @@
 
                     // 如果用户取消文件选择，就执行下面的函数，这个行为只在防盗匹配生效，
                     // 如果在其他业务下，可能就需要其他行为了
-                    win.global.userCancelSelectFile = function(){
+                    if(!global.userCancelSelectFile){
+                        win.global.userCancelSelectFile = function(){
 
-                        //如果用户取消选择文件，就下发 “3109600001FE” 给DEV，流程号无所谓
-                        win.devService.sendDataToDev("3109600001FE");
-                    };
+                            //如果用户取消选择文件，就下发 “3109600001FE” 给DEV，流程号无所谓
+                            win.devService.sendDataToDev("3109600001FE");
+                        };
+                    }
                     break;
                 case "03":
                     //sendFileToDevFromServer();
@@ -553,7 +555,7 @@
                 },
                 dataPack,
                 win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.bindingATViewFromServer, [supids]),
-                    [FunGetsupidDataFromServer, closeBusiness])
+                    [FunGetsupidDataFromServer, errorQuit])
             );
 
             dataPack.supids.length = 0;
@@ -565,7 +567,7 @@
                 if (!responseObject.items.length) {
                     tool.alert('服务器无任何数据',
                         function () {
-                            closeBusiness();
+                            normalQuit();
                         }
                     );
                     return;
@@ -806,7 +808,7 @@
                         break;
                     default :
                         tool.alert("未知的响应类型！", function () {
-                            closeBusiness();
+                            errorQuit();
                         });
                         break;
                 }
@@ -816,7 +818,7 @@
                 console.log(e);
                 tool.alert('服务器数据解析出错，业务无法继续！',
                     function () {
-                        closeBusiness();
+                        errorQuit();
                     }
                 );
             }
@@ -967,8 +969,12 @@
             win.devService.sendDataToDev(finalCmd);
         };
 
-        function closeBusiness(){
-            win.appService.sendDataToApp(3999,"","");
+        function errorQuit(){
+            win.appService.sendDataToApp(3999,"","");   //强制退出,异常处理
+        }
+
+        function normalQuit(){
+            win.devService.sendDataToDev("3109FF"); //正常退出
         }
 
     }]).config(function () {

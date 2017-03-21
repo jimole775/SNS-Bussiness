@@ -1,5 +1,5 @@
-(function(){
-
+$(document).ready(function(){
+    var win = window;
     //启动OBDII诊断应答(PC)，0x5104+0x01（成功）
     win.devService.Fun5104 = function (varRecvData) {
         var strCommand = varRecvData.substr(4, 2);
@@ -46,4 +46,4 @@
                 break;
         }
     }
-})();
+});

@@ -18,7 +18,7 @@ $ (document).ready (function () {
 	//通过服务器传送回来ID号，匹配callbackMap里的回调函数；
 	win.appService.getCallbackById = function (callbackId) {
 		var callback = callbackMap[callbackId];
-		callbackMap[callbackId] = null;
+		delete callbackMap[callbackId];
 		return callback;
 	};
 

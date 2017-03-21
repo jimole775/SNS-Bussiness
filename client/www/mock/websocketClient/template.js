@@ -2,8 +2,6 @@
  * Created by Andy on 2017/3/4.
  */
 (function () {
-	window.global = window.global ? window.global : {};
-
 	var innerHtml = [
 	'<h2 id="friendListHeader" style="height:3rem;line-height:200%;text-align:center;background:#008eff;color:#fff;position: absolute;width: 100%;left: 0;top: 0;z-index: 2;display: block;">基友列表(在线)</h2>' +
 	'<ul id="friendList" style="width:100%;height:100%;position: absolute;padding-top:3rem;box-sizing: border-box;top:0;left:0;z-index: 1;"></ul>',

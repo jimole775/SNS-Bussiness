@@ -4,7 +4,7 @@
 /**
  * Created by Andy on 2016/3/7.
  */
-(function () {
+$(document).ready(function () {
 
     var win = window;
 
@@ -105,4 +105,4 @@
     win.devService.Fun2107 = function (varRecvData) {
         console.log("上传文件", varRecvData);
     }
-})();
+});

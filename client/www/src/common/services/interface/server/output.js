@@ -44,9 +44,9 @@ $(document).ready(function () {
 			return result;
 		})();
 
-		var link = global.businessInfo.link;
+		var link = global.businessInfo.link;	//如果link值为空，就判断为在线模式
 		//在线模式,使用AJAX请求服务器;
-		if (link.indexOf("=online&") >= 0) {
+		if (!link || link.indexOf("=online&") >= 0) {
 			that.ajaxHandle(pack, callback);
 		}
 		else {

@@ -122,7 +122,6 @@ var CommonTool = function () {
                         }
                     });
 
-                    //返回第一个显示元素的父级元素
                     return $(result);
                 })();
             }
@@ -137,7 +136,6 @@ var CommonTool = function () {
                         }
                     });
 
-                    //返回第一个显示元素的父级元素
                     return $(result);
                 })();
             } else {    //标签类型
@@ -147,7 +145,7 @@ var CommonTool = function () {
 
         //如果标签类型是input，就把提示文本插入父级
         var finalTarget = (function(){
-            if(box[0].tagName==="INPUT"){
+            if(box[0].tagName === "INPUT"){
                 return box.parent();
             }else{
                 return box;

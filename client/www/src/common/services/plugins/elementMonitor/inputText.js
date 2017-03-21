@@ -119,7 +119,7 @@
 				'</span>';
 
 			$oInput.each (function (index, input) {
-				if (/disable-plugin/.test (input.className)) return;
+				if (/disable-plugin/.test (input.className)) return;	//忽略带有disable-plugin选择器的元素
 
 				var $input = $ (input);
 

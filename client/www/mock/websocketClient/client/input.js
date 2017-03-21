@@ -3,7 +3,7 @@
  */
 (function () {
 	var win = window;
-	win.global.RMTID.userName = win.prompt("输入一个用户名，用于远程交互！");
+
 	var userName = win.global.RMTID.userName;
 	var ws = new WebSocket("ws://127.0.0.1:81");
 

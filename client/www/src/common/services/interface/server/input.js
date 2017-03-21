@@ -47,10 +47,10 @@
 			console.log("服务器数据：",JSON.stringify(jsonData),"服务器回调:",params);
 		}
 		
-		//如果服务器查询失败，就不必再给用户请求的机会！
+		//如果服务器查询失败，就绑定消极回调，如果未定义消极回调，就简单给出提示
 		else {
 			tool.alert("服务器响应失败:"+response.CODEDATA,function(){
-				cacheCallback.retryFn[1].apply(null, cacheCallback.params);
+				cacheCallback.retryFn[1] ? cacheCallback.retryFn[1].apply(null, cacheCallback.params) : "";
 			});
 		}
 	};
