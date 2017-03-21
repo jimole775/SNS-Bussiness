@@ -9,15 +9,15 @@
 	WebSocket.prototype.send = function () {
 		var formatData = null;
 		switch (arguments[0]) {
-			case 0:
+			case 0x00:
 				formatData = {
-					status: 0,
+					status: 0x00,
 					uid: userName
 				};
 				break;
-			case 1:   //协助通道的询问
+			case 0x01:   //协助通道的询问
 				formatData = {
-					status: 1,
+					status: 0x01,
 					uid: userName,
 					items: {
 						helperUid: arguments[1],
@@ -26,9 +26,9 @@
 					}
 				};
 				break;
-			case 2:   //协助通道的应答
+			case 0x02:   //协助通道的应答
 				formatData = {
-					status: 2,
+					status: 0x02,
 					uid: userName,
 					items: {
 						helperUid: arguments[1],
@@ -37,9 +37,9 @@
 					}
 				};
 				break;
-			case 3:   //远程协助交互通道
+			case 0x03:   //远程协助交互通道
 				formatData = {
-					status: 3,
+					status: 0x03,
 					uid: userName,
 					items: {
 						remoteRole: arguments[1],
@@ -48,17 +48,17 @@
 					}
 				};
 				break;
-			case 4:   //断开协助通道
+			case 0x04:   //断开协助通道
 				break;
-			case 5:   //关闭ws
+			case 0x05:   //关闭ws
 				formatData = {
-					status: 5,
+					status: 0x05,
 					uid: userName
 				};
 				break;
-			case 6:
+			case 0x06:
 				break;
-			case 7:
+			case 0x07:
 				break;
 			default :
 				break;

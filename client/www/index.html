@@ -11,7 +11,6 @@
     <meta http-equiv="Expires" content="0"/>
     <script>
         (function (win) {
-            console.log("satrt:", (new Date()).getTime());
             var userAgent = win.navigator.userAgent; //取得浏览器的userAgent字符串
             var isOpera = userAgent.indexOf("Opera") > -1; //判断是否Opera浏览器
             var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 && !isOpera; //判断是否IE浏览器
