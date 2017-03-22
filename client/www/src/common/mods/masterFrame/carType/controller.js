@@ -416,7 +416,7 @@
             }
 
             if (/(防盗匹配)/.test(global.businessInfo.procedureType)) {
-
+                tool.layout(thisBoxId, 0);
                 //防盗匹配只有在这里才能获取到完整的URL，和其他的项目不一样，需要区别对待！
                 win.global.businessInfo.operationMenuCache = [nodeAddress.replace(/\./g, ""), "carType"];
 

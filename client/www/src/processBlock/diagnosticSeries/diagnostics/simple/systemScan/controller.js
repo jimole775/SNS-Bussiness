@@ -576,7 +576,7 @@
 				},
 				DataPack,
 				win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.DTC_simple, [markParams]),
-				[null,handleBadRequest])
+				handleBadRequest)
 			);
 		}
 

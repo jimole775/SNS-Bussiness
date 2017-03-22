@@ -147,7 +147,7 @@
 				},
 				dataPack,
 				win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.BASE_ADJUST, [dataPack]),
-				[null, handleBadRequest])
+				handleBadRequest)
 			);
 
 		}

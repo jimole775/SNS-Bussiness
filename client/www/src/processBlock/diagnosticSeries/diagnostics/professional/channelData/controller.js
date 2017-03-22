@@ -163,7 +163,7 @@
 				},
 				dataPack,
 				win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.CHANNEL_DATA, [dataPack]),
-				[null, handleBadRequest])
+				handleBadRequest)
 			);
 
 		}

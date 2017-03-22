@@ -620,7 +620,7 @@
 				},
 				dataPack,
 				win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.CALC_ONE_ANS, [param]),
-				[null, handleBadRequest])
+				handleBadRequest)
 			)
 
 		}

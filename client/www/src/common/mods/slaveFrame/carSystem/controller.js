@@ -79,7 +79,7 @@
 				},
 				dataPack,
 				win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.SYS, [dataPack]),
-				[null,handleBadRequest])
+				handleBadRequest)
 			);
 		}
 
