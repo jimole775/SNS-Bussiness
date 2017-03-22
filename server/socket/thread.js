@@ -5,10 +5,13 @@
     var WebSocket = require("./host.js");
 
     var clients = [];
-    var namesMap = [];
 
     //所有以创建连接的用户以{asker:session,assiant:session}的方式存储
     var chanelMap = [];
+
+
+    WebSocket.prototype.namesMap = [];
+
     WebSocket.prototype.send = function (socket, status, data) {
         var that = this;
         var emitProtocolMap = {
@@ -36,8 +39,8 @@
             if (item.asker.uid == data.uid || item.helper.uid == data.uid) {
                 asker = item.asker.session;
                 helper = item.helper.session;
-                that.send(asker, 0x05, {disconnect: true});
-                that.send(helper, 0x05, {disconnect: true});
+                that.send(asker, 0xFF, {disconnect: true});
+                that.send(helper, 0xFF, {disconnect: true});
                 chanelMap.splice(index, 1);   //删除远程会话通道
             }
         });
@@ -83,7 +86,7 @@
 
         //消极应答，直接发03通知询问方
         else {
-            var asker = this.tool.getSession(data.uid, clients);
+            var asker = this.tool.getSession(data.items.askerUid, clients);
             this.send(
                 asker,
                 0x03,
@@ -121,30 +124,28 @@
                 clients[index].session.destroy();
                 console.log("删除对象：", clients[index]);
                 clients.splice(index, 1);
-                namesMap.splice(index, 1);
+                that.namesMap.splice(index, 1);
             }
         });
 
         clients.forEach(function (item, index) {
-            that.send(item.session, 0x00, {userList: namesMap.join(",")});
+            that.send(item.session, 0x00, {userList: that.namesMap.join(",")});
         });
     };
 
     //绑定用户信息
     WebSocket.prototype.distributeUid = function (data, socket) {
-
-        if (!namesMap.join(",").match(new RegExp(data.uid, "g"))) {
-
-            var that = this;
+        var that = this;
+        if (!that.namesMap.join(",").match(new RegExp(data.uid, "g"))) {
             clients.push({
                 uid: data.uid,
                 session: socket
             });
-            namesMap.push(data.uid);
+            that.namesMap.push(data.uid);
 
             //向所有的用户推送用户名
             clients.forEach(function (item, index) {
-                that.send(item.session, 0x00, {userList: namesMap.join(",")});
+                that.send(item.session, 0x01, {userList: that.namesMap.join(",")});
             });
         }
     };

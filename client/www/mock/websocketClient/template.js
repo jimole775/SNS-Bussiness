@@ -18,7 +18,11 @@
 
     $("#friendFrame").ready(function () {
         setTimeout(function () {
-            $().show();
+            $("#headBarRight").show();
+
+            $("#headBarRight").on("click",function(){
+                $("#friendFrame").show();
+            });
             $("#friendListClose").on("click", function () {
                 $("#friendFrame").hide();
             });

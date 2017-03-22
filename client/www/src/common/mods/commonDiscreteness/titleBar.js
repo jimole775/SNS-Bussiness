@@ -13,10 +13,12 @@
 		'</button>',
 		'<button id="Title" class="head-bar-title" disabled>CCDP</button>',
 		'<div id="headBarRight" class="head-bar-right">',
+		'<div class="table full">',
 		'<div class="table-cell-center">',
 		'   <button class="head-bar-right-button">',
 		'       <i></i>',
 		'   </button>',
+		'</div>',
 		'</div>',
 		'</div>',
 		'</header>'

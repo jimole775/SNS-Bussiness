@@ -35,27 +35,30 @@
                 that.opcode = frame.Opcode;
                 var data = JSON.parse(frame.PayloadData.toString()) || "";
                 switch (data.status) {
-                    case 0x00:   //连接,绑定用户名
+                    case 0x00:
+                        that.send(socket,0x00,that.namesMap.join("-"));
+                        break;
+                    case 0x01:
                         //如果map里面没有此用户，就存储session，并绑定用户名
                         that.distributeUid(data, socket);
                         break;
-                    case 0x01:   //协助通道的询问
+                    case 0x02:    //协助通道的询问
                         that.remoteConnectAsk(data, socket);
                         break;
-                    case 0x02:   //协助通道的应答
+                    case 0x03:  //协助通道的应答
                         that.remoteConnectAnswer(data, socket);
                         break;
-                    case 0x03:
+                    case 0x04:
                         break;
-                    case 0x04:   //远程协助交互通道
+                    case 0x05:    //远程协助交互通道
                         that.RMTInterActive(data);
-                        break;
-                    case 0x05:   //断开协助通道//关闭ws
-                        that.close(data);
                         break;
                     case 0x06:
                         break;
                     case 0x07:
+                        break;
+                    case 0xFF: //断开协助通道//关闭ws
+                        that.close(data);
                         break;
                     default :
                         break;

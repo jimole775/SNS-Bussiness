@@ -80,36 +80,6 @@ WebSocket.prototype.tool = {
 
 };
 
-WebSocket.prototype.init = function () {
-    var that = this;
-    require('net').createServer(function (socket) {
-        socket.on("connect", function (sock) {
-            console.log("connect:", sock);
-        });
-        socket.on('error', function (sock) {
-            console.log("error", sock);
-        });
-        socket.on('lookup', function (sock) {
-            console.log("lookup", sock);
-        });
-        socket.on('timeout', function (sock) {
-            console.log("timeout", sock);
-        });
-        socket.on('data', function (e) {
-            var frame = that.tool.decodeDataFrame(e);
-            //
-            if (frame.FIN === 0) {
-                that.handshake(socket, e);
-            }
-            //
-            else {
-                that.dataHost(socket, frame);
-            }
-        });
-
-    }).listen(81, function () {
-    });
-};
 
 module.exports = WebSocket;
 })();

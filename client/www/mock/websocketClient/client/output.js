@@ -12,7 +12,7 @@
 			case 0x00:
 				formatData = {
 					status: 0x00,
-					uid: getUserName()
+					uid: ""
 				};
 				break;
 			case 0x01:   //协助通道的询问

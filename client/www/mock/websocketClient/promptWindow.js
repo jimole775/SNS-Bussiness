@@ -16,4 +16,39 @@
 
     $("body").append(template);
     $("#bodyInit").text("");
+    setTimeout(function () {
+        $("#carLogo")[0].style.filter = "blur(3px)";
+        $("#userNameBtn").on("click", function () {
+            var input = $("#userName");
+            if (input.val()) {
+                if (getUserList().indexOf(input.val()) >= 0) {
+                    input[0].placeholder = "那么优秀的名字已经被抢了！";
+                    return;
+                }
+                win.global.RMTID.userName = input.val();
+                $("#userNameFrame").hide();
+                $("#carLogo")[0].style.filter = "blur(0)";
+
+                global.ws.send(0x00);
+            } else {
+                tool.warnTip("#userName", "不支持黑户");
+                input[0].placeholder = "请先取一个名字！";
+            }
+        });
+    }, 500);
+
+
+    function getUserList() {
+        var result = [];
+        $("#friendList").find("li").each(function (index,item) {
+            if (item.children.length && !item.innerText) {
+                result.push(item.children.innerText);
+            } else {
+                result.push(item.innerText);
+            }
+        });
+
+        return result;
+    }
+
 })(jQuery);

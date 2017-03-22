@@ -7,4 +7,4 @@ var createHttp = require("./server/http.js");
 createHttp.run();
 
 var createTcp = require("./server/socket");
-(new createTcp).init();
+(new createTcp).run();
