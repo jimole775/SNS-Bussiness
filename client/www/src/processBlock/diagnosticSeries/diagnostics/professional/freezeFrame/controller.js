@@ -506,7 +506,7 @@
 		 *
 		 * */
 		function getIndexByDevIndex(index) {
-			return index <= 7 ? 0 : (index - 7) * 2;            //我们这里都是以字符来操作，2个字符对应一个字节
+			return index <= 7 ? 0 : (index - 7) * 2;	//我们这里都是以字符来操作，2个字符对应一个字节
 		}
 		win.devService.Fun71090C = function (varRecvData) {
 

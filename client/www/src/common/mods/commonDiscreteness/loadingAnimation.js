@@ -6,22 +6,22 @@
 	var doc = document;
 	doc.body.innerHTML += [
 		'<!-- 中心加载动画 -->',
-		'<div id="bodyLoading" style="display: none;height: 100%;width: 100%;z-index: 998;position: absolute;top: 0;left: 0;">',
-		'<div style="display: table-cell;vertical-align:middle;position: relative;z-index:998">',
-		'<div id="bodyLoadingIconBox" style="display: table;border-radius: 5px;background: rgba(0, 0, 0, .6);width: 52%;height: 22%;z-index: 997;margin:0 auto">',
-		'<div id="bodyLoadingIconLayout" style="z-index: 101;display: table-cell;vertical-align: middle;text-align: center;color: #fff;font-size: 1.8rem;padding:1.6rem;position: relative;">',
+		'<div id="bodyLoading" class="body-loading">',
+		'<div  class="body-loading-layer" style="">',
+		'<div id="bodyLoadingIconBox" class="body-loading-icon-box">',
+		'<div id="bodyLoadingIconLayout" class="body-loading-icon-layout">',
 		//'<img src="images/common/refresh_1.png"',
 		//'     style="background:rgba(250,250,250,.3);border-radius:3px;position: absolute;right: 0;top: 0;opacity: .7;z-index: 998;display: none;width: 1.7rem;box-sizing: border-box;padding:0.3rem"',
 		//'     id="loadingClose" onclick="tool.loading(0)"/>',
 
-		'<img src="images/common/iconfont-loading.png" id="loading-img-spin" alt="" style="position: relative;margin: 1.0rem auto;display: block;width: 5.0rem;"/>',
+		'<img src="images/common/iconfont-loading.png" id="loading-img-spin" class="loading-img-spin" alt=""/>',
 
 		'<p style="margin-top:1rem"><span id="loadingText">数据初始化...</span><span id="timerText"></span></p>',
 		'</div>',
 		'</div>',
 		'</div>',
 
-		'<div id="bodyLoadingCover" style="text-align: center;position: absolute;left: 0;top: 0;width: 100%;height: 100%;z-index: 996;background: rgba(0, 0, 0, .2);"></div>',
+		'<div id="bodyLoadingCover" class="body-loading-cover"></div>',
 		'</div>'
 
 	].join ('');

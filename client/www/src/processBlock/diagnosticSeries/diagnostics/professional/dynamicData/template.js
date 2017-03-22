@@ -13,6 +13,7 @@
 		'               <span class="item-value" ng-bind="currentGroupName"></span>',
 		'           </button>',
 		'       </div>',
+		'		<!--控制全选按钮的显示状态在tool.layout方法里面-->',
 		'       <button value="全 选" class="animation top-nav-button hack-for-huawei-browser" id="topNavButton" ng-disabled="!btnAssistAndBack" onclick="RMTClickEvent.dynamicCheckAllBtn()">全 选',
 		'       </button>',
 		'   </div>',

@@ -2,7 +2,7 @@
  * Created by Andy on 2017/1/23.
  */
 (function () {
-    var WebSocket = require("./input.js");
+    var WebSocket = require("./host.js");
 
     var clients = [];
     var namesMap = [];

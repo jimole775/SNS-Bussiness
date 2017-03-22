@@ -69,13 +69,11 @@
 		$scope.state = State.idle;
 		$scope.stateText = StateText[$scope.state];
 
-		var bodyHeight = 0;
 		/**
 		 * 入口函数
 		 */
 		win.moduleEntry.dynamicData = function () {
 			cachePidPackForRequestServer.length = 0;
-			//tool.layout("ShowOperate", 0);
 			document.getElementById("Title").innerText = "动态数据列表";
 			showCheckBox();
 			$scope.hasGroup = false;
@@ -85,8 +83,7 @@
 			showView = true;
 
 			bindingBottomBtn();
-			bodyHeight = tool.layout("ShowDynamicData", 1);
-			//tool.processBar('正在初始化数据', true);
+			tool.layout("ShowDynamicData", 1);
 
 			if (YhSupportService._0x09.value && YhSupportService._0x13.value)
 			//当 310909 和 310913 同时被支持时
@@ -495,7 +492,7 @@
 
 			wrapOriginalValue4GetShowValue({
 				index: support.index,
-				original: varRecvData.substr(win.getIndexByDevIndex(12 + 2), originalLen * 2),
+				original: varRecvData.substr(7, originalLen * 2),
 				pos: varRecvData.substr(6, 4)         //两字节pos计算位置
 
 			});//两字节pos计算位置

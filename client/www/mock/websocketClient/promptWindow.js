@@ -6,24 +6,14 @@
     var doc = document;
 
     var template = [
-        '<div id="userNameFrame" style="position: absolute;top:0;left:0;display: table;width:100%;height:100%;background-color: rgba(100,100,100,.5);z-index:10000;">' +
-        '<div style="display: table-cell;vertical-align: middle;text-align: center;font-size: 20px">' +
-        '<label for=""><input type="text" id="userName" placeholder="取个牛逼点的名字" class="disable-plugin"/></label><input type="button" id="userNameBtn" class="item-button disable-plugin" value="确定"></div>' +
+        '<div id="userNameFrame" class="user-name-frame">' +
+        '<div class="table-cell-center">' +
+        '<label for=""><input type="text" id="userName" style="font-size: 1.6rem" placeholder="取个牛逼点的名字" class="disable-plugin"/></label>' +
+        '<label for=""><input type="button" style="width: 6rem;text-align: center;margin-left: 1rem;" id="userNameBtn" class="item-button disable-plugin" value="确定"></label>' +
+        '</div>' +
         '</div>'
     ].join("");
 
     $("body").append(template);
-    setTimeout(function () {
-        $("#userNameBtn").on("click", function () {
-            var input =  $("#userName");
-            if (input.val()) {
-                win.global.RMTID.userName = input.val();
-                $("#userNameFrame").hide();
-                input[0].placeholder = "取个牛逼点的名字！";
-            }else{
-                tool.warnTip("#userName","不支持黑户");
-                input[0].placeholder = "请先取一个名字！";
-            }
-        });
-    }, 500);
+    $("#bodyInit").text("");
 })(jQuery);

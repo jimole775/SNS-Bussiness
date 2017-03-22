@@ -3,7 +3,7 @@
  */
 (function (WebSocket) {
 
-	var userName = win.global.RMTID.userName;
+	var getUserName = function(){return win.global.RMTID.userName;};
 	var send = WebSocket.prototype.send;
 
 	WebSocket.prototype.send = function () {
@@ -12,13 +12,13 @@
 			case 0x00:
 				formatData = {
 					status: 0x00,
-					uid: userName
+					uid: getUserName()
 				};
 				break;
 			case 0x01:   //协助通道的询问
 				formatData = {
 					status: 0x01,
-					uid: userName,
+					uid: getUserName(),
 					items: {
 						helperUid: arguments[1],
 						askerUid: arguments[2],
@@ -29,7 +29,7 @@
 			case 0x02:   //协助通道的应答
 				formatData = {
 					status: 0x02,
-					uid: userName,
+					uid: getUserName(),
 					items: {
 						helperUid: arguments[1],
 						askerUid: arguments[2],
@@ -37,10 +37,13 @@
 					}
 				};
 				break;
-			case 0x03:   //远程协助交互通道
+			case 0x03:
+
+				break;
+			case 0x04:   //远程协助交互通道
 				formatData = {
-					status: 0x03,
-					uid: userName,
+					status: 0x04,
+					uid: getUserName(),
 					items: {
 						remoteRole: arguments[1],
 						funcName: arguments[2],
@@ -48,12 +51,10 @@
 					}
 				};
 				break;
-			case 0x04:   //断开协助通道
-				break;
-			case 0x05:   //关闭ws
+			case 0x05:  //断开协助通道
 				formatData = {
 					status: 0x05,
-					uid: userName
+					uid: getUserName()
 				};
 				break;
 			case 0x06:
@@ -85,6 +86,5 @@
 		}
 
 	};
-
 
 })(WebSocket ? WebSocket : function WebSocket() {});

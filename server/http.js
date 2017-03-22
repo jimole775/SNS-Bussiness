@@ -1,7 +1,9 @@
 /**
  * Created by Andy on 2017/2/8.
  */
-function CreateHttp(){}
+function CreateHttp(){
+	this.init();
+}
 CreateHttp.prototype.init = function(){
 	this.fs = require("fs");
 	this.http = require("http");
@@ -9,9 +11,7 @@ CreateHttp.prototype.init = function(){
 
 CreateHttp.prototype.run = function(){
 	var that = this;
-	that.init();
 	that.http.createServer(function (req, res) {
-
 		that.writeHead(req, res);
 		that.response(req, res);
 

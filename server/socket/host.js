@@ -9,22 +9,6 @@
     WebSocket.prototype.run = function () {
         var that = this;
         require('net').createServer(function (socket) {
-            console.log("服务器net会话：", socket);
-            socket.on("connect", function (sock) {
-                console.log("connect:", sock);
-            });
-            socket.on('error', function (sock) {
-                console.log("error：", sock);
-            });
-            socket.on('lookup', function (sock) {
-                console.log("lookup：", sock);
-            });
-            socket.on('timeout', function (sock) {
-                console.log("timeout：", sock);
-            });
-            //socket.on('drain',function(sock){
-            //	console.log("drain：",sock);
-            //});
             socket.on('data', function (e) {
                 var frame = that.tool.decodeDataFrame(e);
                 //第一次握手
@@ -61,13 +45,12 @@
                     case 0x02:   //协助通道的应答
                         that.remoteConnectAnswer(data, socket);
                         break;
-                    case 0x03:   //远程协助交互通道
+                    case 0x03:
+                        break;
+                    case 0x04:   //远程协助交互通道
                         that.RMTInterActive(data);
                         break;
-                    case 0x04:   //断开协助通道
-
-                        break;
-                    case 0x05:   //关闭ws
+                    case 0x05:   //断开协助通道//关闭ws
                         that.close(data);
                         break;
                     case 0x06:

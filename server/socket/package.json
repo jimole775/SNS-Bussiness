@@ -1,4 +1,4 @@
 {
   "name": "socket",
-  "main": "output.js"
+  "main": "thread.js"
 }

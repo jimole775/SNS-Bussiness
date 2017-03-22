@@ -4,6 +4,7 @@
 (function(){
 
 function WebSocket() {}
+
 WebSocket.prototype.tool = {
 
     getChanelSession: function (chanelMap,uid) {

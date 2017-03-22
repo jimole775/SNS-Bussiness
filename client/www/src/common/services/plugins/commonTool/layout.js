@@ -132,7 +132,6 @@
 					buttonElement.style.right = 0;
 					buttonElement.style.height = thead_cloneHeight;
 				}
-
 			}
 
 			var titleHeight = $("#Title").height() || 0;
