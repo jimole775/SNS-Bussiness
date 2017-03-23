@@ -7,31 +7,42 @@
         return win.global.RMTID.userName
     };
 
-    win.global.ws = new WebSocket("ws://127.0.0.1:81");
+    if(!win.global.ws){
+        win.global.ws = new WebSocket("ws://127.0.0.1:81");
+    }
 
     global.ws.onopen = function (res) {
         console.log(res);
         console.log("握手成功");
+        //global.ws.send(0x00);
     };
 
     global.ws.onerror = function (e) {
         console.log(e, "进行错误重连！");
-        //win.ws = new WebSocket("ws://127.0.0.1:81");
+        global.ws.close(); //关闭TCP连接
     };
 
     global.ws.onclose = function (e) {
         console.log(e, "进行关闭重连！");
-        //win.ws = new WebSocket("ws://127.0.0.1:81");
+        $("#RMTCover").hide();
+        if(win.global.RMTID.role != 0){
+            win.global.RMTID.role = 0;
+            tool.alert("对方已经断开连接!", function () {
+            });
+        }
+        global.ws.close(); //关闭TCP连接
     };
 
     win.onbeforeunload = function () {
         console.log("关闭窗口");
-        global.ws.send(0x05);
+        //global.ws.send(0xFF);
+        global.ws.close(); //关闭TCP连接
     };
 
     win.onunload = function () {
         console.log("刷新窗口");
-        global.ws.send(0x05);
+        //global.ws.send(0xFF);
+        global.ws.close(); //关闭TCP连接
     };
 
     global.ws.onmessage = function (res) {
@@ -40,9 +51,7 @@
             if (!data) return;
 
             switch (data.status) {
-                case 0x00:
-                    addFriend(data.items);
-                    break;
+                case 0x00:  //刷新用户列表
                 case 0x01:
                     addFriend(data.items);
                     break;
@@ -56,7 +65,6 @@
                     rejectRemoteConnect();
                     break;
                 case 0x05: //远程协助交互通道
-
                     win.RecvRMTEventFromApp(data.items.remoteRole, data.items.funcName, data.items.expression);
                     break;
                 case 0x06:
@@ -65,10 +73,6 @@
 
                     break;
                 case 0xFF:  //断开协助通道//关闭ws
-                    $("#RMTCover").hide();
-                    win.global.RMTID.role = 0;
-                    tool.alert("对方已经断开连接!", function () {
-                    });
                     break;
                 default :
                     break;
@@ -81,10 +85,10 @@
         tool.alert(
             ["【" + items.asker + "】请求您协助，请做出回应！", "确定", "取消"],
             function () {
-                global.ws.send(0x02, items.helper, items.asker, true);
+                global.ws.send(0x03, items.helperUid, items.askerUid, true);
             },
             function () {
-                global.ws.send(0x02, items.helper, items.asker, false);
+                global.ws.send(0x04, items.helperUid, items.askerUid, false);
             });
     }
 
@@ -106,10 +110,10 @@
     function addFriend(items) {
         //当有多个用户名的时候
         var friendList = document.getElementById("friendList");
-        if (/,/g.test(items.userList)) {
+        if (/-/g.test(items.namesMap)) {
             document.getElementById("friendList").innerHTML = "";
 
-            items.userList.split(",").forEach(function (newName) {
+            items.namesMap.split("-").forEach(function (newName) {
                 if (getUserName() === newName) return;
                 var li = document.createElement("li");
                 li.innerHTML = '<button class="item-button" style="height:3.6rem;">' + newName + '</button>';
@@ -120,9 +124,9 @@
         else {
             //当只有一个用户名的时候
             document.getElementById("friendList").innerHTML = "";
-            if (getUserName() === items.userList) return;
+            if (getUserName() === items.namesMap) return;
             var li = document.createElement("li");
-            li.innerHTML = '<button class="item-button" style="height:3.6rem;">' + items.userList + '</button>';
+            li.innerHTML = '<button class="item-button" style="height:3.6rem;">' + items.namesMap + '</button>';
             friendList.appendChild(li);
         }
 
@@ -134,7 +138,7 @@
                     tool.alert("是否请求【" + item.innerText + "】的协助！确定之后将失去控制权，直到你选择退出！",
                         function () {
                             tool.loading({text: "等待对方响应..."});
-                            global.ws.send(0x01, item.innerText, getUserName(), true);
+                            global.ws.send(0x02, item.innerText, getUserName(), true);
                         },
                         function () {
                         })
@@ -147,7 +151,7 @@
     //模拟APP交互端口;
     win.external.SendRMTEventToApp = function (localID, funcName, expression) {
 
-        global.ws.send(0x04, global.RMTID.role, funcName, expression);
+        global.ws.send(0x05, global.RMTID.role, funcName, expression);
 
     };
 })();

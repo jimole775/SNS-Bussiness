@@ -3,9 +3,7 @@
  */
 (function(){
 
-function WebSocket() {}
-
-WebSocket.prototype.tool = {
+var tool = {
 
     getChanelSession: function (chanelMap,uid) {
         var result = {};
@@ -81,5 +79,5 @@ WebSocket.prototype.tool = {
 };
 
 
-module.exports = WebSocket;
+module.exports = tool;
 })();

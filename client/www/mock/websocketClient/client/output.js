@@ -9,15 +9,23 @@
 	WebSocket.prototype.send = function () {
 		var formatData = null;
 		switch (arguments[0]) {
-			case 0x00:
+			case 0x00://连接之前，通知服务器下发一份当前在线的用户列表
 				formatData = {
-					status: 0x00,
+					status: arguments[0],
 					uid: ""
 				};
 				break;
-			case 0x01:   //协助通道的询问
+			case 0x01:	//发送用户名，让服务器刷新用户列表
 				formatData = {
-					status: 0x01,
+					status: arguments[0],
+					uid: getUserName()
+				};
+				break;
+			case 0x02:	//协助通道的询问
+			case 0x03:  //协助通道的应答
+			case 0x04:	//
+				formatData = {
+					status: arguments[0],
 					uid: getUserName(),
 					items: {
 						helperUid: arguments[1],
@@ -26,23 +34,9 @@
 					}
 				};
 				break;
-			case 0x02:   //协助通道的应答
+			case 0x05:   //远程协助交互通道
 				formatData = {
-					status: 0x02,
-					uid: getUserName(),
-					items: {
-						helperUid: arguments[1],
-						askerUid: arguments[2],
-						RMTResponse: arguments[3]
-					}
-				};
-				break;
-			case 0x03:
-
-				break;
-			case 0x04:   //远程协助交互通道
-				formatData = {
-					status: 0x04,
+					status: arguments[0],
 					uid: getUserName(),
 					items: {
 						remoteRole: arguments[1],
@@ -51,15 +45,21 @@
 					}
 				};
 				break;
-			case 0x05:  //断开协助通道
-				formatData = {
-					status: 0x05,
-					uid: getUserName()
-				};
-				break;
 			case 0x06:
 				break;
 			case 0x07:
+				break;
+			case 0xFE:  //用户失联
+				formatData = {
+					status: arguments[0],
+					uid: getUserName()
+				};
+				break;
+			case 0xFF:  //断开协助通道
+				formatData = {
+					status: arguments[0],
+					uid: getUserName()
+				};
 				break;
 			default :
 				break;

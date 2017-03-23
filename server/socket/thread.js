@@ -3,54 +3,32 @@
  */
 (function () {
     var WebSocket = require("./host.js");
-
-    var clients = [];
+    var send = require("./output.js");
+    var tool = require("./tool.js");
+    var clients = {};
 
     //所有以创建连接的用户以{asker:session,assiant:session}的方式存储
     var chanelMap = [];
 
-
     WebSocket.prototype.namesMap = [];
 
-    WebSocket.prototype.send = function (socket, status, data) {
-        var that = this;
-        var emitProtocolMap = {
-            status: status,
-            items: data
-        };
-
-        var PayloadData = that.opcode == 1 ? JSON.stringify(emitProtocolMap) : new Buffer(JSON.stringify(emitProtocolMap));
-
-        socket.write(
-            that.tool.encodeDataFrame({
-                FIN: 1,
-                Opcode: that.opcode,
-                PayloadData: PayloadData
-            })
+    //远程链接询问，把询问信息推给协助者
+    WebSocket.prototype.remoteConnectAsk = function (data, socket) {
+        var helper = clients[data.items.helperUid];
+        send(0x02,
+            {
+                asker: data.items.askerUid,
+                helper: data.items.helperUid,
+                RMTResponse: data.items.RMTResponse
+            },
+            helper
         );
     };
 
-    WebSocket.prototype.disconnectChanel = function (data) {
-        //如果是协助者的断开讯号,
+    WebSocket.prototype.remoteConnectAccept = function (data, socket) {
         var that = this;
-        var asker = null;
-        var helper = null;
-        chanelMap.forEach(function (item, index) {
-            if (item.asker.uid == data.uid || item.helper.uid == data.uid) {
-                asker = item.asker.session;
-                helper = item.helper.session;
-                that.send(asker, 0xFF, {disconnect: true});
-                that.send(helper, 0xFF, {disconnect: true});
-                chanelMap.splice(index, 1);   //删除远程会话通道
-            }
-        });
-    };
-
-    //两个用户的对接
-    WebSocket.prototype.openChanel = function (data) {
-        var that = this;
-        var asker = that.tool.getSession(data.items.askerUid, clients);
-        var helper = that.tool.getSession(data.items.helperUid, clients);
+        var asker = clients[data.items.askerUid];
+        var helper = clients[data.items.helperUid];
 
         //存储远程对话通道
         chanelMap.push({
@@ -58,54 +36,29 @@
             helper: {uid: data.items.helperUid, session: helper}
         });
 
-        that.send(asker, 0x02, {remoteRole: 1});
-        that.send(helper, 0x02, {remoteRole: 2});
-    };
-
-    //远程链接询问，把询问信息推给协助者
-    WebSocket.prototype.remoteConnectAsk = function (data, socket) {
-        var helper = this.tool.getSession(data.items.helperUid, clients);
-        this.send(
-            helper,
-            0x01,
-            {
-                asker:data.items.askerUid,
-                helper: data.items.helperUid,
-                RMTResponse: data.items.RMTResponse
-            }
-        );
+        send(0x03, {remoteRole: 1}, asker);
+        send(0x03, {remoteRole: 2}, helper);
     };
 
     //远程链接,把应答消息推给询问者
-    WebSocket.prototype.remoteConnectAnswer = function (data, socket) {
-
-        //积极应答，就直接开通协助通道
-        if (data.items.RMTResponse) {
-            this.openChanel(data);
-        }
-
-        //消极应答，直接发03通知询问方
-        else {
-            var asker = this.tool.getSession(data.items.askerUid, clients);
-            this.send(
-                asker,
-                0x03,
-                {
-
-                }
-            );
-        }
+    WebSocket.prototype.remoteConnectReject = function (data, socket) {
+        var asker = clients[data.items.askerUid];
+        send(
+            0x04,
+            {},
+            asker
+        );
     };
 
     //开始远程交互
     WebSocket.prototype.RMTInterActive = function (data) {
         var that = this;
-        var map = that.tool.getChanelSession(chanelMap,data.uid);
+        var map = tool.getChanelSession(chanelMap, data.uid);
         if (data.items.remoteRole == 1) {
-            that.send(map.helper, 0x04, data.items);
+            send(0x04, data.items, map.helper);
         }
         else if (data.items.remoteRole == 2) {
-            that.send(map.asker, 0x04, data.items);
+            send(0x05, data.items, map.asker);
         }
     };
 
@@ -115,41 +68,60 @@
         this.disconnectChanel(data);
     };
 
+    WebSocket.prototype.disconnectChanel = function (data) {
+        //如果是协助者的断开讯号,
+        var that = this;
+        var asker = null;
+        var helper = null;
+        chanelMap.forEach(function (item,index) {
+            if (item.asker.uid == data.uid || item.helper.uid == data.uid) {
+                asker = item.asker.session;
+                helper = item.helper.session;
+                send(0xFE, {disconnect: true}, asker);
+                send(0xFE, {disconnect: true}, helper);
+                chanelMap.splice(index, 1);   //删除远程会话通道
+            }
+        });
+    };
     //刷新好友列表
     WebSocket.prototype.refreshUserList = function (data) {
         var that = this;
-        //删除断线的用户，重新推送到客户端
-        clients.forEach(function (item, index) {
-            if (item.uid === data.uid) {
-                clients[index].session.destroy();
-                console.log("删除对象：", clients[index]);
-                clients.splice(index, 1);
-                that.namesMap.splice(index, 1);
-            }
-        });
 
-        clients.forEach(function (item, index) {
-            that.send(item.session, 0x00, {userList: that.namesMap.join(",")});
+        //删除断线的session，
+        clients[data.uid].destroy();
+        delete clients[data.uid];
+
+        //删除断线的用户名，
+        var index = that.namesMap.indexOf(data.uid);
+        that.namesMap.splice(index, 1);
+
+        //刷新用户列表到客户端
+        that.namesMap.forEach(function (item,index) {
+            send(0x01, {namesMap: that.namesMap.join("-")}, clients[item]);
         });
     };
 
     //绑定用户信息
     WebSocket.prototype.distributeUid = function (data, socket) {
         var that = this;
-        if (!that.namesMap.join(",").match(new RegExp(data.uid, "g"))) {
-            clients.push({
-                uid: data.uid,
-                session: socket
-            });
-            that.namesMap.push(data.uid);
+        socket.uid = data.uid;
 
-            //向所有的用户推送用户名
-            clients.forEach(function (item, index) {
-                that.send(item.session, 0x01, {userList: that.namesMap.join(",")});
-            });
+        if (that.namesMap.indexOf(data.uid) < 0) {
+            that.namesMap.push(data.uid);
         }
+
+        clients[data.uid] = socket;
+
+        //向所有的用户推送用户名
+        that.namesMap.forEach(function (item,index) {
+            send(0x01, {namesMap: that.namesMap.join("-")}, clients[item]);
+        });
     };
 
+    WebSocket.prototype.pushNameMap = function (data, socket) {
+        var that = this;
+        send(0x00, {namesMap: that.namesMap.join("-")}, socket);
+    };
 
     module.exports = WebSocket;
 

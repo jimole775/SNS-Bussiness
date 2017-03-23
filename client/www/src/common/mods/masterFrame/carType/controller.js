@@ -275,8 +275,8 @@
             if (showView)win.tool.loading({pos: "body", text: '获取数据...'});
             getItemsByParents(
                 pagesOptionChosenRecord,
-                win.server.addCallbackParam(win.serverRequestCallback.CTYPE, [pagesOptionChosenRecord]),
-                [requestData, backToPrvLevel]
+                win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.CTYPE, [pagesOptionChosenRecord]),
+                [requestData, backToPrvLevel])
             );
         }
 

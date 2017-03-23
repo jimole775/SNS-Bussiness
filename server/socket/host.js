@@ -2,17 +2,18 @@
  * Created by Andy on 2017/3/14.
  */
 (function () {
-    var WebSocket = require("./tool.js");
+    var tool = require("./tool.js");
     var key;
     var mask = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
-
+    function WebSocket() {}
     WebSocket.prototype.run = function () {
         var that = this;
         require('net').createServer(function (socket) {
             socket.on('data', function (e) {
-                var frame = that.tool.decodeDataFrame(e);
+                var frame = tool.decodeDataFrame(e);
                 //第一次握手
                 if (frame.FIN === 0) {
+                    console.log("握手");
                     that.handshake(socket, e);
                 }
                 //数据交互
@@ -29,14 +30,14 @@
         var that = this;
         switch (frame.Opcode) {
             case 8:
-                console.log("会话已经结束:", socket, frame.PayloadData);
+                console.log("会话已经结束:", socket, frame.PayloadData.toString());
                 break;
             default :
                 that.opcode = frame.Opcode;
                 var data = JSON.parse(frame.PayloadData.toString()) || "";
                 switch (data.status) {
                     case 0x00:
-                        that.send(socket,0x00,that.namesMap.join("-"));
+                        that.pushNameMap(data, socket);
                         break;
                     case 0x01:
                         //如果map里面没有此用户，就存储session，并绑定用户名
@@ -46,9 +47,10 @@
                         that.remoteConnectAsk(data, socket);
                         break;
                     case 0x03:  //协助通道的应答
-                        that.remoteConnectAnswer(data, socket);
+                        that.remoteConnectAccept(data, socket);
                         break;
                     case 0x04:
+                        that.remoteConnectReject(data, socket);
                         break;
                     case 0x05:    //远程协助交互通道
                         that.RMTInterActive(data);
@@ -57,8 +59,14 @@
                         break;
                     case 0x07:
                         break;
+
+                    case 0xFE: //断开协助通道//关闭ws
+                        that.disconnectChanel(data);
+                        console.log("中断远程用户");
+                        break;
                     case 0xFF: //断开协助通道//关闭ws
                         that.close(data);
+                        console.log("用户断开服务器");
                         break;
                     default :
                         break;
