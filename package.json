@@ -19,5 +19,8 @@
   "dependencies": {
     "express": "^4.15.2",
     "jade": "^1.11.0"
+  },
+  "devDependencies": {
+    "webpack": "^2.3.1"
   }
 }
