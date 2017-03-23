@@ -3,7 +3,8 @@
  */
 
 var tool = require("./tool.js");
-var send = function (status, data, socket) {
+var WebSocket = require("./host.js");
+WebSocket.prototype.send = function (status, data, socket) {
     var that = this;
     var emitProtocolMap = {
         status: status,
@@ -21,4 +22,4 @@ var send = function (status, data, socket) {
     );
 };
 
-module.exports = send;
+module.exports = WebSocket;

@@ -22,7 +22,7 @@
             var input = $("#userName");
             if (input.val()) {
                 if (getUserList().indexOf(input.val()) >= 0) {
-                    input[0].placeholder = "那么优秀的名字已经被抢了！";
+                    tool.warnTip("#userName", "那么帅气的名字已经被抢了");
                     return;
                 }
                 win.global.RMTID.userName = input.val();

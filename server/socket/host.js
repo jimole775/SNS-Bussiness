@@ -9,6 +9,9 @@
     WebSocket.prototype.run = function () {
         var that = this;
         require('net').createServer(function (socket) {
+            socket.on('error',function(e){
+                console.log(e);
+            });
             socket.on('data', function (e) {
                 var frame = tool.decodeDataFrame(e);
                 //第一次握手
@@ -31,6 +34,7 @@
         switch (frame.Opcode) {
             case 8:
                 console.log("会话已经结束:", socket, frame.PayloadData.toString());
+                socket.end();
                 break;
             default :
                 that.opcode = frame.Opcode;
@@ -60,13 +64,13 @@
                     case 0x07:
                         break;
 
-                    case 0xFE: //断开协助通道//关闭ws
-                        that.disconnectChanel(data);
-                        console.log("中断远程用户");
-                        break;
+                    //case 0xFE: //断开协助通道//关闭ws
+                        //that.disconnectChanel(data);
+                        //console.log("中断远程用户");
+                        //break;
                     case 0xFF: //断开协助通道//关闭ws
                         that.close(data);
-                        console.log("用户断开服务器");
+                        console.log("中断远程用户");
                         break;
                     default :
                         break;

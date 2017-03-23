@@ -2,8 +2,7 @@
  * Created by Andy on 2017/1/23.
  */
 (function () {
-    var WebSocket = require("./host.js");
-    var send = require("./output.js");
+    var WebSocket = require("./output.js");
     var tool = require("./tool.js");
     var clients = {};
 
@@ -15,7 +14,7 @@
     //远程链接询问，把询问信息推给协助者
     WebSocket.prototype.remoteConnectAsk = function (data, socket) {
         var helper = clients[data.items.helperUid];
-        send(0x02,
+        this.send(0x02,
             {
                 asker: data.items.askerUid,
                 helper: data.items.helperUid,
@@ -36,14 +35,14 @@
             helper: {uid: data.items.helperUid, session: helper}
         });
 
-        send(0x03, {remoteRole: 1}, asker);
-        send(0x03, {remoteRole: 2}, helper);
+        that.send(0x03, {remoteRole: 1}, asker);
+        that.send(0x03, {remoteRole: 2}, helper);
     };
 
     //远程链接,把应答消息推给询问者
     WebSocket.prototype.remoteConnectReject = function (data, socket) {
         var asker = clients[data.items.askerUid];
-        send(
+        that.send(
             0x04,
             {},
             asker
@@ -55,10 +54,10 @@
         var that = this;
         var map = tool.getChanelSession(chanelMap, data.uid);
         if (data.items.remoteRole == 1) {
-            send(0x04, data.items, map.helper);
+            that.send(0x04, data.items, map.helper);
         }
         else if (data.items.remoteRole == 2) {
-            send(0x05, data.items, map.asker);
+            that.send(0x05, data.items, map.asker);
         }
     };
 
@@ -77,8 +76,8 @@
             if (item.asker.uid == data.uid || item.helper.uid == data.uid) {
                 asker = item.asker.session;
                 helper = item.helper.session;
-                send(0xFE, {disconnect: true}, asker);
-                send(0xFE, {disconnect: true}, helper);
+                that.send(0xFE, {disconnect: true}, asker);
+                that.send(0xFE, {disconnect: true}, helper);
                 chanelMap.splice(index, 1);   //删除远程会话通道
             }
         });
@@ -97,7 +96,7 @@
 
         //刷新用户列表到客户端
         that.namesMap.forEach(function (item,index) {
-            send(0x01, {namesMap: that.namesMap.join("-")}, clients[item]);
+            that.send(0x01, {namesMap: that.namesMap.join("-")}, clients[item]);
         });
     };
 
@@ -114,13 +113,13 @@
 
         //向所有的用户推送用户名
         that.namesMap.forEach(function (item,index) {
-            send(0x01, {namesMap: that.namesMap.join("-")}, clients[item]);
+            that.send(0x01, {namesMap: that.namesMap.join("-")}, clients[item]);
         });
     };
 
     WebSocket.prototype.pushNameMap = function (data, socket) {
         var that = this;
-        send(0x00, {namesMap: that.namesMap.join("-")}, socket);
+        that.send(0x00, {namesMap: that.namesMap.join("-")}, socket);
     };
 
     module.exports = WebSocket;
