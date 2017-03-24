@@ -187,17 +187,17 @@
          * @param parentIndex ；当前页的下标
          * @param curIndex  ；当前选项的下标
          * */
-        $scope.requestPicUrl = function (boxId, picName, parentIndex, curIndex) {
-            var appDataPack = {
-                name: picName,
-                param: {
-                    boxId: boxId,
-                    parentIndex: parentIndex,
-                    curIndex: curIndex
-                }
-            };
-            win.appService.sendDataToApp(1009, JSON.stringify(appDataPack), "");
-        };
+        //$scope.requestPicUrl = function (boxId, picName, parentIndex, curIndex) {
+        //    var appDataPack = {
+        //        name: picName,
+        //        param: {
+        //            boxId: boxId,
+        //            parentIndex: parentIndex,
+        //            curIndex: curIndex
+        //        }
+        //    };
+        //    win.appService.sendDataToApp(1009, JSON.stringify(appDataPack), "");
+        //};
 
 
         /**

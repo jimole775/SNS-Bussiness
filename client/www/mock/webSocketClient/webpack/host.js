@@ -4,45 +4,71 @@
 (function () {
     var win = window;
 
-    if(!win.global.ws)win.global.ws = new WebSocket("ws://127.0.0.1:81");
+    if (!win.global.ws)win.global.ws = new WebSocket("ws://127.0.0.1:81");
+    function getUserName() {
+        return global.RMTID.userName;
+    }
+
+    function getOppositeName() {
+        return global.RMTID.oppositeName;
+    }
 
     global.ws.onopen = function (res) {
         console.log(res);
         console.log("握手成功");
 
-        var loop = setInterval(function(){
-            if(global.ws.readyState === 1 && global.ws.send){
+        var loop = setInterval(function () {
+            if (global.ws.readyState === 1 && global.ws.send) {
                 global.ws.send(0x00);
                 clearInterval(loop);
             }
-        },300);
+        }, 300);
     };
 
     global.ws.onerror = function (e) {
         console.log(e, "ws错误信号！");
-        global.ws.close(); //关闭TCP连接
+        close();
     };
 
+    //处理服务器的主动断开请求
     global.ws.onclose = function (e) {
         console.log(e, "ws关闭信号！");
         $("#RMTCover").hide();
-        if(win.global.RMTID.role != 0){
+        if (win.global.RMTID.role != 0) {
             win.global.RMTID.role = 0;
             tool.alert("对方已经断开连接!", function () {
             });
         }
-        global.ws.close(); //关闭TCP连接
+        close();
     };
 
     win.onbeforeunload = function () {
         console.log("关闭窗口");
-        global.ws.close(); //关闭TCP连接
+        close();
     };
 
     win.onunload = function () {
         console.log("刷新窗口");
-        global.ws.close(); //关闭TCP连接
+        close();
     };
+
+    function close() {
+        var PayloadData = {};
+        PayloadData.uid = getUserName();
+
+        PayloadData.items = {};
+        PayloadData.items.role = global.RMTID.role;
+        if (global.RMTID.role == 0) {
+
+        } else if (global.RMTID.role == 1) {
+            PayloadData.items.askerUid = getUserName();
+            PayloadData.items.helperUid = getOppositeName();
+        } else {
+            PayloadData.items.askerUid = getOppositeName();
+            PayloadData.items.helperUid = getUserName();
+        }
+        global.ws.close(1000, JSON.stringify(PayloadData)); //关闭TCP连接
+    }
 
     global.ws.onmessage = function (res) {
         var that = this;

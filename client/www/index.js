@@ -114,7 +114,6 @@
 				scripts = diagnosticScript["公共"].concat(diagnosticScript[typeMap[index]]);
 			}
 			injectScript(scripts);
-			//console.log("scripts:", scripts);
 		}
 	});
 

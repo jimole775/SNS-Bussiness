@@ -526,10 +526,10 @@
 
 			for (var i = 0; i < count; i++) {
 
-				valueLen = tool.hex2dec(varRecvData.substr(win.getIndexByDevIndex(j), 2));
+				valueLen = tool.hex2dec(varRecvData.substr(getIndexByDevIndex(j), 2));
 				j = j + 1;
 				dataPack.pids.push({
-					original: varRecvData.substr(win.getIndexByDevIndex(j), valueLen * 2),
+					original: varRecvData.substr(getIndexByDevIndex(j), valueLen * 2),
 					index: curSupports[i].index
 				});
 				j = j + valueLen;

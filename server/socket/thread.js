@@ -16,8 +16,8 @@
         var helper = clients[data.items.helperUid];
         this.send(0x02,
             {
-                asker: data.items.askerUid,
-                helper: data.items.helperUid,
+                askerUid: data.items.askerUid,
+                helperUid: data.items.helperUid,
                 RMTResponse: data.items.RMTResponse
             },
             helper
@@ -54,7 +54,7 @@
         var that = this;
         var map = tool.getChanelSession(chanelMap, data.uid);
         if (data.items.remoteRole == 1) {
-            that.send(0x04, data.items, map.helper);
+            that.send(0x05, data.items, map.helper);
         }
         else if (data.items.remoteRole == 2) {
             that.send(0x05, data.items, map.asker);
@@ -70,18 +70,14 @@
     WebSocket.prototype.disconnectChanel = function (data) {
         //如果是协助者的断开讯号,
         var that = this;
-        var asker = null;
-        var helper = null;
-        chanelMap.forEach(function (item,index) {
-            if (item.asker.uid == data.uid || item.helper.uid == data.uid) {
-                asker = item.asker.session;
-                helper = item.helper.session;
-                that.send(0xFE, {disconnect: true}, asker);
-                that.send(0xFE, {disconnect: true}, helper);
-                chanelMap.splice(index, 1);   //删除远程会话通道
-            }
-        });
+        if(data.items.role != 0){
+            var asker = clients[data.items.askerUid];
+            var helper = clients[data.items.helperUid];
+            that.send(0xFF, {disconnect: true}, asker);
+            that.send(0xFF, {disconnect: true}, helper);
+        }
     };
+
     //刷新好友列表
     WebSocket.prototype.refreshUserList = function (data) {
         var that = this;

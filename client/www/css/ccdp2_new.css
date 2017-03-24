@@ -786,9 +786,8 @@ body.log {
 .data-box table {
     width: 100%;
     margin: 0;
-    box-sizing: border-box;
     background: #fff;
-    overflow-x: hidden;
+    overflow-x:auto; word-wrap:break-word; word-break:break-all;
 }
 
 .data-box tr {
@@ -800,6 +799,7 @@ body.log {
     text-align: center;
     padding: 1.2rem;
     font-size: 1.6rem;
+    box-sizing: border-box;
 }
 
 .data-box th {

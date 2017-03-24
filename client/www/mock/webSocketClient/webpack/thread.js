@@ -8,7 +8,7 @@
 
     WebSocket.prototype.remoteSniff = function(items) {
         tool.alert(
-            ["¡¾" + items.asker + "¡¿ÇëÇóÄúĞ­Öú£¬Çë×ö³ö»ØÓ¦£¡", "È·¶¨", "È¡Ïû"],
+            ["ã€" + items.asker + "ã€‘è¯·æ±‚æ‚¨ååŠ©ï¼Œè¯·åšå‡ºå›åº”ï¼", "ç¡®å®š", "å–æ¶ˆ"],
             function () {
                 global.ws.send(0x03, items.helperUid, items.askerUid, true);
             },
@@ -20,6 +20,8 @@
     WebSocket.prototype.acceptRemoteConnect = function(items) {
 
         tool.loading(0);
+
+        global.RMTID.oppositeName = items.remoteRole == 1 ? data.items.askerUid : data.items.helperUid;
         win.jsRecvAppData(1000, {
             screenInfo: {screenSize: 5.5, headHeight: 60, footHeight: 60},
             serverHost: "http://112.124.26.243:8090",
@@ -28,12 +30,12 @@
     };
 
     WebSocket.prototype.rejectRemoteConnect = function(items) {
-        tool.alert("¶Ô·½ÕıÔÚÃ¦Âµ,ÎŞ·¨¸øÓèĞ­Öú!", function () {
+        tool.alert("å¯¹æ–¹æ­£åœ¨å¿™ç¢Œ,æ— æ³•ç»™äºˆååŠ©!", function () {
         });
     };
 
     WebSocket.prototype.addFriend = function(items) {
-        //µ±ÓĞ¶à¸öÓÃ»§ÃûµÄÊ±ºò
+        //å½“æœ‰å¤šä¸ªç”¨æˆ·åçš„æ—¶å€™
         var friendList = document.getElementById("friendList");
         if (/-/g.test(items.namesMap)) {
             document.getElementById("friendList").innerHTML = "";
@@ -47,7 +49,7 @@
 
         }
         else {
-            //µ±Ö»ÓĞÒ»¸öÓÃ»§ÃûµÄÊ±ºò
+            //å½“åªæœ‰ä¸€ä¸ªç”¨æˆ·åçš„æ—¶å€™
             document.getElementById("friendList").innerHTML = "";
             if (getUserName() === items.namesMap) return;
             var li = document.createElement("li");
@@ -55,14 +57,14 @@
             friendList.appendChild(li);
         }
 
-        //°ó¶¨µã»÷ÊÂ¼ş
+        //ç»‘å®šç‚¹å‡»äº‹ä»¶
         setTimeout(function () {
             var lis = friendList.children;
             Array.prototype.forEach.call(lis, function (item) {
                 item.onclick = function () {
-                    tool.alert("ÊÇ·ñÇëÇó¡¾" + item.innerText + "¡¿µÄĞ­Öú£¡È·¶¨Ö®ºó½«Ê§È¥¿ØÖÆÈ¨£¬Ö±µ½ÄãÑ¡ÔñÍË³ö£¡",
+                    tool.alert("æ˜¯å¦è¯·æ±‚ã€" + item.innerText + "ã€‘çš„ååŠ©ï¼ç¡®å®šä¹‹åå°†å¤±å»æ§åˆ¶æƒï¼Œç›´åˆ°ä½ é€‰æ‹©é€€å‡ºï¼",
                         function () {
-                            tool.loading({text: "µÈ´ı¶Ô·½ÏìÓ¦..."});
+                            tool.loading({text: "ç­‰å¾…å¯¹æ–¹å“åº”..."});
                             global.ws.send(0x02, item.innerText, getUserName(), true);
                         },
                         function () {

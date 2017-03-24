@@ -450,12 +450,12 @@
 
 			'               <div id="appendForm" class="help-pop-content table-cell">',
 			'                   <img ng-src="{{ curSrc.src }}" alt="" ng-click="imgView()" ng-hide="!curSrc.src"/>',
-			'<div class="help-pop-desc">',
-			'                   <p ng-repeat="(index,phrase) in curSrc.name">' +
-			'                       <span ng-bind="phrase">文本内容</span>',
-			'                       <span ng-show="index == curSrc.name.length-1">({{ curSrc.index + 1 }}/{{ helpPopData.length }})</span>',
-			'                   </p>',
-			'</div>',
+			'						<div class="help-pop-desc">',
+			'                   	<p ng-repeat="(index,phrase) in curSrc.name">' +
+			'                       	<span ng-bind="phrase">文本内容</span>',
+			'                       	<span ng-show="index == curSrc.name.length-1">({{ curSrc.index + 1 }}/{{ helpPopData.length }})</span>',
+			'                   	</p>',
+			'					</div>',
 			'               </div>',
 			'               <div class="arrow-back-cover arrow-back-cover-right" ng-click="nextPic(curSrc.index)">',
 			'                   <span class="table-cell-center"><i class="arrow-right" style="right:1.2rem"></i></span>',

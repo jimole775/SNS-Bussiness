@@ -33,7 +33,9 @@
         var that = this;
         switch (frame.Opcode) {
             case 8:
-                console.log("会话已经结束:", socket, frame.PayloadData.toString());
+                var msg = frame.PayloadData.slice(2).toString();
+                console.log("会话已经结束:", socket, msg);
+                that.close(msg);
                 socket.end();
                 break;
             default :
@@ -64,13 +66,9 @@
                     case 0x07:
                         break;
 
-                    //case 0xFE: //断开协助通道//关闭ws
-                        //that.disconnectChanel(data);
-                        //console.log("中断远程用户");
-                        //break;
                     case 0xFF: //断开协助通道//关闭ws
-                        that.close(data);
-                        console.log("中断远程用户");
+                        //that.close(data);
+                        //console.log("中断远程用户");
                         break;
                     default :
                         break;

@@ -117,20 +117,21 @@
 				var bodyThead = frameBody.find('thead');
 				thead_cloneHeight = bodyThead.height();
 
-
 				if (!frameHeader.find('table').length && bodyThead.length) {       		//避免重复克隆，而且有些盒子是没有thead的，就不需要克隆
 					frameHeader.append('<table></table>');
 					frameHeader.find('table').append(bodyThead.clone());
 				}
 
-				var buttonElement = document.getElementById("topNavButton");
+				var buttonElement = $("#topNavButton");
 
-				if (buttonElement) {
-					thead_cloneWidth = document.getElementById("topNav").offsetWidth;
-					buttonElement.style.width = thead_cloneWidth;
-					buttonElement.style.top = groupNav.height() + 10 + (thead_cloneHeight - buttonElement.offsetHeight) / 2;
-					buttonElement.style.right = 0;
-					buttonElement.style.height = thead_cloneHeight;
+				if (buttonElement.length) {
+					thead_cloneWidth = $("#topNav")[0].clientWidth;
+					buttonElement.css({
+						width:thead_cloneWidth,
+						top:groupNav.height() + 10 + (thead_cloneHeight - buttonElement.offsetHeight) / 2,
+						right:0,
+						height:thead_cloneHeight
+					});
 				}
 			}
 

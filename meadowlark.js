@@ -13,7 +13,7 @@ app.use(function(err,req,res,next){
 	res.type('text/plain');
 	res.status(500);
 	res.send('500 - server error');
-})
+});
 
 app.listen(app.get('port'),function(){
 	console.log('express started on http://localhost:'+app.get('port')+';press Ctrl-C to termainate');
