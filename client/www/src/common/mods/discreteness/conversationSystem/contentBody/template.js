@@ -4,7 +4,7 @@
 (function(){
 
 	document.body.innerHTML += [
-		'<div ng-controller="RMTCharController" ng-class="[\'charForm\',\'alert-box\',{\'hide\':!charSate.charFormState,\'show\':charSate.charFormState}]" ng-click="charSate.phraseFormState = false">',
+		'<div ng-controller="RMTCharController" id="RMTCharFrame" ng-class="[\'charForm\',\'alert-box\',{\'hide\':!charSate.charFormState,\'show\':charSate.charFormState}]" ng-click="charSate.phraseFormState = false">',
 
 		//头部模块
 		'   <head-bar></head-bar>',

@@ -16,19 +16,22 @@
 
     $("body").append(template);
     $("#bodyInit").text("");
+
     setTimeout(function () {
         $("#carLogo")[0].style.filter = "blur(3px)";
         $("#userNameBtn").on("click", function () {
             var input = $("#userName");
+
+            if (!win.global.ws)win.global.ws = new WebSocket("ws://127.0.0.1:81");
+
             if (input.val()) {
                 if (getUserList().indexOf(input.val()) >= 0) {
                     tool.warnTip("#userName", "那么帅气的名字已经被抢了");
                     return;
                 }
-                win.global.RMTID.userName = input.val();
                 $("#userNameFrame").hide();
                 $("#carLogo")[0].style.filter = "blur(0)";
-
+                global.ws.tool.getUserName(input.val());
                 global.ws.send(0x01);
             } else {
                 tool.warnTip("#userName", "不支持黑户");
@@ -37,7 +40,7 @@
         });
     }, 500);
 
-    function getUserList() {
+     function getUserList() {
         var result = [];
         $("#friendList").find("li").each(function (index, item) {
             if (item.children.length && !item.innerText) {

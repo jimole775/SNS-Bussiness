@@ -2,8 +2,8 @@
  * Created by Andy on 2017/3/23.
  */
 
-var tool = require("./tool.js");
-var WebSocket = require("./host.js");
+var tool = require("./tools.js");
+var WebSocket = require("./input.js");
 WebSocket.prototype.send = function (status, data, socket) {
     var that = this;
     var emitProtocolMap = {
@@ -12,10 +12,10 @@ WebSocket.prototype.send = function (status, data, socket) {
     };
 
     var PayloadData = that.opcode == 1 ? JSON.stringify(emitProtocolMap) : new Buffer(JSON.stringify(emitProtocolMap));
-    var fin = status === 0xFF ? 8 : 1;
+
     socket.write(
         tool.encodeDataFrame({
-            FIN: fin,
+            FIN: 1,
             Opcode: that.opcode,
             PayloadData: PayloadData
         })

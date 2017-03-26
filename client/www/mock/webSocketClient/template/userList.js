@@ -1,7 +1,7 @@
 /**
  * Created by Andy on 2017/3/4.
  */
-(function () {
+(function ($) {
     var template = [
         '<div id="friendFrame" class="friend-frame">',
         '<h2 id="friendListHeader" class="friend-list-header">基友列表(在线)</h2>' +
@@ -31,4 +31,4 @@
             _drag.bindEvent("friendListHeader", "friendFrame", "friendListExtend");
         }, 500);
     });
-}());
+}(jQuery));
