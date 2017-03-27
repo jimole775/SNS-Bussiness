@@ -12,7 +12,7 @@
 
 		$scope.publicFileName = '';
 		$scope.dbFilename = '';
-		$scope.helpPopData = [];
+		//$scope.helpPopData = [];
 		//如果需要使用id（jquery），就直接从这里获取
 		var thisBox = $element;
 		var thisBoxId = $element.attr("id");
@@ -35,8 +35,7 @@
 				if ($scope.pagesDataIndex-- == 1) $scope.isBack = false;
 				//tool.processBar("获取车型系统成功");
 
-			}
-			else {    //否则就是重新诊断
+			}else{
 				$scope.isBack = false;
 				reset();
 				requestData($scope.pagesOptionChosenRecord);
@@ -53,7 +52,13 @@
 		 * @item   回调参数；
 		 * */
 		$scope.handleSelect = function (parentIndex, item) {
-			win.RMTClickEvent.keyMatchHandleSelect(parentIndex, item);
+			if (item["N"] && item["N"]["nodeaddress"].indexOf("0001") === 0) {
+				//helpInfoRequest(1, item["N"]["dbfilename"], item["N"]["publicfilename"]);
+				win.RMTClickEvent.handleHelpType(1, item["N"]["dbfilename"], item["N"]["publicfilename"])
+			}
+			else{
+				win.RMTClickEvent.keyMatchHandleSelect(parentIndex, item);
+			}
 		};
 
 		/**
@@ -63,13 +68,13 @@
 		 * */
 		win.RMTClickEvent.keyMatchHandleSelect = function (curClickPageIndex, item) {
 			//如果获取到的nodeAddress的首位为0001，就是请求帮助菜单
-			if (item["N"] && item["N"]["nodeaddress"].indexOf("0001") === 0) {
+			//if (item["N"] && item["N"]["nodeaddress"].indexOf("0001") === 0) {
 				//请求模式1的帮助菜单
-				helpInfoRequest(1, item["N"]["dbfilename"], item["N"]["publicfilename"]);
-			}
-			else {
+				//helpInfoRequest(1, item["N"]["dbfilename"], item["N"]["publicfilename"]);
+			//}
+			//else {
 				handlePageTurning(curClickPageIndex, item);
-			}
+			//}
 		};
 
 		function handlePageTurning(curClickPageIndex, item) {
@@ -164,58 +169,6 @@
 
 			checkBtnTextBasisCurIndex();
 			safeApply(function () {});
-		};
-
-		//处理帮助二类型的请求；
-		$scope.handleHelp = function (dbfilename) {
-			//实际的打包信息为dbfilename，但是服务器处理成以picture的返回
-			win.RMTClickEvent.handleHelpType2(dbfilename);
-		};
-
-		win.RMTClickEvent.handleHelpType2 = function (dbfilename) {
-			tool.loading({text: "加载中..."});
-			helpInfoRequest(2, "null", dbfilename);
-		};
-
-		function helpInfoRequest(requestType, carType, dbfilename) {
-			tool.loading({text: "加载中..."});
-			var key = requestType === 2 ? "ANTISTEEL_HELP2" : "ANTISTEEL_HELP";
-			win.server.request(
-				1011,
-				{
-					"key": key,
-					"cartype": carType  //请求模式是1，carType的值为null
-				},
-				{
-					"dbfilename": dbfilename,
-					"pub": ""
-				},
-				win.server.addRetryFn(
-					win.server.addCallbackParam(
-						win.serverRequestCallback.helpMenu,
-						[requestType, carType, dbfilename]
-					),
-					[helpInfoRequest,backToPrvLevel]
-				)
-			);
-		}
-
-		win.serverRequestCallback.helpMenu = function (responseObject, params) {
-
-			tool.loading(0);
-			if (!showView)return;
-
-			if(!responseObject.items.length){
-				tool.alert('服务器无任何数据',
-				           function () {
-					           //tool.processBar("");
-					           backToPrvLevel();
-				           }
-				);
-				return;
-			}
-				$scope.helpPopData = responseObject.items;
-				document.getElementById("helpPop").style.display = "block";
 		};
 
 		/**
@@ -402,7 +355,7 @@
 			win.global.businessInfo.busID = $scope.publicFileName.split("@")[0];
 			win.global.businessInfo.nodeAddress = $scope.nodeAddress;
 			tool.layout(thisBoxId, 0);
-			win.moduleEntry.carType();
+			win.moduleEntry.antCarType();
 		}
 
 		function outputCancel() {
@@ -432,6 +385,12 @@
 				$scope.pagesData.length = 0;
 			})
 		}
+
+		//处理帮助二类型的请求；
+		$scope.handleHelp = function (dbfilename) {
+			//实际的打包信息为dbfilename，但是服务器处理成以picture的返回
+			win.RMTClickEvent.handleHelpType(2,"null",dbfilename);
+		};
 
 	}]).config(function () {
 

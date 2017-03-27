@@ -53,7 +53,8 @@
 
 		win.RMTClickEvent.systemItemSelect = function (item) {
 			var RecordLen = $scope.pagesOptionChosenRecord.length;
-			win.global.DTCLog.systemName = global.rootCache.carSystem[RecordLen] = item.name;
+			//win.global.DTCLog.systemName = global.rootCache.carSystem[RecordLen] = item.name;
+			win.global.DTCLog.systemName = item.name;
 
 			safeApply(function () {
 				$scope.systemItemNodeaddress = item.nodeaddress;

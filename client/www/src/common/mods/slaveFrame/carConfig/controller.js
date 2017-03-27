@@ -87,7 +87,7 @@
 				                                                                            // -1；
 					$scope.pagesData.splice($scope.pagesDataIndex);                         //record下标和pages下标有1的差别，需要同步显示的情况下，引用record的下标的时候必须
 				                                                                            // +1；
-					global.rootCache.carConfig[$scope.pagesOptionChosenRecord.length] = item.name;
+					//global.rootCache.carConfig[$scope.pagesOptionChosenRecord.length] = item.name;
 					$scope.pagesOptionChosenRecord[$scope.pagesOptionChosenRecord.length] = item.name;
 					win.global.DTCLog.systemName = item.name;
 					//选择了相同项，直接修改show属性；
@@ -112,7 +112,7 @@
 
 			//第三种情况：正常选择，正常添加记录长度，监听器会做后续工作
 			else {
-				global.rootCache.carConfig[$scope.pagesOptionChosenRecord.length] = item.name;                      //缓存车型选择信息到车辆信息页面
+				//global.rootCache.carConfig[$scope.pagesOptionChosenRecord.length] = item.name;                      //缓存车型选择信息到车辆信息页面
 				$scope.pagesOptionChosenRecord[$scope.pagesOptionChosenRecord.length] = item.name;          //手动更改parents的值，让$watchCollection监听器生效
 				win.global.DTCLog.systemName = item.name;
 			}

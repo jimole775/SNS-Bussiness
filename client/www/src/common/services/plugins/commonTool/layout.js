@@ -87,7 +87,6 @@
 		if (!curFrame) {
 			return;
 		}
-		//打开页面【后】，探索当前页有没有存储有滚动条记录
 
 		var frameHeader = $(curFrame).find('.scroll-table-header');
 		var frameBody = $(curFrame).find('.scroll-table-body');
@@ -142,6 +141,7 @@
 			frameHeader.css({
 				'top': titleHeight
 			});
+
 			frameBody.css({
 				'height': CONSTANT.WINDOW_HEIGHT - titleHeight - frameHeaderHeight - jinDuBarHeight + thead_cloneHeight,
 				'top': frameHeaderHeight - thead_cloneHeight + titleHeight

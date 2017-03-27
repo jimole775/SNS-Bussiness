@@ -59,10 +59,10 @@
 	win.global.DTCLog.systemName = "";  //选择的系统，用于在专业诊断中拼组数据，数据格式｛systemName:[json]｝
 	win.global.DTCLog.detail = [];  //数据细节
 
-	win.global.rootCache = {}; //存储选择路径信息
-	win.global.rootCache.carType = {}; //缓存车型选择列表项
-	win.global.rootCache.carConfig = {};    //缓存车辆配置列表项
-	win.global.rootCache.carSystem = {};    //缓存系统选择列表项
+	//win.global.rootCache = {}; //存储选择路径信息
+	//win.global.rootCache.carType = {}; //缓存车型选择列表项
+	//win.global.rootCache.carConfig = {};    //缓存车辆配置列表项
+	//win.global.rootCache.carSystem = {};    //缓存系统选择列表项
 
 	win.global.RMTID = {};
 	win.global.RMTID.role = 0;  //远程协助信号   0：正常业务， 1：业务机， 2：远程控制机

@@ -3,12 +3,12 @@
  */
 App.directive("helpPop", function () {
     var template = [
-        '<div id="helpPop" class="help-pop-frame">',
+        '<div class="help-pop-frame">',
         '   <div class="help-pop-layout table">',
         '       <div class="help-pop-layout-slave table-cell">',
 
         '           <div  class="help-pop-content-box table">',
-        '               <img class="help-pop-close-button" src="images/common/refresh_1.png" onclick="document.getElementById(\'helpPop\').style.display = \'none\';"/>',
+        '               <img class="help-pop-close-button" src="images/common/refresh_1.png" ng-click="close()"/>',
         '               <div class="arrow-back-cover arrow-back-cover-left" ng-click="prevPic(curSrc.index)">',
         '                   <span class="table-cell-center"><i class="arrow-left" style="right:1.2rem"></i></span>',
         '               </div>',
@@ -17,7 +17,7 @@ App.directive("helpPop", function () {
         '                   <img ng-src="{{ curSrc.src }}" alt="" ng-click="imgView()" ng-hide="!curSrc.src"/>',
         '						<div class="help-pop-desc">',
         '                   	<p ng-repeat="(index,phrase) in curSrc.name">' +
-        '                       	<span ng-bind="phrase">�ı�����</span>',
+        '                       	<span ng-bind="phrase">文本内容</span>',
         '                       	<span ng-show="index == curSrc.name.length-1">({{ curSrc.index + 1 }}/{{ helpPopData.length }})</span>',
         '                   	</p>',
         '					</div>',
@@ -34,23 +34,64 @@ App.directive("helpPop", function () {
     ].join("");
     return {
         restrict: "ECMA",
-        scope: {
-
-        },
         replace: true,
         template: template,
-        link: function (scope) {
-
+        link: function (scope,element) {
+            var win = window;
             var pswitems = [];
-            //var host = "http://192.168.1.37:8091/";
-            //var path = "CCDPWebServer/CCDP_Web/zh-cn/carimage/";
+
+            scope.helpPopData = [];
+
+            win.RMTClickEvent.handleHelpType = function (requestType, carType, dbfilename) {
+                tool.loading({text: "加载中..."});
+                helpInfoRequest(requestType, carType, dbfilename);
+            };
+
+            function helpInfoRequest(requestType, carType, dbfilename) {
+                tool.loading({text: "加载中..."});
+                var key = requestType === 2 ? "ANTISTEEL_HELP2" : "ANTISTEEL_HELP";
+                win.server.request(
+                    1011,
+                    {
+                        "key": key,
+                        "cartype": carType  //请求模式是2，carType的值为null
+                    },
+                    {
+                        "dbfilename": dbfilename,
+                        "pub": ""
+                    },
+                    win.server.addRetryFn(
+                        win.server.addCallbackParam(
+                            win.serverRequestCallback.antCarTypeHelpMenu,
+                            [requestType, carType, dbfilename]
+                        ),
+                        [helpInfoRequest, function(){}]
+                    )
+                );
+            }
+
+            win.serverRequestCallback.antCarTypeHelpMenu = function (responseObject, params) {
+
+                tool.loading(0);
+                if (!responseObject.items.length) {
+                    tool.alert('服务器无任何数据',
+                        function () {
+                        }
+                    );
+                    return;
+                }
+                scope.helpPopData = responseObject.items;
+                //document.getElementById("helpPop").style.display = "block";
+                element.show();
+            };
+
             scope.$watch("helpPopData", function () {
                 if (scope.helpPopData.length) {
                     scope.helpPopData = (function () {
                         scope.helpPopData.forEach(function (item, index) {
                             item.index = index;
                             item.name = item.name.split("\\n");
-                            item.src = item.fomulaname ? "images/carType/img/" + item.fomulaname : "";
+                            item.src = item.fomulaname ? "images/carType/img/" + item.fomulaname.split("/").pop() : "";
                             pswitems.push({
                                 src: item.src,
                                 w: 600,
@@ -83,6 +124,14 @@ App.directive("helpPop", function () {
                 scope.curSrc = scope.helpPopData[index];
             };
 
+            scope.close = function(){
+                win.RMTClickEvent.helpPopClose();
+            };
+
+            win.RMTClickEvent.helpPopClose = function(){
+                element.hide();
+            };
+
             var pswpElement = document.querySelectorAll('.pswp')[0];
             scope.imgView = function () {
                 var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, pswitems, {
@@ -93,7 +142,8 @@ App.directive("helpPop", function () {
                     h: "100%"
                 });
                 gallery.init();
-            }
+            };
+
         }
     }
 });

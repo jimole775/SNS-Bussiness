@@ -4,7 +4,7 @@
 (function () {
     var win = window;
     var showView = false;
-    App.controller('carTypeController', ['$scope', 'angularFactory', '$element', function ($scope, angularFactory, $element) {
+    App.controller('antCarTypeController', ['$scope', 'angularFactory', '$element', function ($scope, angularFactory, $element) {
         var safeApply = angularFactory.getScope($scope).safeApply;
         $scope.pagesOptionChosenRecord = [];        //用于存储选择项,并发送给服务器
         $scope.pagesData = [];                      //用于刷新显示内容
@@ -18,7 +18,7 @@
         var thisBoxId = $element.attr("id");
 
         //入口
-        win.moduleEntry.carType = function () {
+        win.moduleEntry.antCarType = function () {
             showView = true;
             document.getElementById("Title").innerText = "车型列表";
             bindBottomBtn();
@@ -55,7 +55,15 @@
          * @item   回调参数；
          * */
         $scope.handleSelect = function (parentIndex, item) {
-            win.RMTClickEvent.carTypeHandleSelect(parentIndex, item);
+            //如果获取到的nodeAddress的首位为0001，就是请求帮助菜单
+            if (item["N"] && item["N"]["nodeaddress"].indexOf("0001") === 0) {
+
+                //请求模式1的帮助菜单
+                win.RMTClickEvent.handleHelpType(1, item["N"]["dbfilename"], item["N"]["publicfilename"])
+            }
+            else{
+                win.RMTClickEvent.antCarTypeHandleSelect(parentIndex, item);
+            }
         };
 
         /**
@@ -63,7 +71,16 @@
          * @param curClickPageIndex
          * @param item
          * */
-        win.RMTClickEvent.carTypeHandleSelect = function (curClickPageIndex, item) {
+        win.RMTClickEvent.antCarTypeHandleSelect = function (curClickPageIndex, item) {
+            handlePageTurning(curClickPageIndex, item);
+        };
+
+        /**
+         * 正常选择事件
+         * @param curClickPageIndex
+         * @param item
+         * */
+        function handlePageTurning(curClickPageIndex, item) {
             //每次翻页，都把滚动条置顶
             thisBox.find(".scroll-table-body").scrollTop(0);
 
@@ -129,17 +146,17 @@
                     tool.layoutTable();
                 }, 45);
             });
-        };
+        }
 
         $scope.navSelection = function (recordIndex) {
-            win.RMTClickEvent.carTypeNavSelection({nav: recordIndex});
+            win.RMTClickEvent.antCarTypeNavSelection({nav: recordIndex});
         };
 
         /**
          * 导航条点击事件
          * @param obj ;this param's type like {record:index} || {pagesDataIndex:index}
          * */
-        win.RMTClickEvent.carTypeNavSelection = function (obj) {
+        win.RMTClickEvent.antCarTypeNavSelection = function (obj) {
 
             //区别从 点击 【导航】 返回 和 点击【上一级】按钮返回
             if (obj.hasOwnProperty("nav")) {
@@ -174,7 +191,7 @@
                 quit();
             }
             else {
-                win.RMTClickEvent.carTypeNavSelection({btn: --$scope.pagesDataIndex});
+                win.RMTClickEvent.antCarTypeNavSelection({btn: --$scope.pagesDataIndex});
             }
             safeApply(function () {
             });
@@ -255,7 +272,7 @@
             if (showView)win.tool.loading({pos: "body", text: '获取数据...'});
             getItemsByParents(
                 pagesOptionChosenRecord,
-                win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.CTYPE, [pagesOptionChosenRecord]),
+                win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.ANTCTYPE, [pagesOptionChosenRecord]),
                     [requestData, backToPrvLevel])
             );
         }
@@ -274,12 +291,10 @@
                 parents: pagesOptionChosenRecord       //服务器解析名为 parents；
             };
 
-            //var dataKey = global.businessInfo.procedureType === "防盗匹配" ? "ANTISTEEL_CTYPE" : "CTYPE";
-
             win.server.request(
                 global.businessInfo.serverType,
                 {
-                    key: "CTYPE",
+                    key: "ANTISTEEL_CTYPE",
                     cartype: global.businessInfo.carType
                 },
                 DataPack,
@@ -294,7 +309,7 @@
          * @param responseObject ;JSON数据
          * @param params ;用于内部运算的参数，通过 server.RequestService.utilAddParams() 方法传入, 远程协助时通过APP传入
          * */
-        win.serverRequestCallback.CTYPE = function (responseObject, params) {
+        win.serverRequestCallback.ANTCTYPE = function (responseObject, params) {
             win.tool.loading(0);
             if (!showView)return;
             if (!responseObject.items.length) {
@@ -374,97 +389,39 @@
         function outputPrompt(nodeAddress) {
             win.global.businessInfo.dbFilenamePrev = $scope.dbFilename;
             win.global.businessInfo.pubFilename = $scope.publicfilename;
-
-            if (!/(模块编程)|(设码配置)|(个性化设置)/.test(global.businessInfo.procedureType)) {
-
-                //从最后一层车型列表获取的通讯地址0000.0000.0000.0001
-                //获取第二段的字节，根据下面的判断式得出连接系统的模式：
-                //0002 时 则连接时进入模式一连接，
-                //0003 时 则连接时进入模式三连接
-                //否则为模式二连接：
-                switch (nodeAddress.substr(5, 4)) {
-                    case '0002':
-                        win.global.businessInfo.connectMode = 1;
-                        break;
-                    case '0003':
-                        win.global.businessInfo.connectMode = 3;
-                        break;
-                    default :
-                        win.global.businessInfo.connectMode = 2;
-                        break;
-                }
+            //从最后一层车型列表获取的通讯地址0000.0000.0000.0001
+            //获取第二段的字节，根据下面的判断式得出连接系统的模式：
+            //0002 时 则连接时进入模式一连接，
+            //0003 时 则连接时进入模式三连接
+            //否则为模式二连接：
+            switch (nodeAddress.substr(5, 4)) {
+                case '0002':
+                    win.global.businessInfo.connectMode = 1;
+                    break;
+                case '0003':
+                    win.global.businessInfo.connectMode = 3;
+                    break;
+                default :
+                    win.global.businessInfo.connectMode = 2;
+                    break;
             }
-
-                tool.alert(
-                    ["请确认：<br>1.OBD16接口已经连接稳定。<br>2.汽车点火已经处于ON状态且引擎未打开。", "确定", "返回"],
-                    function () {
-                        outputConfirm(nodeAddress);
-                    },
-                    function () {
-                        outputCancel();
-                    }
-                );
-
-        }
-
-        function outputConfirm(nodeAddress) {
             tool.layout(thisBoxId, 0);
-            //编程和设码比较特殊
-            if (/(模块编程)|(设码配置)|(个性化设置)/.test(global.businessInfo.procedureType)) {
+            //防盗匹配只有在这里才能获取到完整的URL，和其他的项目不一样，需要区别对待！
+            win.global.businessInfo.operationMenuCache = [nodeAddress.replace(/\./g, ""), "carType"];
 
-                /**
-                 * 普通项目是通过选择LOGO的时候获取的链接，但是编程类项目需要在车型列表选择完（多了一个车系的选择）之后才有完整的link
-                 * */
-                global.businessInfo.link = nodeAddress;
+            //重新组拼link字段；因为业务ID必须从keyMatch模块选取，服务器无法判断；
+            //"empty.htm#ID=&INDEX=1&PROCEDURE=防盗匹配&TLMAX=&CARCODE=&ServerType=&CarType=ATmatch/bmw&DiagnoseType=&RunMode=online&FunctionID="
+            var _split = global.businessInfo.link.split("ID=");
+            var link = _split[0] + "ID=" + global.businessInfo.busID + _split[1];
+            win.appService.sendDataToApp(win.CONSTANT.JS_TO_APP.REQUEST_LOGIN_SERVER, link, "3027");
 
-                win.appService.sendDataToApp(win.CONSTANT.JS_TO_APP.REQUEST_LOGIN_SERVER, global.businessInfo.link, "3027");
-                return;
-            }
-
-            //简易诊断和(专业诊断,保养,特殊功能)最后抛出的数据不同,(专业诊断,保养,特殊功能)只抛出nodeAddress,简易诊断需要抛出含有nodeAddress的Json
-            if (global.businessInfo.diagType === "simp") {
-
-                if (!$scope.pagesOptionChosenRecord.length) {
-                    win.global.businessInfo.operationMenuCache = [$scope.pagesData[0], "carType"];
-                }
-                else {
-                    win.global.businessInfo.operationMenuCache = [$scope.pagesData[$scope.pagesData.length - 1], "carType"];
-                }
-
-                //发送3027登入服务器,下一个入口在src/common/services/interActivePorts/devService.js
-                win.appService.sendDataToApp(win.CONSTANT.JS_TO_APP.REQUEST_LOGIN_SERVER, global.businessInfo.link, "3027");
-            }
-            else {
-                win.global.businessInfo.operationMenuCache = [nodeAddress.replace(/\./g, ""), "carType"];
-
-                //发送3027登入服务器,下一个入口在src/common/services/interActivePorts/devService.js
-                win.appService.sendDataToApp(win.CONSTANT.JS_TO_APP.REQUEST_LOGIN_SERVER, global.businessInfo.link, "3027");
-            }
-        }
-
-        function outputCancel() {
-            if ($scope.pagesOptionChosenRecord.length) {
-                $scope.pagesOptionChosenRecord.splice($scope.pagesOptionChosenRecord.length - 1);
-                $scope.pagesDataIndex--;
-            }
-            else {
-                quit();
-            }
-
-            safeApply(function () {
-            });
         }
 
         function quit() {
             showView = false;
             tool.layout(thisBoxId, 0);
             reset();
-            if (global.businessInfo.diagType) {
-                win.moduleEntry.diagType(-1);
-            }
-            else {
-                win.moduleEntry.carLogo(-1);
-            }
+            win.moduleEntry.carLogo(-1);
         }
 
         function reset() {
@@ -475,14 +432,10 @@
             })
         }
 
-        $scope.showImg = function (parentIndex, itemIndex, flag) {
-            win.RMTClickEvent.showImg(parentIndex, itemIndex, flag);
-        };
-
-        win.RMTClickEvent.showImg = function (parentIndex, itemIndex, flag) {
-            safeApply(function () {
-                $scope.pagesData[parentIndex][itemIndex].imgShow = !flag;
-            });
+        //处理帮助二类型的请求；
+        $scope.handleHelp = function (dbfilename) {
+            //实际的打包信息为dbfilename，但是服务器处理成以picture的返回
+            win.RMTClickEvent.handleHelpType(2, "null", dbfilename);
         };
 
     }]).config(function () {

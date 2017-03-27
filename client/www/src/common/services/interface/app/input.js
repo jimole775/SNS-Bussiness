@@ -108,13 +108,24 @@ $ (document).ready (function () {
 			$ ("#vehicleType").html ("【" + win.global.businessInfo.carName_cn + "(" + win.global.businessInfo.carType + ")】");
 
 			$ ("#businessType").html ((function(){
-				var carTypeRoot = "";
-				for(var item in win.global.rootCache.carType){
-					if(win.global.rootCache.carType.hasOwnProperty(item)){
-						carTypeRoot += win.global.rootCache.carType[item] + "/";
-					}
+				var frame = "";
+				var result = null;
+				if(global.businessInfo.procedureType === "防盗匹配"){
+					frame = $("#antCarType");
+				}else{
+					frame = $("#carType");
 				}
-				return carTypeRoot.substring(0,carTypeRoot.length-1);   //去掉最后一个"/"
+				var items = frame.find(".scroll-table-header").find("em");
+
+				items.forEach(function(item){
+					result += item.text() + "/";
+				});
+				//for(var item in win.global.rootCache.carType){
+				//	if(win.global.rootCache.carType.hasOwnProperty(item)){
+				//		carTypeRoot += win.global.rootCache.carType[item] + "/";
+				//	}
+				//}
+				return result.substring(0,result.length-1);   //去掉最后一个"/"
 			})());
 
 			document.getElementById("ShowMessage").style.display = "block";

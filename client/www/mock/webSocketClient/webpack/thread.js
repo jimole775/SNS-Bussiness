@@ -26,7 +26,8 @@
         tool.loading(0);
         win.jsRecvAppData(1000, {
             screenInfo: {screenSize: 5.5, headHeight: 60, footHeight: 60},
-            serverHost: "http://112.124.26.243:8090",
+
+            serverHost: "http://192.168.1.37:8091",   //http://192.168.1.37:8091#ZJL服务器 //http://112.124.26.243:8090#云服务器
             businessRole: items.remoteRole
         }, "");
     };

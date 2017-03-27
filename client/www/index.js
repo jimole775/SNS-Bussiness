@@ -3,6 +3,7 @@
  */
 	//根据url的描述,动态加载相应的业务模块
 (function () {
+
 	var win = window;
 	var doc = document;
 	var diagnosticScript = {};

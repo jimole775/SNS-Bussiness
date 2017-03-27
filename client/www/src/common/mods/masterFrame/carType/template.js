@@ -19,12 +19,6 @@
 		'               <span class="item-description item-description-layout-table" ng-class="{\'full-width\':!item.picture}" ng-click="handleSelect(parentIndex,item)">',
 		'                   <em class="item-description-layout-cell extend-font-size">{{ item.name }}</em>',
 		'               </span>',
-						//如果没有图片，就切换到向右的箭标
-		//'               <span class="item-value-layout-table"  ng-if="!item.picture">',
-		//'                   <span class="item-value-layout-cell">',
-		//'                       <i class="arrow-right arrow-layout-middle"></i>',
-		//'                   </span>',
-		//'               </span>',
 						//如果有图片，就切换到向下的箭标
 		'               <span class="item-value-layout-table"  ng-if="item.picture" ng-click="showImg(parentIndex,curIndex,item.imgShow)">',
 		'                   <span class="item-value-layout-cell">',

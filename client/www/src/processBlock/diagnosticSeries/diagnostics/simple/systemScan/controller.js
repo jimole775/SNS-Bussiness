@@ -206,7 +206,7 @@
 					});
 
 					//重新扫描时，重置车辆信息缓存
-					global.rootCache.carSystem = {};
+					//global.rootCache.carSystem = {};
 					$scope.DTCTotal.length = 0;
 					$scope.webViewSystemList_arr.length = 0;
 					$scope.scanState = SystemScanState['scanning'];
@@ -372,7 +372,7 @@
 				$scope.webViewSystemList_arr.push(getCurrentSystem());
 				var realIndex = webViewListIndex - 1;                                               //webViewListIndex
 			                                                                                        //是显示给用户的下标，起始值为1
-				global.rootCache.carSystem[realIndex] = $scope.webViewSystemList_arr[realIndex].name;     //缓存系统信息，以便显示给用户
+				//global.rootCache.carSystem[realIndex] = $scope.webViewSystemList_arr[realIndex].name;     //缓存系统信息，以便显示给用户
 			});
 			Fun310905();
 		};
