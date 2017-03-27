@@ -1913,6 +1913,7 @@ option {
     top: 0;
     left: 0;
     z-index: 1;
+    overflow: auto;
 }
 
 .user-name-frame {
@@ -1941,12 +1942,13 @@ option {
     width: 15%;
     height: 100%;
     float: right;
+    position: relative;
 }
 
 .head-bar-right-button {
     background: none;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
     margin: 0 auto;
     width: 3.6rem;
     display: block;
@@ -2060,4 +2062,26 @@ option {
     height: 100%;
     z-index: 996;
     background: rgba(0, 0, 0, .2);
+}
+
+.tip-pop{
+    border-radius: 100%;
+    -webkit-border-radius:100%;
+    -moz-border-radius:100%;
+    width: 18px;
+    height: 18px;
+    padding: 0;
+    margin: 0;
+    line-height: 150%;
+    font-size: 12px;
+    text-align: center;
+    background: #f72828;
+    border: 0;
+    color: #fff;
+    box-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    display: none;
+
 }

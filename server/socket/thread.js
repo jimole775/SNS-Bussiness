@@ -6,10 +6,7 @@
     var tool = require("./tools.js");
     var clients = {};
 
-    //所有以创建连接的用户以{asker:session,assiant:session}的方式存储
-    //var chanelMap = [];
-
-    WebSocket.prototype.namesMap = [];
+    var namesMap = [];
 
     //远程链接询问，把询问信息推给协助者
     WebSocket.prototype.remoteConnectAsk = function (data, socket) {
@@ -31,12 +28,6 @@
         var that = this;
         var asker = clients[data.items.remoteUid.askerUid];
         var helper = clients[data.items.remoteUid.helperUid];
-
-        //存储远程对话通道
-        //chanelMap.push({
-        //    asker: {uid: data.items.remoteUid.askerUid, session: asker},
-        //    helper: {uid: data.items.remoteUid.helperUid, session: helper}
-        //});
 
         that.send(0x03, {remoteRole: 1}, asker);
         that.send(0x03, {remoteRole: 2}, helper);
@@ -93,12 +84,12 @@
         delete clients[data.uid];
 
         //删除断线的用户名，
-        var index = that.namesMap.indexOf(data.uid);
-        that.namesMap.splice(index, 1);
+        var index = namesMap.indexOf(data.uid);
+        namesMap.splice(index, 1);
 
         //刷新用户列表到客户端
-        that.namesMap.forEach(function (item, index) {
-            that.send(0x01, {namesMap: that.namesMap.join("-")}, clients[item]);
+        namesMap.forEach(function (item, index) {
+            that.send(0x01, {namesMap: namesMap.join("-")}, clients[item]);
         });
     };
 
@@ -107,21 +98,21 @@
         var that = this;
         socket.uid = data.uid;
 
-        if (that.namesMap.indexOf(data.uid) < 0) {
-            that.namesMap.push(data.uid);
+        if (namesMap.indexOf(data.uid) < 0) {
+            namesMap.push(data.uid);
         }
 
         clients[data.uid] = socket;
 
         //向所有的用户推送用户名
-        that.namesMap.forEach(function (item, index) {
-            that.send(0x01, {namesMap: that.namesMap.join("-")}, clients[item]);
+        namesMap.forEach(function (item, index) {
+            that.send(0x01, {namesMap: JSON.stringify(namesMap)}, clients[item]);
         });
     };
 
     WebSocket.prototype.pushNameMap = function (data, socket) {
         var that = this;
-        that.send(0x00, {namesMap: that.namesMap.join("-")}, socket);
+        that.send(0x00, {namesMap: JSON.stringify(namesMap)}, socket);
     };
 
     module.exports = WebSocket;

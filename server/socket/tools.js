@@ -5,28 +5,6 @@
 
 var tool = {
 
-    getChanelSession: function (chanelMap,uid) {
-        var result = {};
-        chanelMap.forEach(function (item, index) {
-            if (item.asker.uid == uid || item.helper.uid == uid) {
-                result = {
-                    asker: item.asker.session,
-                    helper: item.helper.session
-                };
-            }
-        });
-        return result;
-    },
-
-    getSession: function (uid, store) {
-        var i = store.length;
-        while (i--) {
-            if (store[i].uid === uid) {
-                return store[i].session;
-            }
-        }
-    },
-
 //websocket数据的加解密工作
     decodeDataFrame:function(e){
         var i = 0, j, s, frame = {

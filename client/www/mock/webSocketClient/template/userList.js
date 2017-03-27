@@ -22,7 +22,9 @@
 
             $("#headBarRight").on("click",function(){
                 $("#friendFrame").show();
+                $("#headBarRight").find(".tip-pop").hide().text("");
             });
+
             $("#friendListClose").on("click", function () {
                 $("#friendFrame").hide();
             });

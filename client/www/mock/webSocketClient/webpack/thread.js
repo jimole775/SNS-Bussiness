@@ -37,27 +37,63 @@
         });
     };
 
+    var newFriendsAmount = 0;
     WebSocket.prototype.addFriend = function (items) {
         var that = this;
-        var friendList = document.getElementById("friendList");
-        if (/-/g.test(items.namesMap)) {
-            document.getElementById("friendList").innerHTML = "";
+        var friendList = $("#friendList");
+        var namesMap = JSON.parse(items.namesMap);
+        var originNames = friendList.find("button").text();
+        //var newNames = [];
+        if (namesMap.length > 1) {
+            //document.getElementById("friendList").innerHTML = "";
 
-            items.namesMap.split("-").forEach(function (newName) {
-                if (that.tool.getUserName() === newName) return;
-                var li = document.createElement("li");
-                li.innerHTML = '<button class="item-button" style="height:3.6rem;">' + newName + '</button>';
-                friendList.appendChild(li);
+            namesMap.forEach(function (item) {
+
+                if(item.indexOf(originNames) < 0) {
+                    if (that.tool.getUserName() != item){
+                        friendList.append('<li><button class="item-button" style="height:3.6rem;">' + item + '</button></li>');
+                        //newFriendsAmount ++;
+
+                        if ($("#friendFrame").is(":hidden")) {  //如果用户列表在隐藏状态，就累积计算新用户数量
+                            newFriendsAmount = parseInt(newFriendsAmount) >= 9 ? "9+" : newFriendsAmount + 1;
+                            var tipPop = $("#headBarRight").find(".tip-pop");
+                            if(tipPop.text() === ""){ //如果好友提示文本为空，就证明是第一次显示，或者其中被重置过，重新计算新好友数量
+                                newFriendsAmount = 1;
+                                tipPop.text(1).show();
+                            }else{
+                                tipPop.text(newFriendsAmount).show();
+                            }
+                        }
+                        else {
+                            newFriendsAmount = 0;
+                        }
+                    }
+                }
+
             });
 
         }
-        else {
-            document.getElementById("friendList").innerHTML = "";
-            if (that.tool.getUserName() === items.namesMap) return;
-            var li = document.createElement("li");
-            li.innerHTML = '<button class="item-button" style="height:3.6rem;">' + items.namesMap + '</button>';
-            friendList.appendChild(li);
+        else if (namesMap.length === 1){
+            //document.getElementById("friendList").innerHTML = "";
+            if (that.tool.getUserName() === namesMap[0]) return;
+            friendList.append('<li><button class="item-button" style="height:3.6rem;">' + namesMap[0] + '</button></li>');
+            //newFriendsAmount ++;
+
+            if ($("#friendFrame").is(":hidden")) {  //如果用户列表在隐藏状态，就累积计算新用户数量
+                newFriendsAmount = parseInt(newFriendsAmount) >= 9 ? "9+" : newFriendsAmount + 1;
+                var tipPop = $("#headBarRight").find(".tip-pop");
+                if(tipPop.text() === ""){ //如果好友提示文本为空，就证明是第一次显示，或者其中被重置过，重新计算新好友数量
+                    newFriendsAmount = 1;
+                    tipPop.text(1).show();
+                }else{
+                    tipPop.text(newFriendsAmount).show();
+                }
+            }
+            else {
+                newFriendsAmount = 0;
+            }
         }
+
 
         setTimeout(function () {
             var lis = friendList.children;
@@ -70,7 +106,8 @@
                             tool.loading({text: "等待对方应答..."});
                             that.send(0x02, true);
                         },
-                        function () {})
+                        function () {
+                        })
                 }
             })
         }, 45);
