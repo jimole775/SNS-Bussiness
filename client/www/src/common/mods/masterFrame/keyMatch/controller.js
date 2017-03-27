@@ -216,7 +216,6 @@
 			}
 				$scope.helpPopData = responseObject.items;
 				document.getElementById("helpPop").style.display = "block";
-
 		};
 
 		/**
