@@ -5,13 +5,6 @@
     var win = window;
 
     if (!win.global.ws)win.global.ws = new WebSocket("ws://127.0.0.1:81");
-    function getUserName() {
-        return global.RMTID.userName;
-    }
-
-    function getOppositeName() {
-        return global.RMTID.oppositeName;
-    }
 
     global.ws.onopen = function (res) {
         console.log(res);
@@ -36,37 +29,32 @@
         $("#RMTCover").hide();
         if (win.global.RMTID.role != 0) {
             win.global.RMTID.role = 0;
-            tool.alert("对方已经断开连接!", function () {
-            });
         }
         close();
     };
 
     win.onbeforeunload = function () {
-        console.log("关闭窗口");
+        console.log("关闭或者刷新窗口");
         close();
     };
 
-    win.onunload = function () {
-        console.log("刷新窗口");
-        close();
-    };
+    //win.onunload = function () {
+    //    console.log("刷新窗口");
+    //    close();
+    //};
 
     function close() {
         var PayloadData = {};
-        PayloadData.uid = getUserName();
-
+        PayloadData.uid = global.ws.tool.getUserName();
         PayloadData.items = {};
-        PayloadData.items.role = global.RMTID.role;
-        if (global.RMTID.role == 0) {
-
-        } else if (global.RMTID.role == 1) {
-            PayloadData.items.askerUid = getUserName();
-            PayloadData.items.helperUid = getOppositeName();
-        } else {
-            PayloadData.items.askerUid = getOppositeName();
-            PayloadData.items.helperUid = getUserName();
+        PayloadData.items.remoteRole = global.RMTID.role;
+        PayloadData.items.remoteUid = {};
+        if (global.RMTID.role != 0) {
+            PayloadData.items.remoteUid.askerUid = global.ws.tool.getAskerName();
+            PayloadData.items.remoteUid.helperUid = global.ws.tool.getHelperName();
         }
+
+        //alert("关闭链接："+global.ws.tool.getAskerName()+global.ws.tool.getHelperName());
         global.ws.close(1000, JSON.stringify(PayloadData)); //关闭TCP连接
     }
 
@@ -98,13 +86,23 @@
                 case 0x07:
 
                     break;
-                case 0xFF:  //断开协助通道//关闭ws
+                case 0xFF:  //断开协助通道通知
+                    $("#RMTCover").hide();
+                    tool.alert("对方已经断开连接",function(){
+                        global.RMTID.role = 0;
+                        //需要删除聊天泡泡
+                    });
                     break;
                 default :
                     break;
             }
         });
 
+    };
+
+    //模拟APP交互端口;
+    win.external.SendRMTEventToApp = function (localID, funcName, expression) {
+        global.ws.send(0x05, global.RMTID.role, funcName, expression);
     };
 
 })();
