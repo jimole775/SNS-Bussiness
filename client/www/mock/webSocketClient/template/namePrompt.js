@@ -8,7 +8,7 @@
     var template = [
         '<div id="userNameFrame" class="user-name-frame">' +
         '<div class="table-cell-center">' +
-        '<label for=""><input type="text" id="userName" style="text-align:center; font-size: 1.6rem" placeholder="取个牛逼点的名字" class="disable-plugin"/></label>' +
+        '<label for=""><input type="text" size="22" maxlength="14" id="userName" style="text-align:center; font-size: 1.6rem" placeholder="取个牛逼点的名字" class="disable-plugin"/></label>' +
         '<label for=""><input type="button" style="width: 6rem;text-align: center;margin-left: 1rem;" id="userNameBtn" class="item-button disable-plugin" value="确定"></label>' +
         '</div>' +
         '</div>'
@@ -19,6 +19,22 @@
 
     setTimeout(function () {
         $("#carLogo")[0].style.filter = "blur(3px)";
+
+        //监听用户名长度
+        $("#userName").on("input", function (event) {
+            var val = this.value;
+            var cnLen = 0;
+            if (val) {
+                val.split("").forEach(function (item) {
+                    if (item.charCodeAt().toString(16).length >= 4) {
+                        cnLen++;
+                    }
+                });
+            }
+            this.maxLength = cnLen + (14 - cnLen * 2);  //动态设置最大长度
+        });
+
+        //绑定确定按钮事件
         $("#userNameBtn").on("click", function () {
             var input = $("#userName");
 
@@ -40,7 +56,7 @@
         });
     }, 500);
 
-     function getUserList() {
+    function getUserList() {
         var result = [];
         $("#friendList").find("li").each(function (index, item) {
             if (item.children.length && !item.innerText) {

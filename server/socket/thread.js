@@ -36,7 +36,7 @@
     //远程链接,把应答消息推给询问者
     WebSocket.prototype.remoteConnectReject = function (data, socket) {
         var asker = clients[data.items.remoteUid.askerUid];
-        that.send(
+        this.send(
             0x04,
             {},
             asker

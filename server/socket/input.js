@@ -35,8 +35,8 @@
             case 8:
                 var msg = frame.PayloadData.slice(2).toString();
                 console.log("会话已经结束:", socket, msg);
-                if(msg)if(/^[\{\[]/.test(msg))that.close(JSON.parse(msg), socket);
                 socket.end();
+                if(msg)if(/^[\{\[]/.test(msg))that.close(JSON.parse(msg), socket);
                 break;
             default :
                 that.opcode = frame.Opcode;
