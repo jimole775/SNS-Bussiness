@@ -5,7 +5,7 @@
 
 var tool = {
 
-//websocket数据的加解密工作
+    //websocket数据的加解密工作
     decodeDataFrame:function(e){
         var i = 0, j, s, frame = {
             //解析前两个字节的基本数据

@@ -65,9 +65,17 @@
             if (!data) return;
 
             switch (data.status) {
-                case 0x00:  //刷新用户列表
-                case 0x01:
+                case 0x00:  //如果是00，就需要标注正在远程的用户
+                case 0x01:  //刷新用户列表
                     that.addFriend(data.items);
+
+                    //推送给未注册用户的远程用户列表
+                    if(data.items.remoteChanelMap){
+                        data.items.remoteChanelMap.forEach(function(item){
+                            that.signRMTUser(item);
+                        });
+                    }
+
                     break;
                 case 0x02:  //协助通道的询问
                     that.remoteSniff(data.items);
@@ -81,25 +89,17 @@
                 case 0x05: //远程协助交互通道
                     win.RecvRMTEventFromApp(data.items.remoteRole, data.items.funcName, data.items.expression);
                     break;
-                case 0x06:
+                case 0x06:  //标记正在远程业务的用户
+                    that.signRMTUser(data.items);
                     break;
-                case 0x07:
-
+                case 0x07:  //取消标记正在远程业务的用户
+                    that.unSignRMTUser(data.items);
                     break;
                 case 0xFE:  //刷新用户列表
                     that.reduceUserName(data.items);
                     break;
                 case 0xFF:  //断开协助通道通知
-                    $("#RMTCover").hide();
-                    tool.alert("对方已经断开连接", function () {
-                        $("#friendList").find("button").each(function (index, item) {
-                                $(item).find("em.light-text").remove();
-                            $(item).removeClass("event-disable button-disable-state");
-
-                        });
-                        global.RMTID.role = 0;
-                        //需要删除聊天泡泡
-                    });
+                    that.disconnectChanel();
                     break;
                 default :
                     break;

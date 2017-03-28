@@ -45,6 +45,10 @@
                     tool.warnTip("#userName", "那么帅气的名字已经被抢了");
                     return;
                 }
+                if(/[`~!！?？@#$%^&"“”\{}\[\]()\\\/\*]/.test(input.val())){
+                    tool.warnTip("#userName", "不允许有特殊字符");
+                    return;
+                }
                 $("#userNameFrame").hide();
                 $("#carLogo")[0].style.filter = "blur(0)";
                 global.ws.tool.getUserName(input.val());

@@ -52,64 +52,71 @@
             }
         });
     };
+
     WebSocket.prototype.rejectRemoteConnect = function (items) {
         tool.alert("对方拒绝了您的请求!", function () {
         });
     };
 
     var newFriendsAmount = 0;
+    function handleNewFriendTipsPop(){
+        if ($("#friendFrame").is(":hidden")) {  //如果用户列表在隐藏状态，就累积计算新用户数量
+            newFriendsAmount = parseInt(newFriendsAmount) >= 9 ? "9+" : newFriendsAmount + 1;
+            var tipPop = $("#headBarRight").find(".tip-pop");
+            if(tipPop.text() === ""){ //如果好友提示文本为空，就证明是第一次显示，或者被重置过，重新计算新好友数量
+                newFriendsAmount = 1;
+                tipPop.text(1).show();
+            }else{
+                tipPop.text(newFriendsAmount).show();
+            }
+        }
+        else {
+            newFriendsAmount = 0;
+        }
+    }
+
     WebSocket.prototype.addFriend = function (items) {
         var that = this;
         var friendList = $("#friendList");
         var namesMap = JSON.parse(items.namesMap);
         var originNames = friendList.find("button").text() || [];
+
+        //多个用户
         if (namesMap.length > 1) {
 
             namesMap.forEach(function (item) {
 
+                //如果原用户列表中没有，就代表是新用户
                 if(originNames.indexOf(item) < 0) {
                     if (that.tool.getUserName() != item){
-                        friendList.append('<li><button class="item-button" style="height:3.6rem;">' + item + '</button></li>');
-
-                        if ($("#friendFrame").is(":hidden")) {  //如果用户列表在隐藏状态，就累积计算新用户数量
-                            newFriendsAmount = parseInt(newFriendsAmount) >= 9 ? "9+" : newFriendsAmount + 1;
-                            var tipPop = $("#headBarRight").find(".tip-pop");
-                            if(tipPop.text() === ""){ //如果好友提示文本为空，就证明是第一次显示，或者被重置过，重新计算新好友数量
-                                newFriendsAmount = 1;
-                                tipPop.text(1).show();
-                            }else{
-                                tipPop.text(newFriendsAmount).show();
-                            }
+                        if(global.RMTID.role != 0){
+                            friendList.append('<li><button class="item-button event-disable button-disable-state" style="height:3.6rem;">' + item + '</button></li>');
+                        }else{
+                            friendList.append('<li><button class="item-button" style="height:3.6rem;">' + item + '</button></li>');
                         }
-                        else {
-                            newFriendsAmount = 0;
-                        }
+                        handleNewFriendTipsPop();
                     }
                 }
 
             });
 
         }
+
+        //单个用户
         else if (namesMap.length === 1){
             if (that.tool.getUserName() === namesMap[0]) return;
-            friendList.append('<li><button class="item-button" style="height:3.6rem;">' + namesMap[0] + '</button></li>');
 
-            if ($("#friendFrame").is(":hidden")) {  //如果用户列表在隐藏状态，就累积计算新用户数量
-                newFriendsAmount = parseInt(newFriendsAmount) >= 9 ? "9+" : newFriendsAmount + 1;
-                var tipPop = $("#headBarRight").find(".tip-pop");
-                if(tipPop.text() === ""){ //如果好友提示文本为空，就证明是第一次显示，或者其中被重置过，重新计算新好友数量
-                    newFriendsAmount = 1;
-                    tipPop.text(1).show();
-                }else{
-                    tipPop.text(newFriendsAmount).show();
-                }
+            if(global.RMTID.role != 0){
+                friendList.append('<li><button class="item-button event-disable button-disable-state" style="height:3.6rem;">' + namesMap[0] + '</button></li>');
+            }else{
+                friendList.append('<li><button class="item-button " style="height:3.6rem;">' + namesMap[0] + '</button></li>');
             }
-            else {
-                newFriendsAmount = 0;
-            }
+
+
+            handleNewFriendTipsPop();
         }
 
-
+        //绑定按钮事件
         setTimeout(function () {
             friendList.off().on("click","button",function(event){
                 that.tool.getAskerName(that.tool.getUserName());
@@ -125,5 +132,47 @@
 
         }, 45);
     };
+
+    WebSocket.prototype.disconnectChanel = function (){
+        $("#RMTCover").hide();
+        tool.alert("对方已经断开连接", function () {
+            $("#friendList").find("button").each(function (index, item) {
+                $(item).find("em.light-text").remove();
+                $(item).removeClass("event-disable button-disable-state");
+
+            });
+            global.RMTID.role = 0;
+            //需要删除聊天泡泡
+        });
+    };
+
+
+    WebSocket.prototype.signRMTUser = function (items){
+        var that = this;
+
+        //如果有remoteUid项，就是普通业务通知的，如果没有，就是未注册用户获取整个列表的时候，拿到的通知
+        var asker = items.remoteUid ? items.remoteUid.askerUid : items.askerUid;
+        var helper = items.remoteUid ? items.remoteUid.helperUid : items.helperUid;
+
+        $("#friendList").find("button").each(function (index, item) {
+            if(item.innerText === helper || item.innerText === asker){
+                $(item).addClass("event-disable button-disable-state");
+                item.innerHTML += '<em class="disable-text">(远程中...)</em>';
+            }
+        });
+    };
+
+    WebSocket.prototype.unSignRMTUser = function (items){
+        var that = this;
+        var asker = items.remoteUid.askerUid;
+        var helper = items.remoteUid.helperUid;
+        $("#friendList").find("button").each(function (index, item) {
+            if(item.innerText === helper || item.innerText === asker){
+                $(item).find("em.disable-text").remove();
+                $(item).removeClass("event-disable button-disable-state");
+            }
+        });
+    }
+
 
 })();
