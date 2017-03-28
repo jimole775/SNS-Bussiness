@@ -10,6 +10,16 @@
 
     var remoteChanelMap = [];
 
+    global.getChanelMap = function(){
+        console.log(remoteChanelMap);
+    };
+    global.getClients = function(){
+        console.log(clients);
+    };
+    global.getNamesMap = function(){
+        console.log(namesMap);
+    };
+
     //远程链接询问，把询问信息推给协助者
     WebSocket.prototype.remoteConnectAsk = function (data, socket) {
         var helper = clients[data.items.remoteUid.helperUid];
@@ -81,8 +91,8 @@
 
     //用户关闭socket链接
     WebSocket.prototype.close = function (data, socket) {
-        this.refreshUserList(data, socket);
-        this.disconnectChanel(data, socket);
+        this.reduceUserName(data, socket);
+        if(data.items.remoteRole != 0)this.disconnectChanel(data, socket);
     };
 
     WebSocket.prototype.disconnectChanel = function (data, socket) {
@@ -106,13 +116,10 @@
             );
         });
 
-        //删除通道列表
         remoteChanelMap.forEach(function (item, index) {
-
             //不确定请求者或者协助者哪个断开连接，所以两个都要判断
             if (item.askerUid === askerUid || item.helperUid === helperUid) {
-                remoteChanelMap.slice(index, 1);
-                return false;
+                remoteChanelMap.splice(index, 1);
             }
         });
 
@@ -127,7 +134,7 @@
     };
 
     //通知前端删除断开的用户
-    WebSocket.prototype.refreshUserList = function (data, socket) {
+    WebSocket.prototype.reduceUserName = function (data, socket) {
         var that = this;
 
         socket.destroy();   //删除断线的session，
@@ -167,6 +174,8 @@
         var that = this;
         that.send(0x00, {remoteChanelMap: remoteChanelMap,namesMap: JSON.stringify(namesMap)}, socket);
     };
+
+
 
     module.exports = WebSocket;
 

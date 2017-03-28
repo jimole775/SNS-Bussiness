@@ -95,7 +95,7 @@
                 case 0x07:  //取消标记正在远程业务的用户
                     that.unSignRMTUser(data.items);
                     break;
-                case 0xFE:  //刷新用户列表
+                case 0xFE:  //刪除断线了的用户
                     that.reduceUserName(data.items);
                     break;
                 case 0xFF:  //断开协助通道通知
