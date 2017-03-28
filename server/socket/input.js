@@ -17,11 +17,11 @@
                 //第一次握手
                 if (frame.FIN === 0) {
                     console.log("握手");
-                    that.handshake(socket, e);
+                    that.handshake(e, socket);
                 }
                 //数据交互
                 else {
-                    that.dataHost(socket, frame);
+                    that.dataHost(frame, socket);
                 }
             });
 
@@ -29,13 +29,13 @@
         });
     };
 
-    WebSocket.prototype.dataHost = function (socket, frame) {
+    WebSocket.prototype.dataHost = function (frame, socket) {
         var that = this;
         switch (frame.Opcode) {
             case 8:
                 var msg = frame.PayloadData.slice(2).toString();
                 console.log("会话已经结束:", socket, msg);
-                if(msg)if(/^[\{\[]/.test(msg))that.close(JSON.parse(msg));
+                if(msg)if(/^[\{\[]/.test(msg))that.close(JSON.parse(msg), socket);
                 socket.end();
                 break;
             default :
@@ -79,7 +79,7 @@
 
     var crypto = require('crypto');
     //单个用户的握手实例;
-    WebSocket.prototype.handshake = function (socket, e) {
+    WebSocket.prototype.handshake = function (e, socket) {
         var original = e.toString().match(/Sec-WebSocket-Key: (.+)/)[1];
         key = crypto.createHash("sha1").update(original + mask).digest("base64");
         socket.write("HTTP/1.1 101 Switching Protocols\r\n");

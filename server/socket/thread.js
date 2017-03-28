@@ -58,38 +58,40 @@
     };
 
     //用户关闭socket链接
-    WebSocket.prototype.close = function (data) {
-        this.refreshUserList(data);
-        this.disconnectChanel(data);
+    WebSocket.prototype.close = function (data, socket) {
+        this.refreshUserList(data, socket);
+        this.disconnectChanel(data, socket);
     };
 
-    WebSocket.prototype.disconnectChanel = function (data) {
+    WebSocket.prototype.disconnectChanel = function (data, socket) {
         //如果是协助者的断开讯号,
         var that = this;
         if (data.items.remoteRole == 1) {
             var helper = clients[data.items.remoteUid.helperUid];
             that.send(0xFF, {disconnect: true}, helper);
-        }else if(data.items.remoteRole == 2){
+        } else if (data.items.remoteRole == 2) {
             var asker = clients[data.items.remoteUid.askerUid];
             that.send(0xFF, {disconnect: true}, asker);
         }
     };
 
     //刷新好友列表
-    WebSocket.prototype.refreshUserList = function (data) {
+    WebSocket.prototype.refreshUserList = function (data, socket) {
         var that = this;
 
-        //删除断线的session，
-        clients[data.uid].destroy();
-        delete clients[data.uid];
+        socket.destroy();   //删除断线的session，
 
-        //删除断线的用户名，
-        var index = namesMap.indexOf(data.uid);
-        namesMap.splice(index, 1);
+        if (data.uid) {
+            delete clients[data.uid];
+
+            //删除断线的用户名，
+            var index = namesMap.indexOf(data.uid);
+            namesMap.splice(index, 1);
+        }
 
         //刷新用户列表到客户端
         namesMap.forEach(function (item, index) {
-            that.send(0x01, {namesMap: namesMap.join("-")}, clients[item]);
+            that.send(0xFE, {deadUid: data.uid}, clients[item]);
         });
     };
 

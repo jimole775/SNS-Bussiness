@@ -1571,6 +1571,12 @@ option {
     pointer-events: none;
 }
 
+.button-disable-state{
+    color: #939393;
+    background: #cdcdcd;
+    border-top:1px solid #b0b0b0
+}
+
 .button-disable {
     color: #5A627C;
     background: #454169;
@@ -1634,7 +1640,12 @@ option {
 .light-text {
     color: #027dff !important;
 }
-
+.unlight-text {
+    color: #02000e !important;
+}
+.dark-state {
+    background: #02000e !important;
+}
 .href-text {
     color: #007DFF !important;
 }
@@ -1820,6 +1831,7 @@ option {
     right: -1rem;
     top: -1rem;
     content: " ";
+    box-shadow: 0 1px 3px rgba(83, 83, 83, 0.3);
 }
 
 .extend-icon-basic {
@@ -1849,6 +1861,7 @@ option {
     top: 1rem;
     left: 1rem;
     transform: rotate(45deg);
+    box-shadow: -1px 0px 1px rgba(102, 114, 178, 0.5);
 }
 
 .extend-icon:before {
@@ -1902,6 +1915,7 @@ option {
     top: 0;
     z-index: 2;
     display: block;
+    box-shadow: 0 3px 3px rgba(110, 110, 110, 0.5);
 }
 
 .friend-list {

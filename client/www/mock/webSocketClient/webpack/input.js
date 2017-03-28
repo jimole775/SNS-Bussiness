@@ -86,9 +86,17 @@
                 case 0x07:
 
                     break;
+                case 0xFE:  //刷新用户列表
+                    that.reduceUserName(data.items);
+                    break;
                 case 0xFF:  //断开协助通道通知
                     $("#RMTCover").hide();
-                    tool.alert("对方已经断开连接",function(){
+                    tool.alert("对方已经断开连接", function () {
+                        $("#friendList").find("button").each(function (index, item) {
+                                $(item).find("em.light-text").remove();
+                            $(item).removeClass("event-disable button-disable-state");
+
+                        });
                         global.RMTID.role = 0;
                         //需要删除聊天泡泡
                     });
