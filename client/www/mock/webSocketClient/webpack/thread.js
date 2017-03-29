@@ -1,7 +1,7 @@
 /**
  * Created by Andy on 2017/3/23.
  */
-(function () {
+(function ($) {
 
     //被询问 请求协助，只有被询问方执行
     WebSocket.prototype.remoteSniff = function (items) {
@@ -28,13 +28,14 @@
         var helper = that.tool.getHelperName();
         $("#friendList").find("button").each(function (index, item) {
             var userName = $(item).find("span").text();
-            if (userName === helper || userName === asker) {
-                $(item).addClass("event-disable");
-                $(item).append('<em class="light-text">(通讯中...)</em>');
-                return;
+            $(item).addClass("event-disable");
+            if (userName === helper) {
+                $(item).append('<em class="light-text">(协助者)</em>');
+            } else if(userName === asker){
+                $(item).append('<em class="light-text">(求助者)</em>');
+            }else {
+                $(item).addClass("button-disable-state");
             }
-            $(item).addClass("event-disable button-disable-state");
-
         });
 
         win.jsRecvAppData(1000, {
@@ -141,15 +142,20 @@
         }
     }
 
-    WebSocket.prototype.disconnectChanel = function () {
+    WebSocket.prototype.disconnectChanel = function (items) {
         $("#RMTCover").hide();
-        tool.alert("对方已经断开连接", function () {
-            $("#friendList").find("button").each(function (index, item) {
-                $(item).find("em.light-text").remove();
+
+        global.RMTID.role = 0;
+
+        $("#friendList").find("button").each(function (index, item) {
+            var userName = $(item).find("span").text();
+            items.remoteChanelMap.forEach(function (inneritem, innerIndex) {
+                if (inneritem.askerUid === userName || inneritem.helperUid === userName)return;
                 $(item).removeClass("event-disable button-disable-state");
             });
-            global.RMTID.role = 0;
-            //需要删除聊天泡泡
+        });
+
+        tool.alert("对方已经断开连接", function () {
         });
     };
 
@@ -164,7 +170,7 @@
             var userName = $(item).find("span").text();
             if (userName === helper || userName === asker) {
                 $(item).addClass("event-disable button-disable-state");
-                $(item).append('<em class="disable-text">(远程中...)</em>');
+                $(item).append('<em class="disable-text">(忙碌...)</em>');
             }
         });
     };
@@ -177,9 +183,11 @@
             var userName = $(item).find("span").text();
             if (userName === helper || userName === asker) {
                 $(item).find("em.disable-text").remove();
-                $(item).removeClass("event-disable button-disable-state");
+                if (global.RMTID.role == 0) {
+                    $(item).removeClass("event-disable button-disable-state");
+                }
             }
         });
     }
 
-})();
+})(jQuery);

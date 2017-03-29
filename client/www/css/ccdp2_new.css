@@ -239,15 +239,15 @@ body.log {
 }
 
 .title {
-    /*background-color: #1A395A;*/
     color: #fff;
     position: fixed;
     top: 0;
     width: 100%;
-    z-index: 990;
+    z-index: 9999;
     height: 4.5rem;
     overflow: hidden;
     border-top: 1px solid #416A96;
+
     /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#295788+0,1b3a5b+100 */
     background: #295788; /* Old browsers */
     background: -moz-linear-gradient(top, #295788 0%, #1b3a5b 100%); /* FF3.6-15 */
@@ -1898,7 +1898,7 @@ option {
     position: fixed;
     right: 1rem;
     top: 1rem;
-    z-index: 990;
+    z-index: 9999;
     background: rgba(250, 250, 250, 0.7);
     box-shadow: 3px 3px 3px rgba(0, 0, 0, .7);
 }
@@ -1968,6 +1968,7 @@ option {
     display: block;
     height: 3.6rem;
     border: 1px solid #1A3755;
+    outline:none;
     border-radius: 4px;
     border-bottom: 1px solid #1d2f42;
 }
@@ -1978,8 +1979,8 @@ option {
     top: 0;
     position: absolute;
     left: 0;
-    background: url(../images/common/menu.png) center center no-repeat;
-    background-size: 50%;
+    background: url(../images/friend_list.png) center center no-repeat;
+    background-size: 70%;
     border: none;
     border-top: 1px solid #52657a;
     border-bottom: 1px solid #1A3755;

@@ -126,10 +126,10 @@
         //通知远程业务中的两方
         if (data.items.remoteRole == 1) {
             var helper = clients[helperUid];
-            that.send(0xFF, {disconnect: true}, helper);
+            that.send(0xFF, {remoteChanelMap: remoteChanelMap}, helper);
         } else if (data.items.remoteRole == 2) {
             var asker = clients[askerUid];
-            that.send(0xFF, {disconnect: true}, asker);
+            that.send(0xFF, {remoteChanelMap: remoteChanelMap}, asker);
         }
     };
 

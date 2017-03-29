@@ -20,7 +20,7 @@
         setTimeout(function () {
             $("#headBarRight").show();
 
-            $("#headBarRight").on("click",function(){
+            $("#headBarRight").find(".head-bar-right-button").on("click",function(){
                 $("#friendFrame").show();
                 $("#headBarRight").find(".tip-pop").hide().text("");
             });

@@ -99,7 +99,7 @@
                     that.reduceUserName(data.items);
                     break;
                 case 0xFF:  //断开协助通道通知
-                    that.disconnectChanel();
+                    that.disconnectChanel(data.items);
                     break;
                 default :
                     break;
