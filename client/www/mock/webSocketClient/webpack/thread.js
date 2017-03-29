@@ -31,8 +31,10 @@
             $(item).addClass("event-disable");
             if (userName === helper) {
                 $(item).append('<em class="light-text">(协助者)</em>');
+                $(item).parent("li").append('<i class="remote-disconnect-btn"></i>');
             } else if(userName === asker){
                 $(item).append('<em class="light-text">(求助者)</em>');
+                $(item).parent("li").append('<i class="remote-disconnect-btn"></i>');
             }else {
                 $(item).addClass("button-disable-state");
             }
@@ -83,9 +85,11 @@
                 if (originNames.indexOf(item) < 0) {
                     if (that.tool.getUserName() != item) {
                         if (global.RMTID.role != 0) {
-                            friendList.append('<li><button class="item-button event-disable button-disable-state" style="height:3.6rem;"><span>' + item + '</span></button></li>');
+                            friendList.append(
+                                '<li><button class="item-button event-disable button-disable-state" style="height:3.6rem;">' +
+                                '<span data-id="userName">' + item + '</span></button></li>');
                         } else {
-                            friendList.append('<li><button class="item-button" style="height:3.6rem;"><span>' + item + '</span></button></li>');
+                            friendList.append('<li><button class="item-button" style="height:3.6rem;"><span data-id="userName">' + item + '</span></button></li>');
                         }
                         handleNewFriendTipsPop();
                     }
@@ -100,9 +104,9 @@
             if (that.tool.getUserName() === namesMap[0]) return;
 
             if (global.RMTID.role != 0) {
-                friendList.append('<li><button class="item-button event-disable button-disable-state" style="height:3.6rem;"><span>' + namesMap[0] + '</span></button></li>');
+                friendList.append('<li><button class="item-button event-disable button-disable-state" style="height:3.6rem;"><span data-id="userName">' + namesMap[0] + '</span></button></li>');
             } else {
-                friendList.append('<li><button class="item-button " style="height:3.6rem;"><span>' + namesMap[0] + '</span></button></li>');
+                friendList.append('<li><button class="item-button " style="height:3.6rem;"><span data-id="userName">' + namesMap[0] + '</span></button></li>');
             }
 
 
