@@ -45,7 +45,7 @@
                     tool.warnTip("#userName", "那么帅气的名字已经被抢了");
                     return;
                 }
-                if(/[`~!！?？@#$%^&'"“”\{}\[\]()\\\/\*]/.test(input.val())){
+                if (/[`~!！?？@#$%^&'"“”\{}\[\]\(\)\\\/\*]/.test(input.val())) {
                     tool.warnTip("#userName", "不允许有特殊字符");
                     return;
                 }
@@ -80,3 +80,60 @@
     }
 
 })(jQuery);
+
+
+//在PC端进行测试的时候，很多时候都需要重新拖拽窗口大小，由于页面的布局某些部分是由JS计算的，
+//所以监听onresize之后，需要进行特殊处理
+(function () {
+    var cumulation = 0;
+
+    var resizeFlag = false;
+    var watcher = null;
+    window.onresize = function () {
+
+        if (cumulation <= 0) {
+            watcher = setInterval(function () {
+                if (cumulation > 0)cumulation--;
+                if (cumulation <= 0 && resizeFlag) {
+                    clearInterval(watcher);
+                    watcher = null;
+                    reLayout();
+                    resizeFlag = false;
+                }
+            }, 75);
+        }
+        cumulation++;
+        resizeFlag = true;
+    };
+
+//如果窗口的大小改变,就重载资源(主要为了在PC端测试时使用)
+    function reLayout() {
+        console.log("重新布局");
+        cumulation = 0;
+        win.CONSTANT.WINDOW_HEIGHT = document.body.clientHeight;
+        win.CONSTANT.WINDOW_WIDTH = document.body.clientWidth;
+        win.CONSTANT.EVENT_TYPE.START = "ontouchstart" in window ? "touchstart" : "mousedown";
+        win.CONSTANT.EVENT_TYPE.MOVE = "ontouchmove" in window ? "touchmove" : "mousemove";
+        win.CONSTANT.EVENT_TYPE.END = "ontouchend" in window ? "touchend" : "mouseup";
+
+        //carLogo布局重新计算
+        $(".module-list-ul").each(function () {
+            var children = $(this).children("li");
+            var liCount = children.length;
+            var lineCount = parseInt(liCount / 3) + (liCount % 3 == 0 ? 0 : 1);
+            var childWidth = win.CONSTANT.WINDOW_WIDTH / 3;
+            // 设置li元素的高度
+            children.each(function (index, item) {
+                $(item).css({
+                    "height": childWidth * 1.1,
+                    "width": childWidth
+                });
+            });
+        });
+
+        tool.layoutTable();//由于数据量有点大,css布局不合理,所以,拿到数据之后再格式化表格
+        setTimeout(function () {
+            tool._scroll.run();//表格显示之后再添加滑动插件，这样的计算更准确
+        }, 210);
+    }
+})();

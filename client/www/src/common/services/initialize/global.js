@@ -17,13 +17,17 @@
 	Array.prototype.unDuplicate = function (condition) {
 		var result = [];
 		var len = this.length;
-		result.push(this[0]);
+		//result.push(this[0]);
 		for (var i = 1; i < len; i++) {
-			var cur = condition ? this[i - 1][condition] : this[i - 1];
-			var next = condition ? this[i][condition] : this[i];
-			if (cur !== next) {
-				result.push(this[i]);
+			var cur = condition ? this[i][condition] : this[i];
+			if(result.indexOf(cur) === -1){
+				result.push(cur);
 			}
+			//var cur = condition ? this[i - 1][condition] : this[i - 1];
+			//var next = condition ? this[i][condition] : this[i];
+			//if (cur !== next) {
+			//	result.push(this[i]);
+			//}
 		}
 		return result;
 	};

@@ -12,6 +12,9 @@ CreateHttp.prototype.init = function(){
 CreateHttp.prototype.run = function(){
 	var that = this;
 	that.http.createServer(function (req, res) {
+		req.on("data",function(data){
+			console.log(data);
+		});
 		that.writeHead(req, res);
 		that.response(req, res);
 
