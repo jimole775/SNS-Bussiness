@@ -12,6 +12,9 @@ CreateHttp.prototype.init = function(){
 CreateHttp.prototype.run = function(){
 	var that = this;
 	that.http.createServer(function (req, res) {
+		req.on("data",function(data){
+			console.log(data);
+		});
 		that.writeHead(req, res);
 		that.response(req, res);
 
@@ -44,7 +47,6 @@ CreateHttp.prototype.writeHead = function(req, res){
 
 	res.writeHead(200, {
 		//'Cache-Control':"max-age=" + 1800,
-		"Access-Control-Allow-Origin":"*",
 		"Content-Type": resType
 	});
 };

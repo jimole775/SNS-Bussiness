@@ -1,8 +1,8 @@
+
 /**
  * Created by Andy on 2017/1/12.
  */
 var win = window;
-
 win.external = win.external ? win.external : {};
 win.devLoaded = false;
 win.external.SendToApp = function (action, msg) {
@@ -30,6 +30,8 @@ win.external.SendToApp = function (action, msg) {
 		}
 
 };
+
+
 
 win.external.RequestDataFromServer = function (action, pack, abandonParam){
 	//offline mock,don't need to handles badRequest status!
