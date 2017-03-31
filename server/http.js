@@ -44,6 +44,7 @@ CreateHttp.prototype.writeHead = function(req, res){
 
 	res.writeHead(200, {
 		//'Cache-Control':"max-age=" + 1800,
+		"Access-Control-Allow-Origin":"*",
 		"Content-Type": resType
 	});
 };
