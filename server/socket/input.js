@@ -2,9 +2,9 @@
  * Created by Andy on 2017/3/14.
  */
 (function () {
-    var tool = require("./tools.js");
+    const tool = require("./tools.js");
     var key;
-    var mask = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
+    const mask = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
     function WebSocket() {}
     WebSocket.prototype.run = function () {
         var that = this;

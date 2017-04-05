@@ -2,8 +2,8 @@
  * Created by Andy on 2017/3/23.
  */
 
-var tool = require("./tools.js");
-var WebSocket = require("./input.js");
+const tool = require("./tools.js");
+const WebSocket = require("./input.js");
 WebSocket.prototype.send = function (status, data, socket) {
     var that = this;
     var emitProtocolMap = {

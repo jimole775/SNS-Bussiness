@@ -3,7 +3,7 @@
  */
 (function(){
 
-var tool = {
+const tool = {
 
     //websocket数据的加解密工作
     decodeDataFrame:function(e){
