@@ -261,32 +261,6 @@
 			//首先隐藏遮罩，才能让提示框可以点击，如果用户选择【继续等待】，再将遮罩层返还，
 			//对于提示网络不稳定之前的 弹框 和 加载遮罩，不管用户如何选择，都必须原样返还
 			tool.alert(
-				//["网络不稳定，可能无法正常运行远程协助，请选择相应的操作。\n选择【取消远程】之后，将由您自行操作，如果您对业务流程不了解，请根据右下角的按钮操作退出业务", "继续等待", "取消远程"],
-
-				//function () {
-				//	//通知APP下次不要发
-				//	tool.loading.status.disable = false;
-				//
-				//	win.appService.sendDataToApp(49167, "", "");
-				//
-				//	//隐藏业务端遮罩层，让业务端可以正常退出业务
-				//	ShowRMTCover();
-				//
-				//	//确保获取文本之后，返还遮罩之前，遮罩层没有做任何的修改；
-				//	if (loadingTxt && tool.loading.status.text) {
-				//		tool.loading({text: tool.loading.status.text});
-				//		loadingTxt = "";
-				//	}
-				//
-				//	if (tipsParams)
-				//	//@用延迟来错开 当前回调函数会关掉tipsBox的冲突，否则，最后的一步操作永远会关闭提示框
-				//		setTimeout(function () {
-				//			tool.alert.apply(tool, tipsParams);
-				//			tipsParams = "";
-				//		}, 450);
-				//
-				//
-				//},
 				"网络通讯不稳定，远程协助已经无法继续，点击确定之后，退出协助模式",
 				function () {
 					tool.loading.status.disable = false;
@@ -311,24 +285,6 @@
 		}
 		else {
 			tool.alert(
-				//["网络不稳定,可能无法正常运行远程协助，选择相应的操作", "继续等待", "退出远程"],
-
-				//function () {
-				//	tool.loading.status.disable = false;
-				//	win.appService.sendDataToApp(49167, "", "");
-				//	if (loadingTxt) {
-				//		tool.loading({text: tool.loading.status.text});
-				//		loadingTxt = "";
-				//	}
-				//	if (tipsParams)
-				//	//@用延迟来错开当前回调 函数 会关掉tipsBox的冲突，否则，最后的一步操作永远会关闭提示框
-				//		setTimeout(function () {
-				//			tool.alert.apply(tool, tipsParams);
-				//			tipsParams = "";
-				//		}, 450);
-				//
-				//	tool.loading.status.disable = false;
-				//},
 				"网络通讯不稳定，远程协助已经无法继续，点击确定之后，退出协助模式",
 				//如果是控制机，发送3999，关闭UI窗口
 				function () {win.appService.sendDataToApp(3999, "", "");}

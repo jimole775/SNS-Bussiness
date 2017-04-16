@@ -7,6 +7,8 @@
 	var clockStart = false;
 	var clocker = 0;
 
+	var processStore = [];
+
 	var split_mark_outer = "_!_";
 	var split_mark_inner = "_|_";
 	var mouseEvent = {};                           //存储鼠标信息
