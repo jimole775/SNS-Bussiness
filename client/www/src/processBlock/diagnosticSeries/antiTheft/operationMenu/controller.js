@@ -110,8 +110,10 @@
                     "cartype": global.businessInfo.carType
                 },
                 dataPack,
-                win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.specialPIDs, [dataPack]),
-                    [PIDsRequest, global.disconnectOBD])
+                win.server.addRetryFn(
+                    win.server.addCallbackParam(win.serverRequestCallback.specialPIDs, [dataPack]),
+                    [PIDsRequest, global.disconnectOBD]
+                )
             );
         }
 
@@ -148,7 +150,6 @@
             }
 
         };
-
 
         $scope.menuJump = function (pid) {
             win.RMTClickEvent.menuJump(pid);
