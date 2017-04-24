@@ -24,7 +24,6 @@
 			$scope.stateText = "开始";
 			cacheChannel = tool.toHex(value, 8);
 			document.getElementById("Title").innerText = "TCP大众基本调整";
-			//tool.processBar('正在初始化数据...');
 			win.devService.sendDataToDev('310920' + cacheChannel);
 			bindBottomBtn();
 			tool.layout("baseadjuster", 1);
@@ -95,7 +94,6 @@
 				$scope.isBtnBackEnable = true;
 				return;
 			}
-			//tool.processBar('正在获取支持项...');
 
 			win.server.request(
 				global.businessInfo.serverType,
@@ -115,7 +113,6 @@
 				tool.alert('服务器无数据支持',
 				           function () {
 					           tcpBaseAdjusterBack();
-					           //tool.processBar("");
 				           }
 				);
 				return;
@@ -229,7 +226,6 @@
 					showView = false;
 					$scope.stateText = '继续';
 					$scope.isBtnBackEnable = true;
-					//tool.processBar("暂停");
 				});
 				return;
 			}

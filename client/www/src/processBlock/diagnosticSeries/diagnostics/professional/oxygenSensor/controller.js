@@ -51,7 +51,6 @@
 				tool.alert('无任何传感器组支持',
 				           function () {
 					           oxygenIsBtnDisable();
-					           //tool.processBar("");
 				           }
 				);
 				return;
@@ -73,7 +72,6 @@
 			tool.alert('设备数据读取失败',
 			           function () {
 				           oxygenIsBtnDisable();
-				           //tool.processBar("");
 			           }
 			);
 		};
@@ -101,7 +99,6 @@
 				tool.alert('服务器无数据支持',
 				           function () {
 					           oxygenIsBtnDisable();
-					           //tool.processBar("");
 				           }
 				);
 				return;
@@ -116,7 +113,6 @@
 		};
 
 		function FunGetOxygenSensorSupport() {
-			//tool.processBar("正在获取支持项", true);
 			if (showView)tool.loading({pos: "body", text: "获取数据..."});
 			if (YhSupportService._0x18.value)
 				win.devService.sendDataToDev("310918" + $scope.curGroupItem.pid);
@@ -161,7 +157,6 @@
 				tool.alert('服务器无数据支持',
 				           function () {
 					           oxygenIsBtnDisable();
-					           //tool.processBar("");
 				           }
 				);
 				return;
@@ -187,14 +182,11 @@
 			tool.alert('设备数据读取失败',
 			           function () {
 				           oxygenIsBtnDisable();
-				           //tool.processBar("");
 			           }
 			);
 		};
 
 		function FunGetOxygenSensorOriginalData() {
-
-			//tool.processBar("正在计算信息值", true);
 
 			//310919 + 氧传感器组pid + 数据pid
 			win.devService.sendDataToDev("310919" + $scope.curGroupItem.pid + $scope.curSupports[$scope.curSupportsIndex].pid);
@@ -248,14 +240,9 @@
 			curSupports.forEach(function (support) {
 
 				DataPack.pids.push({
-					//pid: support.pid,
 					originalCurr: support.originalCurr,
 					originalMin: support.originalMin,
 					originalMax: support.originalMax,
-					//appid: support.appid,
-					//diagid: support.diagid,
-					//fomula: support.fomula,
-					//fomulaname: support.fomulaname,
 					index: support.index
 				});
 			});
@@ -298,7 +285,6 @@
 			});
 
 			safeApply(function () {
-				//tool.processBar("信息值计算完毕");
 				$scope.oxygenSensorBtnDisable = true;
 			});
 			tool.loading(0);
@@ -373,7 +359,6 @@
 			var curData = $scope.curSupports;
 			curData.forEach(function () { curData.ans = 'N/A'; });
 			safeApply(function () { $scope.oxygenSensorBtnDisable = true; });
-			//tool.processBar(meg);
 			tool.loading(0);
 		}
 	}]);

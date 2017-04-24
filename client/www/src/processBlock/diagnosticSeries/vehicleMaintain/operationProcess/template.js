@@ -13,7 +13,6 @@
 		'</div>',
 		'<p class="box-p" ng-show="BombBoxType===\'02\'">',
 		'<label>',
-		//<input id="inputID" type="text" readonly onclick="RMTClickEvent.iScrollPluginDigit('inputID')"/>
 		'<input id="inputID" type="number"/>',
 		'</label>',
 		'</p>',

@@ -40,7 +40,6 @@
 			}, 50);
 
 			document.getElementById ("Title").innerText = "诊断服务列表";
-			//tool.processBar ("请选择诊断项目");
 		};
 
 
@@ -85,7 +84,6 @@
 				tool.alert ('获取支持的诊断服务列表失败',
 					function () {
 						operationMenuQuit ();
-						//tool.processBar ("");
 					}
 				);
 		};
@@ -118,8 +116,6 @@
 		};
 
 		win.devService.Fun710981_pro = function (varRecvData) {
-			//tool.processBar ("获取服务列表失败");
-
 			tool.alert ('尝试与车辆连接失败！<br>请确认：<br>1.OBD16接口已经连接稳定。<br>2.汽车点火已经处于ON状态且引擎未打开。',
 				function () { operationMenuQuit (); }
 			);

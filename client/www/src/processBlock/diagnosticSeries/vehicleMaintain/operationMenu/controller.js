@@ -18,7 +18,6 @@
          */
         win.moduleEntry.operationList = function (address, prevFormId) {
             showView = true;
-            //tool.processBar("");
             win.devService.sendDataToDev("310901" + address);
             tool.loading({pos: "body", text: "与设备通信中..."});
         };
@@ -86,7 +85,6 @@
         };
 
         win.devService.Fun710981 = function (varRecvData) {
-            //tool.processBar("获取服务列表失败");
 
             tool.alert('CCDP设备尝试与车辆连接失败！<br>请确认：<br>1.OBD16接口已经连接稳定。<br>2.汽车点火已经处于ON状态且引擎未打开。',
                 function () {

@@ -3,7 +3,6 @@
  */
 (function() {
 	document.getElementById("processBlock").innerHTML += [
-	//document.body.innerHTML += [
 		'<div id="ShowDynamicData" class="data-box " ng-controller="DynamicDataCtrl">',
 		'   <div class="scroll-table-header">',
 		'       <div class="groupNav">',

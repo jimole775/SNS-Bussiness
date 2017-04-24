@@ -19,25 +19,12 @@
 		$scope.DTCTotal = [];
 		$scope.bDoClear = false;                //清除故障码标记
 		$scope.scanState = SystemScanState['scanning'];
-		//$scope.ContactSystemTotal = "N/A";
 		$scope.scanProcess = "初始化扫描进程";
 		$scope.clickItemIndex = 0;
 
 		$scope.originalSystemListIndex = SystemManager.index;
 		$scope.webViewSystemList_arr = [];                              //*****关键数据，用于webView模板绑定*****
 		$scope.originalSystemList_arr = SystemManager.systemList;       //*****关键数据，用于同服务器交互*****
-
-		////车型信息入口
-		//$scope.descRecordEntry = function () {
-		//	win.sendRMTEventToApp ("moduleEntry.carDescRecordEnter", []);
-		//	win.moduleEntry.carDescRecordEnter ();
-		//};
-		//
-		////流程记录入口
-		//$scope.devMessagesEnter = function () {
-		//	win.sendRMTEventToApp ("moduleEntry.devMessagesEnter", []);
-		//	win.moduleEntry.devMessagesEnter ();
-		//};
 
 		win.moduleEntry.searchDTC = function (systemList, prevFormId) {
 			showView = true;
@@ -97,7 +84,6 @@
 				});
 			}
 
-			//win.appService.sendDataToApp (1020, JSON.stringify (win.global.DTCLog.detail), "");   //退出之前，把故障信息上传给APP；
 			tool.layout(thisBoxId, 0);
 			win.moduleEntry.carType(-1);
 			reset();
@@ -110,7 +96,6 @@
 			$scope.DTCTotal.length = 0;
 			$scope.bDoClear = false;                //清除故障码标记
 			$scope.scanState = SystemScanState['scanning'];
-			//$scope.ContactSystemTotal = "N/A";
 			$scope.scanProcess = "初始化扫描进程";
 			$scope.clickItemIndex = 0;
 
@@ -118,6 +103,7 @@
 			showView = false;
 			webViewListIndex = 0;               //用于界面显示的系统的下标；
 
+			scanStateWtach();
 		}
 
 		//监听扫描状态，以此更新 底部按钮文本
@@ -228,7 +214,6 @@
 
 				tool.alert('系统未连接，请检查设备状态，或者重新扫描',
 				           function () {
-					           //tool.processBar("");
 				           }
 				);
 
@@ -245,7 +230,6 @@
 				else {
 					tool.alert('设备无故障信息',
 					           function () {
-						           //tool.processBar("");
 					           }
 					)
 				}
@@ -369,10 +353,7 @@
 
 			//把处于连接状态的系统信息显示到界面；
 			safeApply(function () {
-				$scope.webViewSystemList_arr.push(getCurrentSystem());
-				var realIndex = webViewListIndex - 1;                                               //webViewListIndex
-			                                                                                        //是显示给用户的下标，起始值为1
-				//global.rootCache.carSystem[realIndex] = $scope.webViewSystemList_arr[realIndex].name;     //缓存系统信息，以便显示给用户
+				$scope.webViewSystemList_arr.push(getCurrentSystem());                                         //是显示给用户的下标，起始值为1
 			});
 			Fun310905();
 		};
@@ -604,12 +585,6 @@
 					if (!items.hasOwnProperty(i))continue;
 					var item = items[i];
 					if (item.data.length == 0) {
-						/* getSystemByIndex(params.index).dtcList.push(
-						 new Dtc({
-						 danwei: item.key,
-						 name: "无有效数据",
-						 status: ""
-						 }));*/
 					}
 
 					//如果data的长度只有1，就是历史 或者 当前 故障
@@ -707,20 +682,7 @@
 							],
 							dtcList: []
 						}
-					],
-
-					getCurrentSystem: function () {
-						return this.systemList[this.index];
-					},
-
-					getSystemByIndex: function (index) {
-						return this.systemList[index];
-					},
-
-					//更新扫描随机数
-					updataScanRandomString: function () {
-						scanRandom = randomString();
-					}
+					]
 				};
 			});
 

@@ -22,7 +22,6 @@
 
         //读取故障码
         win.moduleEntry.funReadDTC = function () {
-            //tool.layout("ShowOperate", 0);
             showView = true;
             document.getElementById("Title").innerText = "故障码信息";
 
@@ -52,11 +51,9 @@
                 devSupportState.push("05");
             }
             if (readDTCCommand.length > 0) {
-                //tool.processBar('正在读取故障码', true);
                 FunReadNextDTC();
             } else
                 tool.alert('设备不支持故障码读取',function () {
-                    //tool.processBar("无故障码信息");
                 });
 
         };
@@ -79,7 +76,6 @@
                     case 1: //当支持1个故障状态时
                         if (dev8xLen == 1 || dev0x00Len == 1) {
                             tool.alert('设备无故障码信息',function () {
-                                //tool.processBar("");
                             });
                         }
                         break;
@@ -89,7 +85,6 @@
                             dev0x00Len == 2 ||
                             (dev8xLen == 1 && dev0x00Len == 1)) {
                             tool.alert('当前车型无故障码信息',function () {
-                                //tool.processBar("");
                             });
                         }
                         break;
@@ -99,7 +94,6 @@
                             (dev8xLen == 1 && dev0x00Len == 2) ||
                             (dev8xLen == 2 && dev0x00Len == 1)) {
                             tool.alert('当前车型无故障码信息',function () {
-                                //tool.processBar("");
                             });
                         }
                         break;
@@ -180,7 +174,6 @@
             if(!responseObject.items.length){
                 tool.alert('服务器无任何数据',
                     function () {
-                        //tool.processBar("");
                     }
                 );
                 return;
@@ -203,11 +196,6 @@
                         var item = responseObject.items[i];
                         var itemDataLen = item.data.length;
                         if (itemDataLen == 0) {
-                            /*$scope.dtcList.push({
-                             danwei: item.key,
-                             name: "无有效数据",
-                             status: ""
-                             });*/
                         } else if (itemDataLen == 1 && (params == dtcHistory || params == dtcCurrent)) {
                             $scope.dtcList.push({
                                 show: true,
@@ -240,7 +228,6 @@
 
                     if ($scope.dtcList.length == 0) {
                         tool.alert('设备无故障码信息',function () {
-                            //tool.processBar("");
                         });
                         return;
                     }
@@ -259,12 +246,10 @@
         win.moduleEntry.funClearDTC = function () {
             showView = true;
             tool.loading({text: '故障码清除中...'});
-            //tool.processBar('正在清除故障码', true);
             win.devService.sendDataToDev("310907");
         };
 
         win.devService.Fun710907_pro = function () {
-            //tool.processBar('清除故障完成');
             tool.loading(0);
             tool.alert('清除故障完成',function () { DTCBack(); });
         };
@@ -272,7 +257,6 @@
         win.devService.Fun710987_pro = function () {
             tool.loading(0);
             tool.alert('清除故障失败',function () { DTCBack(); });
-            //tool.processBar('清除故障失败');
         };
 
 

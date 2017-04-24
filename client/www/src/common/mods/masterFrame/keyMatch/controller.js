@@ -12,7 +12,7 @@
 
 		$scope.publicFileName = '';
 		$scope.dbFilename = '';
-		//$scope.helpPopData = [];
+
 		//如果需要使用id（jquery），就直接从这里获取
 		var thisBox = $element;
 		var thisBoxId = $element.attr("id");
@@ -53,7 +53,6 @@
 		 * */
 		$scope.handleSelect = function (parentIndex, item) {
 			if (item["N"] && item["N"]["nodeaddress"].indexOf("0001") === 0) {
-				//helpInfoRequest(1, item["N"]["dbfilename"], item["N"]["publicfilename"]);
 				win.RMTClickEvent.handleHelpType(1, item["N"]["dbfilename"], item["N"]["publicfilename"])
 			}
 			else{
@@ -67,14 +66,7 @@
 		 * @param item
 		 * */
 		win.RMTClickEvent.keyMatchHandleSelect = function (curClickPageIndex, item) {
-			//如果获取到的nodeAddress的首位为0001，就是请求帮助菜单
-			//if (item["N"] && item["N"]["nodeaddress"].indexOf("0001") === 0) {
-				//请求模式1的帮助菜单
-				//helpInfoRequest(1, item["N"]["dbfilename"], item["N"]["publicfilename"]);
-			//}
-			//else {
 				handlePageTurning(curClickPageIndex, item);
-			//}
 		};
 
 		function handlePageTurning(curClickPageIndex, item) {
@@ -102,7 +94,6 @@
 					$scope.pagesOptionChosenRecord.splice($scope.pagesDataIndex - 1);
 					$scope.pagesData.splice($scope.pagesDataIndex);
 
-					//global.rootCache.carType[$scope.pagesOptionChosenRecord.length] = item.name;
 					$scope.pagesOptionChosenRecord[$scope.pagesOptionChosenRecord.length] = item.name;
 					win.global.DTCLog.systemName = item.name;
 
@@ -130,8 +121,6 @@
 
 			//第三种情况：正常选择，正常添加记录长度，监听器会做后续工作
 			else {
-				//缓存车型选择信息到车辆信息页面
-				//global.rootCache.carType[$scope.pagesOptionChosenRecord.length] = item.name;
 
 				//手动更改parents的值，让$watchCollection监听器生效
 				$scope.pagesOptionChosenRecord[$scope.pagesOptionChosenRecord.length] = item.name;
@@ -219,9 +208,7 @@
 						$scope.dbFilename = item['N']['dbfilename'];
 						$scope.publicFileName = item['N']['publicfilename'];
 
-						safeApply(function () {
-							//tool.processBar("获取车型系统完成");
-						});
+						safeApply(function () {});
 						outputPrompt();
 						return;
 					}
@@ -290,7 +277,6 @@
 			if(!responseObject.items.length){
 				tool.alert('服务器无任何数据',
 				           function () {
-					           //tool.processBar("");
 					           backToPrvLevel();
 				           }
 				);
@@ -313,7 +299,6 @@
 				safeApply(function () {
 					bindBottomBtn();
 					tool.layout(thisBoxId, 1);
-					//tool.processBar('请选择');
 					$scope.pagesData[$scope.pagesDataIndex] = items;
 				});
 

@@ -8,13 +8,18 @@
 
 		//监听远程协助的身份，global.remoteRole默认为0（正常业务），APP推送身份信息的时候是有延迟的！
 		$scope.isRMT = 0;
+		var time = 0;
 		var watcher = setInterval(function () {
-			//if (global.RMTID.role != 0) {
+			time += 100;
+			if (global.RMTID.role != 0 || time >= 5000) {
+
 				$scope.$apply(function () {
 					$scope.isRMT = global.RMTID.role;
 				});
-				//clearInterval(watcher);
-			//}
+
+				clearInterval(watcher);
+				time = null;
+			}
 		}, 100);
 
 		$scope.charSate = {};

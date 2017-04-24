@@ -117,7 +117,6 @@
 		 ******************************************/
 		function FunGetGroup() {
 			if (showView)tool.loading({pos: "body", text: '获取数据...'});
-			//tool.processBar('正在获取分组信息', true);
 			var dataPack = {dbfilename: global.businessInfo.dbFilename, pub: global.businessInfo.pubFilename};
 			win.server.request(
 				global.businessInfo.serverType,
@@ -138,7 +137,6 @@
 				safeApply(function () {
 					$scope.hasGroup = false;
 					$scope.currentGroupName = "无分组信息";
-					//tool.processBar('无任何分组信息');
 				});
 
 				setTimeout(function () { FunGetPid(); }, 25);
@@ -163,7 +161,6 @@
 			safeApply(function () {
 				$scope.btnConfirmDisable = true;
 				$scope.btnAssistAndBack = true;
-				//tool.processBar('分组信息获取成功');
 			});
 
 			tool.loading(0);
@@ -174,7 +171,6 @@
 		 */
 		function FunGetPid() {
 			if (showView)tool.loading({pos: "body", text: '获取数据...'});
-			//tool.processBar('正在获取支持项', true);
 			$scope.btnConfirmDisable = false;
 			$scope.btnAssistAndBack = false;
 
@@ -220,10 +216,6 @@
 					[FunGetPid, dynamicBtn_Assist_Back])
 				);
 
-				//win.RequestDataFromServer(
-				//	"CALC_ONE_PID", {dbfilename: global.businessInfo.dbFilename, pub: global.businessInfo.pubFilename},
-				//	function (responseObject) { serverRequestCallback.CALC_ONE_PID(responseObject) }
-				//);
 			}
 			else
 				Fun310912();
@@ -282,7 +274,6 @@
 			if (count <= 0)
 				tool.alert('无任何支持项信息', function () {
 					relativeButtonStatus();
-					//tool.processBar("");
 				});
 			else
 				wrapPids4GetSupports(count, varRecvData);
@@ -292,7 +283,6 @@
 		win.devService.Fun710992 = function (varRecvData) {
 			tool.alert('设备数据读取失败', function () {
 				relativeButtonStatus();
-				//tool.processBar("");
 			});
 		};
 
@@ -301,7 +291,6 @@
 			if (count <= 0)
 				tool.alert('无任何支持项信息', function () {
 					relativeButtonStatus();
-					//tool.processBar("");
 				});
 			else
 				wrapPids4GetSupports(count, varRecvData);
@@ -311,7 +300,6 @@
 		win.devService.Fun710988 = function () {
 			tool.alert('设备数据读取失败', function () {
 				relativeButtonStatus();
-				//tool.processBar("");
 			});
 		};
 
@@ -342,7 +330,6 @@
 		 * @param dataPack
 		 */
 		function FunGetSupportsFromServer(dataPack) {
-			//tool.processBar('正在解析支持项', true);
 			win.server.request(
 				global.businessInfo.serverType,
 				{
@@ -363,7 +350,6 @@
 				tool.alert('服务器无数据支持',
 				           function () {
 					           dynamicBtn_Confirm_Assist_Back();
-					           //tool.processBar("");
 				           }
 				);
 				return;
@@ -374,7 +360,6 @@
 			if (itemLen <= 0) {
 				tool.alert('无任何支持项信息', function () {
 					relativeButtonStatus();
-					//tool.processBar("");
 				});
 				return;
 			}
@@ -400,7 +385,6 @@
 			safeApply(function () {
 				$scope.btnConfirmDisable = true;
 				$scope.btnAssistAndBack = true;
-				//tool.processBar('支持项解析成功');
 			});
 		};
 
@@ -446,7 +430,6 @@
 					break;
 				default :
 					tool.alert("到设备指令未定义", function () {
-						//tool.processBar("");
 					});
 					break;
 			}
@@ -605,7 +588,6 @@
 			var param = {
 				dataPack: dataPack,
 				selectedGroupName: $scope.currentGroupName,
-				//updatetime: (new Date()).getTime(),
 				index: $scope.calculateIndex
 			};
 
@@ -642,7 +624,6 @@
 			if (!showView) return;
 
 			if ($scope.state === State.idle) {
-				//tool.processBar('暂停');
 				return;
 			}
 
@@ -653,7 +634,6 @@
 			if (countStepFor710913 > supListLen) countStepFor710913 = supListLen;
 
 			safeApply(function () {
-				//tool.processBar('正在计算信息值' + countStepFor710913 + "/" + supListLen);
 			});
 
 			//todo 刷新信息值为“N/A”，每次刷新3条
@@ -676,10 +656,6 @@
 		 * 设备响应失败和服务器计算为空时的处理；
 		 */
 		function checkDevResponse() {
-			/*  var len_8x = $scope.devResponse8x._89.length +
-			 $scope.devResponse8x._9C.length +
-			 $scope.devResponse8x._93.length;*/
-
 			var indexArray = [];
 			if ($scope.devResponse8x._89.length > 0) {
 				indexArray = _.filter($scope.devResponse8x._89, function (index) {
@@ -718,9 +694,6 @@
 			if ($scope.DynamicWebView && $scope.DynamicWebView.length > 0) {
 				var i = $scope.DynamicWebView.length;
 				while (i--) $scope.DynamicWebView[i].ans = 'N/A';
-
-				//处于数据流阶段，无数据只给出提示，不中断流程；
-				//tool.processBar('无任何信息值');
 				safeApply(function () {});
 			}
 		}
@@ -831,9 +804,6 @@
 				$scope.DynamicWebView[_index].check = _checked;
 			});
 
-			//safeApply(function () {
-			//    $scope.DynamicWebView[index].check = checked;
-			//});
 		};
 
 		function relativeButtonStatus() {
@@ -848,7 +818,6 @@
 				btn1Text: function () { return $scope.stateText; },                 //绑定函数，可以动态抓取 $scope.stateText 的值
 				btn2Text: '返回',
 				btn1Disable: function () { return $scope.btnConfirmDisable; },
-				//btn2Disable: function () { return $scope.btnConfirmDisable; },
 				btn1Callback: function () { dynamicConfirm(); },
 				btn2Callback: function () { dynamicBack(); }
 			})
@@ -883,7 +852,6 @@
 					//这个标记的意义在于，如果正在进行数据流任务，就把其他不必要的数据丢弃掉，比如：设备数据
 					win.global.RMTID.dataStream = false;
 					showCheckBox();
-					//tool.processBar('暂停');
 				});
 				return;
 			}
@@ -904,12 +872,10 @@
 			//如果未选中任何选项, 阻断流程;
 			if (checkItemStore.length <= 0) {
 				tool.alert('未选中任何支持项', function () {
-					//tool.processBar("");
 				});
 				return;
 			}
 
-			//tool.processBar('正在加载数据', true);
 			hideCheckBox();
 
 			//让远程操控端无法连续点击按钮，第一个数据从业务机返回时，再隐藏加载遮罩
@@ -1102,8 +1068,6 @@
 			//动态数据默认每一页数据量为7；
 			win.global.DataStream_CurPageLinesCount = 7;
 
-			//tool.processBar("");
-
 			//全选按钮
 			$scope.isCheck = false;
 			$scope.isCheckAll = false;
@@ -1165,7 +1129,6 @@
 		this.pakpos = object.pakpos;
 		this.fomula = object.fomula;
 		this.fomulaname = object.fomulaname;
-		//this.updatetime = 0;//更新时间
 		this.ans = "";
 		this.check = false;//是否选中
 		this.show = true;//是否显示

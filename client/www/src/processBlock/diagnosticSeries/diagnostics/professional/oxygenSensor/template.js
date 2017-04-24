@@ -3,7 +3,6 @@
  */
 (function() {
 	document.getElementById("processBlock").innerHTML += [
-	//document.body.innerHTML += [
 		'<div id="showOxygenSensorData" class="data-box " ng-controller="OxygenSensorCtrl">',
 		'<div class="scroll-table-header">',
 		'<div class="groupNav">',

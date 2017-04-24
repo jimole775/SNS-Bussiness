@@ -208,8 +208,6 @@
 						break;
 				}
 				var temObjFromClone = angular.extend ({}, pidCacheFromDev);
-				//pidCacheFromDev.contents_arr
-				//pidCacheFromDev.buttons_arr
 
 				//把temObjFromClone.buttons_arr里面每个value的值取出来，重新拼成数组；
 				var tempButtons_arr = [];
@@ -228,7 +226,6 @@
 				tool.alert("程序执行失败，点击确定退出",function(){
 					console.log(e.message);
 					global.disconnectOBD ();
-					//tool.processBar ("");
 				});
 			}
 		}
@@ -266,7 +263,6 @@
 				tool.alert('服务器无数据支持',
 				           function () {
 					           global.disconnectOBD();
-					           //tool.processBar("");
 				           }
 				);
 				return;
@@ -405,7 +401,6 @@
 						break;
 				}
 				safeApply (function () { });
-				//tool.processBar ("");
 
 		};
 

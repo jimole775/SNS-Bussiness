@@ -42,7 +42,6 @@
 
 		//①TCP获取车辆导致冻结帧的故障码索引
 		function Fun31090A() {
-			//tool.processBar('正在获取故障码索引', true);
 			win.devService.sendDataToDev("31090A");
 		}
 
@@ -55,7 +54,6 @@
 				tool.alert('无任何故障码索引信息',
 				           function () {
 					           releaseButtonEvent();
-					           //tool.processBar("");
 				           }
 				);
 
@@ -72,7 +70,6 @@
 				for (var i = 0; i < codeCount; i++)
 					dataPack.pids[i] = varRecvData.substr(8 + 8 * i, 8);
 
-				//tool.processBar('正在获取故障码信息', true);
 				getFreezeFrameDtc(dataPack);
 			}
 
@@ -99,7 +96,6 @@
 			if(!responseObject.items.length){
 				tool.alert('服务器无任何数据',
 				           function () {
-					           //tool.processBar("");
 					           releaseButtonEvent();
 				           }
 				);
@@ -123,7 +119,6 @@
 			tool.alert('设备数据读取失败',
 			           function () {
 				           releaseButtonEvent();
-				           //tool.processBar("");
 			           }
 			);
 		};
@@ -185,7 +180,6 @@
 				tool.alert('服务器无数据支持',
 				           function () {
 					           releaseButtonEvent();
-					           //tool.processBar("");
 				           }
 				);
 				return;
@@ -240,7 +234,6 @@
 				tool.alert('服务器无数据支持',
 				           function () {
 					           releaseButtonEvent();
-					           //tool.processBar("");
 				           }
 				);
 				return;
@@ -254,7 +247,6 @@
 			tool.alert('设备数据读取失败',
 			           function () {
 				           releaseButtonEvent();
-				           //tool.processBar("");
 			           }
 			);
 		};
@@ -281,7 +273,6 @@
 			tool.alert('设备数据读取失败',
 			           function () {
 				           releaseButtonEvent();
-				           //tool.processBar("");
 			           }
 			);
 		};
@@ -305,7 +296,6 @@
 		//④由CCDP获取冻结帧数据原始值
 		function FunFreezeFrameGetOriginalData() {
 			if (showView)tool.loading({pos: 'body', text: "获取数据..."});
-			//tool.processBar('正在获取原始值', true);
 
 			//TCP取一块取冻结帧数据流 被支持时
 			if (YhSupportService._0x1B.value) {
@@ -334,7 +324,6 @@
 				tool.alert('当前车型不支持原始值读取',
 				           function () {
 					           releaseButtonEvent();
-					           //tool.processBar("");
 				           }
 				);
 			}
@@ -413,7 +402,6 @@
 				tool.alert('无任何故障码索引信息',
 				           function () {
 					           releaseButtonEvent();
-					           //tool.processBar("");
 				           }
 				);
 				return;
@@ -446,17 +434,6 @@
 				//当数据全部刷新完成再去掉限制
 				if (pidsCallback >= pidsCount) {
 					tool.loading(0);
-					//处理一下如果只有一批数据的情况,Fun71091B类型
-					//if (pidsCount == 1) {
-					//	if (responseObject && responseObject.items && responseObject.items.length <= 0)
-					//		tool.alert("无冻结帧数据", function () {});
-					//	else
-					//		tool.alert(
-					//			["服务器响请求超时", "重试", "取消"],
-					//			function () { getFreezeFrameValue(params); },
-					//			function () { }
-					//		);
-					//}
 					tool.alert("无冻结帧数据", function () {
 						$scope.freezeBtnDisable = true;
 						pidsCallback = 0;
@@ -478,8 +455,6 @@
 				})();
 			});
 
-			//pidsCallback += responseObject.items.length;     //根据请求时的条数，算出结束时间,如果没有，默认为3
-
 			if (pidsCallback >= pidsCount) {                 //当数据全部刷新完成再去掉限制
 				$scope.freezeBtnDisable = true;
 				pidsCallback = 0;
@@ -494,7 +469,6 @@
 			tool.alert('设备数据读取失败',
 			           function () {
 				           releaseButtonEvent();
-				           //tool.processBar("");
 			           }
 			);
 		};
@@ -552,7 +526,6 @@
 			tool.alert('设备数据读取失败',
 			           function () {
 				           releaseButtonEvent();
-				           //tool.processBar("");
 			           }
 			);
 		};
@@ -567,13 +540,12 @@
 				curData.forEach(function () { curData.ans = 'N/A'; });
 				tool.loading(0);
 				$scope.freezeBtnDisable = true;
-				//tool.processBar(meg);
 			});
 		}
 
 
 		$scope.createDropDownList = function () {
-			RMTClickEvent.CreateFreezeFrameDropDownList();
+			win.RMTClickEvent.CreateFreezeFrameDropDownList();
 		};
 
 

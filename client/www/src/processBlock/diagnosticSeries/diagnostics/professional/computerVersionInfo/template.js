@@ -3,7 +3,6 @@
  */
 (function() {
 	document.getElementById("processBlock").innerHTML += [
-	//document.body.innerHTML += [
 		'<div id="showComputerVersionInfo" class="data-box" ng-controller="ReadComputerVersionInfoCtrl">',
 		'<div class="scroll-table-header"></div>',
 		'<div class="scroll-table-body">',

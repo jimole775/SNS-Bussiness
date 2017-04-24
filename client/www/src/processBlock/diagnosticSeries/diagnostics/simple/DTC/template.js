@@ -3,7 +3,6 @@
  */
 (function() {
 	document.getElementById("processBlock").innerHTML += [
-	//document.body.innerHTML += [
 		'<div id="showDtc" class="data-box" ng-controller="DtcCtrl">',
 		'<header class="scroll-table-header">',
 		'</header>',

@@ -115,8 +115,6 @@
 
             //第三种情况：正常选择，正常添加记录长度，监听器会做后续工作
             else {
-                //缓存车型选择信息到车辆信息页面
-                //global.rootCache.carType[$scope.pagesOptionChosenRecord.length] = item.name;
 
                 //手动更改parents的值，让$watchCollection监听器生效
                 $scope.pagesOptionChosenRecord[$scope.pagesOptionChosenRecord.length] = item.name;
@@ -187,11 +185,9 @@
          * */
         $scope.$watchCollection('pagesOptionChosenRecord', function () {
 
-            //$scope.nodeaddress = "";
-
             //监听器的执行先于其他代码，所以在此堵截，防止报错
             if (!$scope.pagesOptionChosenRecord[0] || "" == $scope.pagesOptionChosenRecord[0]) {
-                //tool.processBar("");
+
                 return;
             }
 
@@ -209,7 +205,6 @@
                         $scope.publicfilename = item['N']['publicfilename'];
 
                         safeApply(function () {
-                            //tool.processBar("获取车型系统完成");
                         });
                         outputPrompt(item['N']['nodeaddress']);
                         return;
@@ -274,8 +269,6 @@
                 parents: pagesOptionChosenRecord       //服务器解析名为 parents；
             };
 
-            //var dataKey = global.businessInfo.procedureType === "防盗匹配" ? "ANTISTEEL_CTYPE" : "CTYPE";
-
             win.server.request(
                 global.businessInfo.serverType,
                 {
@@ -300,7 +293,6 @@
             if (!responseObject.items.length) {
                 tool.alert('服务器无任何数据',
                     function () {
-                        //tool.processBar("");
                         backToPrvLevel();
                     }
                 );
@@ -332,18 +324,13 @@
                     $scope.dbFilename = items[0]['N']['dbfilename'];
                     $scope.publicfilename = items[0]['N']['publicfilename'];
                     outputPrompt(items[0]['N']['nodeaddress']);
-                    //tool.processBar('获取车型和系统菜单完成');
                 }
                 else {
                     bindBottomBtn();
                     tool.layout(thisBoxId, 1);
-                    //tool.processBar('请选择');
                     $scope.pagesData[$scope.pagesDataIndex] = items;
                 }
             });
-
-            //tool.processBar("请选择");
-            //}
 
             //根据界面需求，必须等需要跳转的页面渲染完毕再进行 显示
             tool.layout(thisBoxId, 1);

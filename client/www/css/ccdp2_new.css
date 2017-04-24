@@ -712,7 +712,7 @@ body.log {
 }*/
 
 .data-box {
-    position: relative;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
@@ -804,12 +804,12 @@ body.log {
 
 .data-box th {
     background-color: #fff;
-    white-space: nowrap;
     color: #999;
     font-weight: 400;
     border: 1px #fff solid;
     text-align: center;
     height: 4.5rem;
+    padding: 0;
 }
 
 .data-box th.th-center {
@@ -1971,6 +1971,8 @@ option {
     outline:none;
     border-radius: 4px;
     border-bottom: 1px solid #1d2f42;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-tap-highlight-color: transparent;
 }
 
 .head-bar-right-button > i {

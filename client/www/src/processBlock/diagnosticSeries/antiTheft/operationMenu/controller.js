@@ -76,7 +76,6 @@
             var DataPack = {
                 "dbfilename": global.businessInfo.dbFilename,
                 "pub": "PUB.txt",
-                //"carType": global.businessInfo.carType,
                 "type": 1,           //1代表C类型2代表F类型,C型获取服务列表，F型获取操作提示弹框
                 "supids": []
             };
@@ -110,8 +109,10 @@
                     "cartype": global.businessInfo.carType
                 },
                 dataPack,
-                win.server.addRetryFn(win.server.addCallbackParam(win.serverRequestCallback.specialPIDs, [dataPack]),
-                    [PIDsRequest, global.disconnectOBD])
+                win.server.addRetryFn(
+                    win.server.addCallbackParam(win.serverRequestCallback.specialPIDs, [dataPack]),
+                    [PIDsRequest, global.disconnectOBD]
+                )
             );
         }
 
@@ -149,7 +150,6 @@
 
         };
 
-
         $scope.menuJump = function (pid) {
             win.RMTClickEvent.menuJump(pid);
         };
@@ -175,7 +175,6 @@
             var DataPack = {
                 "dbfilename": win.global.businessInfo.dbFilename,
                 "pub": "PUB.txt",
-                //"carType": win.global.businessInfo.carType,
                 "type": 1,	//1代表C类型2代表F类型,C型获取服务列表，F型获取操作提示弹框
                 "supids": supids
             };

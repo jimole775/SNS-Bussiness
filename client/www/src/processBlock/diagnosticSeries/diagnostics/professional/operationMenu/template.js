@@ -3,7 +3,6 @@
  */
 (function() {
 	document.getElementById("processBlock").innerHTML += [
-	//document.body.innerHTML += [
 		'<div class="data-box" id="ShowOperate" ng-controller="OperateMenuCtrl">',
 		'<div class="scroll-table-header">',
 		'</div>',
