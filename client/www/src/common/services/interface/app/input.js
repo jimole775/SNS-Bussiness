@@ -109,23 +109,20 @@ $ (document).ready (function () {
 
 			$ ("#businessType").html ((function(){
 				var frame = "";
-				var result = null;
+
+				//防盗匹配的车型选择和普通车型的选择需要探索不同的盒子
 				if(global.businessInfo.procedureType === "防盗匹配"){
 					frame = $("#antCarType");
 				}else{
 					frame = $("#carType");
 				}
-				var items = frame.find(".scroll-table-header").find("em");
 
-				items.forEach(function(item){
-					result += item.text() + "/";
-				});
-				//for(var item in win.global.rootCache.carType){
-				//	if(win.global.rootCache.carType.hasOwnProperty(item)){
-				//		carTypeRoot += win.global.rootCache.carType[item] + "/";
-				//	}
-				//}
-				return result.substring(0,result.length-1);   //去掉最后一个"/"
+				//找到头部的菜单选择记录，过滤掉所有的标签，返回文本
+				var rootCache = frame.find(".scroll-table-header").html();
+				rootCache = rootCache.replace(/<.+?>/ig,"");
+				rootCache = rootCache.replace(/主菜单/ig,"");
+
+				return rootCache;
 			})());
 
 			document.getElementById("ShowMessage").style.display = "block";

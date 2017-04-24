@@ -2,18 +2,18 @@
  * Created by Andy on 2017/3/14.
  */
 (function () {
-    var tool = require("./tools.js");
-    var key;
-    var mask = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
+    const tool = require("./tools.js");
+    let key;
+    const mask = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
     function WebSocket() {}
     WebSocket.prototype.run = function () {
-        var that = this;
+        const that = this;
         require('net').createServer(function (socket) {
             socket.on('error',function(e){
                 console.log(e);
             });
             socket.on('data', function (e) {
-                var frame = tool.decodeDataFrame(e);
+                let frame = tool.decodeDataFrame(e);
                 //第一次握手
                 if (frame.FIN === 0) {
                     console.log("握手");
@@ -30,17 +30,17 @@
     };
 
     WebSocket.prototype.dataHost = function (frame, socket) {
-        var that = this;
+        const that = this;
         switch (frame.Opcode) {
             case 8:
-                var msg = frame.PayloadData.slice(2).toString();
+                let msg = frame.PayloadData.slice(2).toString();
                 console.log("会话已经结束:", socket, msg);
                 socket.end();
                 if(msg)if(/^[\{\[]/.test(msg))that.close(JSON.parse(msg), socket);
                 break;
             default :
                 that.opcode = frame.Opcode;
-                var data = JSON.parse(frame.PayloadData.toString()) || "";
+                let data = JSON.parse(frame.PayloadData.toString()) || "";
                 switch (data.status) {
                     case 0x00:
                         that.pushNameMap(data, socket);

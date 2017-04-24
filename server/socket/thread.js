@@ -2,13 +2,13 @@
  * Created by Andy on 2017/1/23.
  */
 (function () {
-    var WebSocket = require("./output.js");
-    var tool = require("./tools.js");
-    var clients = {};
+    const WebSocket = require("./output.js");
+    const tool = require("./tools.js");
+    const clients = {};
 
-    var namesMap = [];
+    const namesMap = [];
 
-    var remoteChanelMap = [];
+    const remoteChanelMap = [];
 
     global.getChanelMap = function(){
         console.log(remoteChanelMap);
