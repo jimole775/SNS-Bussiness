@@ -2,18 +2,6 @@
 //工具类
 var CommonTool = function () {
 
-    //十六进制UNICODE编码转换字符串
-    this.HexUnicodeToString = function (varData) {
-        varData = varData.replace(/[ ]/g, "");
-        var varOutMessage = '';
-        var strTmp = '';
-        //\u40FA\u3030\uBACC.....
-        for (var i = 0, len = varData.length; i < len; i = i + 4) {
-            strTmp = strTmp + "\\u" + this.ChangByteSort(varData.substr(i, 4));
-        }
-        varOutMessage = varOutMessage + eval("'" + strTmp + "'");
-        return varOutMessage;
-    };
     //交换字节序
     //varData:输入数据==FF0ABC12  交换后：12BC0AFF
     this.ChangByteSort = function (varData) {
@@ -24,17 +12,6 @@ var CommonTool = function () {
         return varRet;
     };
 
-    //添加进度条:varData=添加范围0-100  varCtrlId=进度条控件ID
-    this.AddBar = function (varData, varCtrlId) {
-
-        var varBar = document.getElementById(varCtrlId);
-        var JinDuZong = parseInt(varBar.style.width) + parseInt(varData);
-
-        if (parseInt(JinDuZong) > 100) {
-            JinDuZong = 100;
-        }
-        varBar.style.width = JinDuZong + "%";
-    };
 
     //打印日志:varRecvData=数据   varCtrlId=日志控件ID
     this.LogPrintf = function (varRecvData, varCtrlId) {
@@ -211,73 +188,6 @@ var CommonTool = function () {
         return des;
     };
 
-    this.getStyle = function (element, name) {
-        var computedStyle;
-        try {
-            computedStyle = document.defaultView.getComputedStyle(element, null);
-        } catch (e) {
-            computedStyle = element.currentStyle;
-        }
-        if (name != "float") {
-            return computedStyle[name];
-        }
-        else {
-            return computedStyle["cssFloat"] || computedStyle["styleFloat"];
-        }
-    };
-
-    this.setStyle = function (elment, obj) {
-        for (var prop in obj) {
-            if (obj.hasOwnProperty(prop)) {
-                elment.style[prop] = obj[prop];
-            }
-        }
-    };
-
-
-    /**
-     * @param select 计算元素真实高宽，包括 边框 和内外 边距
-     */
-    this.realHeight = function (select) {
-        var el;
-        if (typeof select === 'string' && select !== '') {
-            el = $(select);
-        }
-        else if (typeof select === 'object' && select) {
-            el = select;
-        }
-        else {
-            return;
-        }
-
-        var padding = parseInt(el.css('padding-top')) + parseInt(el.css('padding-bottom')) || 0;
-        var margin = parseInt(el.css('margin-top')) + parseInt(el.css('margin-bottom')) || 0;
-        var border = parseInt(el.css('border-top')) + parseInt(el.css('border-bottom')) || 0;
-        return (el.height() ? el.height() : 0) + padding + margin + border;
-
-    };
-
-    /**
-     * @param select 计算元素真实高宽，包括 边框 和内外 边距
-     */
-    this.realWidth = function (select) {
-        var el;
-        if (typeof select === 'string' && select !== '') {
-            el = $(select);
-        }
-        else if (typeof select === 'object' && select) {
-            el = select;
-        }
-        else {
-            return;
-        }
-        var padding = parseInt(el.css('padding-left')) + parseInt(el.css('padding-right')) || 0;
-        var margin = parseInt(el.css('margin-left')) + parseInt(el.css('margin-right')) || 0;
-        var border = parseInt(el.css('border-left')) + parseInt(el.css('border-right')) || 0;
-        return (el.width() ? el.width() : 0) + padding + margin + border;
-
-    };
-
     //ascii转十六进制，并以（00）为分隔符
     this.ascToHexByLen = function (input, length) {
 
@@ -317,111 +227,6 @@ var CommonTool = function () {
             }
         }
         return str;
-    };
-
-    //获取URL参数
-    this.GetRequest = function (url) {
-        //var url = location.search; //获取url中"?"符后的字串
-        var theRequest = {};
-        if (url.indexOf("#") != -1) {
-            var str = url.substr(url.indexOf("#") + 1);
-            var strs = str.split("&");
-            for (var i = 0; i < strs.length; i++) {
-                theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
-            }
-        }
-        return theRequest;
-    };
-
-    /**
-     * //搜索框 过滤方法；
-     * @params keyword    关键词
-     * @params data       需要显示的数据
-     * */
-    this.filterSearch = function (keyword, data) {
-
-        var filterStr = keyword || '';
-        var dataList = data || [];
-
-        if (dataList && dataList.length > 0) {
-
-            var regExp = new RegExp(filterStr, 'i');
-
-            var i = dataList.length;
-            while (i) {
-                i--;
-                var testStr = "" +
-                    (dataList[i].danwei ? dataList[i].danwei : '') +
-                    (dataList[i].name ? dataList[i].name : '') +
-                    (dataList[i].status ? dataList[i].status : '') +
-                    (dataList[i].ans ? dataList[i].ans : '') +
-                    (dataList[i].dtcScanStateText ? dataList[i].dtcScanStateText : '');
-                console.log(testStr);
-                dataList[i].show = regExp.test(testStr);
-
-            }
-        }
-    };
-
-    this.countDown = function (param) {
-        var that = this;
-        var defaultSet = {
-            time: 30,
-            boxID: "",
-            startText: "",
-            endText: ""
-        };
-        var paramSet = $.extend(defaultSet, param);
-        var $box = $("#" + paramSet.boxID);
-        var buttonArr = $box.find("button");
-        var confirmButton;
-
-        var i = buttonArr.length;                           //禁止所有按钮事件，获取确定按钮，方面填充数字
-        while (i--) {
-            $(buttonArr[i]).prop("disabled", true);
-            if (buttonArr[i].innerText === "确定") {
-                confirmButton = buttonArr[i];
-                confirmButton.innerText = paramSet.time;
-            }
-        }
-
-        if (paramSet.startText) {                           //设置开始文本，如果有的话
-            that.statuBar(paramSet.startText);
-        }
-
-        var time = paramSet.time;
-
-        var timerRun = setInterval(function () {
-            time--;
-            confirmButton.innerText = time;
-            if (time <= 0) {
-
-                //设置结束文本，如果有的话；
-                if (paramSet.endText)that.statuBar(paramSet.endText);
-
-                //释放所有按钮事件；
-                var i = buttonArr.length;
-                while (i--) {
-                    $(buttonArr[i]).prop("disabled", false);
-                }
-
-                //确定按钮文本
-                confirmButton.innerText = "确定";
-                clearInterval(timerRun);
-            }
-
-        }, 1000);
-
-    };
-
-    //获取随机数
-    this.randomNumber = function (bit) {
-        var temp = [];
-        var i = bit;
-        while (i--) {
-            temp.push(Math.floor(Math.random() * 10));
-        }
-        return temp.join("");
     };
 
     //获取随机的01，02；用于模拟数据

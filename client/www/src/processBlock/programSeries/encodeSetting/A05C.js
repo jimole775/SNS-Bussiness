@@ -91,13 +91,9 @@
 
     //显示数据库版本列表
     win.serverRequestCallback.showDatabaseVersion_A05C = function (recvData,params) {
-        //var varJson = JSON.parse(getBse64Decode(recvData)); //数量（2B）+长度（2B）+数据库版本（LB）
         var strHtml = '';
         tool.loading(0);
-        //if (varJson.CODETYPE == 'OK') {
             try {
-        //        var varData = tool.HexUnicodeToString(varJson.CODEDATA);
-        //        var jsonData = JSON.parse(varData);
                 var suffix = '';
                 var version = '';
                 for (var i = 0; i < recvData.length; i++) {
@@ -143,13 +139,6 @@
                     win.devService.sendDataToDev("71054202");
                 });
             }
-        //} else {
-        //    console.log(varJson.CODEDATA);
-        //    tool.log(varJson.CODEDATA);
-        //    tool.alert(varJson.CODEDATA,function(){
-        //        win.devService.sendDataToDev("71054202");
-        //    });
-        //}
     };
 
     //解析SVT模块信息回调ID

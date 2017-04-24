@@ -28,7 +28,6 @@
          * 显示服务菜单选项，入口
          */
         win.moduleEntry.showServiceMenu = function () {
-            //tool.processBar("");
             //延时执行 解决因 键盘弹出时 直接退到 服务列表界面；导致无法居中的问题
             setTimeout(function(){
                 bindBottomBtn();
@@ -87,13 +86,11 @@
             while(servicesTotal--){
                 singleService = supportServicesCMD.substr(step,2);
                 if(singleService == "62"){
-                    //win.global.businessInfo.specialType = singleService;
                     is62Supported = true;
                     break;
                 }
                 step +=2;
             }
-            //DataPack.supids = singleService == "62" ? (global.special_pid ? [global.special_pid] : []) : [];    //如果62被支持,就上传pid,如果不支持，就不上传
 
             PIDsRequest(DataPack);
         };
@@ -119,7 +116,6 @@
             if(!responseObject.items.length){
                 tool.alert('服务器无任何数据',
                            function () {
-                               //tool.processBar("");
                                global.disconnectOBD();
                            }
                 );
@@ -182,7 +178,6 @@
         };
 
         win.devService.Fun7109D2 = function (varRecvData) {
-            //tool.processBar("设备数据读取失败");
             tool.alert("设备数据读取失败", function () {
                 win.SendJsDataToDev("710902");
             })
@@ -205,7 +200,6 @@
                 tool.alert('服务器无数据支持',
                            function () {
                                global.disconnectOBD();
-                               //tool.processBar("");
                            }
                 );
                 return;
@@ -223,7 +217,6 @@
 
 
         win.devService.Fun710981 = function (varRecvData) {
-            //tool.processBar("获取服务列表失败");
 
             tool.alert('CCDP设备尝试与车辆连接失败！<br>请确认：<br>1.OBD16接口已经连接稳定。<br>2.汽车点火已经处于ON状态且引擎未打开。',
                 function () {

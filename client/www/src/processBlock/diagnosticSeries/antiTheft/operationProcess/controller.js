@@ -42,7 +42,6 @@
         };
 
         var menuType04 = "";    //区分菜单的supid组合类型
-        //var pidCacheFromDev.items_arr = []; //用于存储菜单的supid;
         var menuItemsValue_arr = [];    //用于存储读值信息;
         var bindsupidWithValueForMenuType04_obj;    //用于处理带读值菜单的显示值,获取到所有的值之后，转换成数字，然后跟前面的supid配对绑定到html显示;supid类型为03的不用绑定
 
@@ -51,17 +50,12 @@
             //supid:state       //把supid和选项的状态绑定，服务器获取完数据之后再筛选，把选项状态反应到视图模板
         };
         win.moduleEntry.antiTheftProcess = function () {
-            //stepCount = 0;  //每次重新进入流程，就重置流程号
             tool.bottomBtn(0);  //当前流程模块全部都是弹框显示，无底部按钮需求，在此隐藏
             var firstContactDev = "0000";
             win.devService.sendDataToDev("310960" + firstContactDev);
         };
 
         win.devService.Fun710960 = function (varRecvData) {
-
-            //根据设备回复的流程号来记录，因为APP在处理文件的时候，自行和设备交互，如果在JS端自加，流程号会有断层
-            //stepCount = parseInt(varRecvData.substr(6,2)) + 1;
-
             handleVarRecvData(varRecvData);
         };
 
@@ -582,7 +576,6 @@
                 tool.popShow("bombMenuBox", 0);
                 tool.popShow("spMenuBox", 0);
 
-                //var theDataModel = tool.objToArr (responseObject.items, "supid", "name");
                 var theDataModel = responseObject.items;
                 switch ($scope.BombBoxType) {
                     case "01":  //构造提示框内容或输入框内容

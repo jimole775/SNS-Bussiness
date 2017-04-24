@@ -28,7 +28,8 @@ $ (document).ready (function () {
 	interActiveState.end = {};
 	interActiveState.event = {};        //通过事件进行动态交互;
 
-	win.jsRecvAppData = function (action, recvData, callbackId)                    //业务开始入口，由APP调用发起；
+	//业务开始入口，由APP调用发起；
+	win.jsRecvAppData = function (action, recvData, callbackId)
 	{
 		//如果callbackId匹配到相应的callbackId字串，就是JS主动请求信息，直接调用回调就OK
 		//否则，都是APP主动推送信息

@@ -2,7 +2,6 @@
  * Created by Andy on 2017/1/5.
  */
 (function() {
-	//document.body.innerHTML += [
 	document.getElementById("processBlock").innerHTML += [
 		'<div id="showFreezeFrameData" class="data-box " ng-controller="ReadFreezeFrameCtrl">',
 		'<div class="scroll-table-header">',

@@ -24,7 +24,6 @@
 			showView = true;
 			getOrignal = false;
 			cacheChannel = tool.toHex(value, 8);
-			//tool.processBar('正在初始化数据', true);
 
 			win.devService.sendDataToDev('31091D' + cacheChannel);
 			document.getElementById("Title").innerText = "TCP大众通道数据读值";
@@ -53,7 +52,6 @@
 
 			}
 			else {
-				//tool.processBar('设备数据读取失败');
 				tool.alert(
 					"设备数据读取失败",
 					function () {
@@ -107,7 +105,6 @@
 				return;
 			}
 
-			//tool.processBar('正在获取支持项', true);
 			win.server.request(
 				global.businessInfo.serverType,
 				{
@@ -128,7 +125,6 @@
 				tool.alert('服务器无数据支持',
 				           function () {
 					           tcpChannelDataBack();
-					           //tool.processBar("");
 				           }
 				);
 				return;
@@ -141,7 +137,6 @@
 			$scope.isBtnOkEnable = true;
 			$scope.isBtnBackEnable = true;
 			releaseButtonEvent_tcpChannel();
-			//tool.processBar('支持项获取成功');
 			safeApply(function () {});
 			tool.layoutTable();
 		};
@@ -152,8 +147,6 @@
 				$scope.isBtnBackEnable = true;
 				return;
 			}
-
-			//tool.processBar('正在读取信息值', true);
 
 			win.server.request(
 				global.businessInfo.serverType,
@@ -197,7 +190,6 @@
 					var k = items.length;
 					while (k--) {
 						if (data[j].pid === items[k].pid) {
-							//data[j].ans = items[k].ans + Math.floor(Math.random() * 100);
 							data[j].ans = items[k].ans;
 							break;
 						}
@@ -240,7 +232,6 @@
 
 
 		function tcpChannelDataBack() {
-			//tool.processBar("");
 			showView = false;
 			getOrignal = false;
 			$scope.stateText = '开始';
@@ -255,7 +246,6 @@
 
 		function channelDataConfirm() {
 			if ($scope.stateText == '暂停') {
-				//tool.processBar("暂停");
 				showView = false;
 				$scope.stateText = '继续';
 				$scope.isBtnBackEnable = true;
@@ -270,7 +260,6 @@
 			}
 
 			safeApply(function () {
-				//tool.processBar("正在读取信息值", true);
 				getOrignal = true;
 				showView = true;
 				$scope.stateText = '暂停';

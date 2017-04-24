@@ -2,7 +2,6 @@
  * Created by Andy on 2017/1/5.
  */
 (function() {
-	//document.body.innerHTML += [
 	document.getElementById("processBlock").innerHTML += [
 		'<div id="channeldata" class="data-box " ng-controller="TcpChannelDataCtrl">',
 		'<div class="scroll-table-header">',

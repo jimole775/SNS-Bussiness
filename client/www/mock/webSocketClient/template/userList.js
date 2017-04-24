@@ -18,15 +18,18 @@
 
     $("#friendFrame").ready(function () {
         setTimeout(function () {
-            $("#headBarRight").show();
+            var headBarRight = $("#headBarRight");
+            headBarRight.show();
 
-            $("#headBarRight").find(".head-bar-right-button").on("click",function(){
+            headBarRight.find(".head-bar-right-button").on("click",function(){
                 $("#friendFrame").show();
-                $("#headBarRight").find(".tip-pop").hide().text("");
+                headBarRight.find(".tip-pop").hide().text("");
+                headBarRight.find("button").addClass("head-bar-right-button-press");
             });
 
             $("#friendListClose").on("click", function () {
                 $("#friendFrame").hide();
+                headBarRight.find("button").removeClass("head-bar-right-button-press");
             });
 
             var _drag = new Drag();

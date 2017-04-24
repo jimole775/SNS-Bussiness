@@ -1,9 +1,6 @@
 /**
  * Created by Andy on 2017/3/2.
  */
-/**
- * Created by Andy on 2016/2/20.
- */
 (function () {
     var win = window;
     var doc = document;

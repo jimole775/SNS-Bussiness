@@ -3,7 +3,6 @@
  */
 (function() {
 	<!-- TCP大众通道数据流读值 与 TCP大众基本调整的输入通道号对话框 -->
-	//document.body.innerHTML += [
 	document.getElementById("processBlock").innerHTML += [
 		'<div class="box tip-box-wide" id="numberInputBox" ng-controller="InputBoxController">',
 		'<h1 class="box-title">请输入通道号：0-255',

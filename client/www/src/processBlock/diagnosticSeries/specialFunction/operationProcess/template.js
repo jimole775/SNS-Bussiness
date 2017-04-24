@@ -3,7 +3,6 @@
  */
 (function() {
 	document.getElementById("processBlock").innerHTML += [
-	//document.body.innerHTML += [
 		'<div ng-controller="specialProcessCtrl">',
 		'	<div id="bombTipBox" class="box tip-box-wide alert-box">',
 		'		<h1 class="box-title">提示</h1>',

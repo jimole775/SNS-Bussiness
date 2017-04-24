@@ -1,9 +1,6 @@
 /**
  * Created by Andy on 2017/3/20.
  */
-/**
- * Created by Andy on 2016/3/7.
- */
 $(document).ready(function () {
 
     var win = window;
@@ -47,6 +44,17 @@ $(document).ready(function () {
 
         win.devService.sendDataToDev("110401");	                                        //发送启动OBD诊断指令
         //tool.processBar('正在启动设备');
+    };
+
+    //启动OBDII诊断应答(PC)，0x5104+0x01（成功）
+    win.devService.Fun5104 = function (varRecvData) {
+        var strCommand = varRecvData.substr(4, 2);
+        if (strCommand == '01') {
+            tool.log('设备启动成功');
+            tool.processBar('设备启动成功');
+            document.getElementById("ShowMessage").style.display = "none";
+            win.global.blockDelegate();
+        }
     };
 
     //诊断项目指令集和 7109xx;

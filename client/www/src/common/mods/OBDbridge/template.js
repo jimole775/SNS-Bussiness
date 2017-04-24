@@ -3,7 +3,6 @@
  */
 //这个控制器只是简单的显示和隐藏ShowMessage这个盒子而已
 (function() {
-	//document.body.innerHTML += '<div ng-controller="DevMessagesCtrl"></div>';
 	document.body.innerHTML += ['<div ng-controller="devMessagesCtrl">',
 		'<div id="ShowMessage" style="display:none;position:absolute;padding: 5rem 0;width:100%;height:100%;top:0;left:0;overflow: auto;z-index:98;box-sizing: border-box;">',
 		'<div id="MessageLayoutTier" style="height:98%;width:94%;margin:1% 3%;box-shadow: 0 0 6px rgba(33,33,33,.3);background: #fff;border-radius: 4px;box-sizing: border-box;position: relative;overflow: hidden;">',

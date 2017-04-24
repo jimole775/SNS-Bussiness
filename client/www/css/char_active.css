@@ -219,3 +219,12 @@
 .hide{
     display: none;
 }
+
+.head-bar-right-button-press{
+    border: 1px solid #1d2f42;
+    border-bottom: 1px solid #1A3755;
+}
+.head-bar-right-button-press > i{
+    border-top: 1px solid #1A3755;
+    border-bottom: 1px solid #52657a;
+}

@@ -14,7 +14,6 @@
 
         //入口
         win.moduleEntry.funReadComputerVersionInfo = function () {
-            //tool.layout("ShowOperate", 0);
             showView = true;
             if (gDataPack.pids)gDataPack.pids.length = 0;
             if (gPIDs)gPIDs.length = 0;
@@ -34,22 +33,12 @@
 
         function computerVerBack() {
             showView = false;
-            //$scope.filterKeyWatch();
             safeApply(function () { $scope.versionInfos.length = 0; });
             tool.layout("showComputerVersionInfo", 0);
             win.moduleEntry.showOperationMenu();
         }
 
-        /* function searchListener(){
-         $scope.filterKey = '';
-         $scope.filterKeyWatch = $scope.$watch('filterKey',function(){
-         filterSearch($scope.filterKey, $scope.versionInfos);
-         });
-         }*/
-
         function FunReadComputerVersionInfoSurpport() {
-
-            //tool.processBar("正在获取支持项", true);
 
             //当 读取版本信息支持项 被支持时
             if (YhSupportService._0x03.value)
@@ -74,7 +63,6 @@
             if (count <= 0) {
                 tool.alert('无任何支持项信息',
                     function () {
-                        //tool.processBar("");
                     }
                 );
                 return;
@@ -102,7 +90,6 @@
 
         win.devService.Fun710983 = function (varRecvData) {
             tool.alert('设备数据读取失败',function () {
-                //tool.processBar("");
             });
         };
 
@@ -125,7 +112,6 @@
             if(!responseObject.items.length){
                 tool.alert('服务器无数据支持',
                            function () {
-                               //tool.processBar("");
                                computerVerBack();
                            }
                 );
@@ -190,13 +176,11 @@
 
         win.devService.Fun710984 = function () {
             tool.alert('设备数据读取失败',function () {
-                //tool.processBar("");
             });
         };
 
 
         function getVersionInfoValue(dataPack) {
-            //tool.processBar("正在获取版本信息", true);
             win.server.request(
                 global.businessInfo.serverType, {
                 key: "CALC_VER",
@@ -216,7 +200,6 @@
             if(!responseObject.items.length){
                 tool.alert('服务器无数据支持',
                            function () {
-                               //tool.processBar("");
                                computerVerBack();
                            }
                 );
@@ -229,13 +212,11 @@
                     //如果已经获取到了系统名称， 数据返回失败时，则全赋值为  “N/A”
                     if (curData && curData.length > 0)
                         safeApply(function () {
-                            //tool.processBar('版本信息获取失败');
                             _.forEach(curData, function (item) { item.ans = "N/A"; });
                         });
 
                     if (!curData)
                         tool.alert('版本信息获取失败',function () {
-                            //tool.processBar("");
                         });
                     tool.loading(0);
                     return;

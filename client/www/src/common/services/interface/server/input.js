@@ -88,17 +88,6 @@
         }else if(retryFn instanceof Function){
             retryFn.apply(null, callbackParams);
         }
-        //if (retryFn[0]) {
-        //
-        //}
-        //
-        ///**单个一般就是一个函数实体，主要是为了以闭包的形式暴露内部变量
-        // * 例如：function(){ $scope.getResponse = response;}
-        // * 在这里直接调用的时候，就可以对$scope.getResponse进行修改！！！
-        // * */
-        //else{
-        //	retryFn[1].apply(null, callbackParams);
-        //}
     };
 
 })();
